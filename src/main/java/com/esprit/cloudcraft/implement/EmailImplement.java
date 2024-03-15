@@ -1,7 +1,7 @@
 package com.esprit.cloudcraft.implement;
 
 import com.esprit.cloudcraft.entities.AbstractEmailContext;
-import com.esprit.cloudcraft.services.emailService;
+import com.esprit.cloudcraft.services.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.thymeleaf.context.Context;
 import java.nio.charset.StandardCharsets;
 
 @Service
-public class emailImplement implements emailService {
+public class EmailImplement implements EmailService {
     @Autowired
     private JavaMailSender emailSender;
     @Autowired

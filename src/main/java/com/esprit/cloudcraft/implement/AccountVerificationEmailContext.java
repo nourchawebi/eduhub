@@ -1,7 +1,7 @@
 package com.esprit.cloudcraft.implement;
 
 import com.esprit.cloudcraft.entities.AbstractEmailContext;
-import com.esprit.cloudcraft.entities.user;
+import com.esprit.cloudcraft.entities.User;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class AccountVerificationEmailContext extends AbstractEmailContext {
@@ -13,7 +13,7 @@ public class AccountVerificationEmailContext extends AbstractEmailContext {
     public  <T>void init(T context){
         //we can do any common configuration setup here
         // like setting up some base URL and context
-        user customer = (user) context; // we pass the customer informati
+        User customer = (User) context; // we pass the customer informati
         put("firstName", customer.getFirstName());
         setTemplateLocation("emailverif");
         setSubject("Complete your registration");

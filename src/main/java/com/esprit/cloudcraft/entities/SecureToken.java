@@ -30,7 +30,7 @@ public class SecureToken implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName ="id")
-    private user user;
+    private User user;
 
     @Transient
     private boolean isExpired;

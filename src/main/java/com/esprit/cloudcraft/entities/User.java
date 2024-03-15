@@ -14,10 +14,10 @@ import java.util.Set;
 
 @Entity
 @Data
-public class user implements Serializable , UserDetails {
+public class User implements Serializable , UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id ;
+    Long id ;
     private String firstName;
     private String lastName;
     private String userName;
@@ -27,9 +27,9 @@ public class user implements Serializable , UserDetails {
     private String secret;
     Date birthDate;
     @Enumerated(EnumType.STRING)
-    classType classType;
+    ClassType classType;
     @Enumerated(EnumType.STRING)
-    private roleType role;
+    private RoleType role;
     private boolean enable;
     @OneToMany(mappedBy = "user")
     private Set<SecureToken> tokens;

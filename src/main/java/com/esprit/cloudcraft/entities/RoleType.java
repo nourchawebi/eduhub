@@ -1,6 +1,6 @@
 package com.esprit.cloudcraft.entities;
 
-public enum roleType {
+public enum RoleType {
 
         USER,
         ADMIN

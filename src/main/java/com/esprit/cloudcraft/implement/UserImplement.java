@@ -1,13 +1,13 @@
 package com.esprit.cloudcraft.implement;
 
 import com.esprit.cloudcraft.entities.SecureToken;
-import com.esprit.cloudcraft.entities.user;
-import com.esprit.cloudcraft.exceptions.userAlreadyExistException;
+import com.esprit.cloudcraft.entities.User;
+import com.esprit.cloudcraft.exceptions.UserAlreadyExistException;
 import com.esprit.cloudcraft.repository.SecureTokenRepository;
-import com.esprit.cloudcraft.repository.userRepository;
-import com.esprit.cloudcraft.services.emailService;
-import com.esprit.cloudcraft.services.secureTokenService;
-import com.esprit.cloudcraft.services.userService;
+import com.esprit.cloudcraft.repository.UserRepository;
+import com.esprit.cloudcraft.services.EmailService;
+import com.esprit.cloudcraft.services.SecureTokenService;
+import com.esprit.cloudcraft.services.UserService;
 
 import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
@@ -22,25 +22,25 @@ import org.thymeleaf.util.StringUtils;
 import java.util.Objects;
 
 @Service
-public class userImplement implements userService,UserDetailsService{
+public class UserImplement implements UserService,UserDetailsService{
     @Resource
-    private userRepository userRepository;
+    private UserRepository userRepository;
     @Resource
     private PasswordEncoder passwordEncoder;
     @Resource
-    private emailService emailService;
+    private EmailService emailService;
 
     @Resource
-    private secureTokenService secureTokenService;
+    private SecureTokenService secureTokenService;
 
     @Resource
     SecureTokenRepository secureTokenRepository;
     @Value("${site.base.url.https}")
     private String baseURL;
     @Override
-    public user register(user user) throws userAlreadyExistException {
+    public User register(User user) throws UserAlreadyExistException {
         if(userRepository.findByEmail(user.getEmail())!= null) {
-            throw new userAlreadyExistException();
+            throw new UserAlreadyExistException();
         }
 
 
@@ -51,14 +51,14 @@ public class userImplement implements userService,UserDetailsService{
         sendRegistrationConfirmationEmail(user);
         return userRepository.save(user);
     }
-    public void resendToken(user user)  {
+    public void resendToken(User user)  {
 
 
         sendRegistrationConfirmationEmail(user);
 
     }
     @Override
-    public void sendRegistrationConfirmationEmail(user user) {
+    public void sendRegistrationConfirmationEmail(User user) {
         SecureToken secureToken= secureTokenService.createSecureToken();
         secureToken.setUser(user);
         secureTokenRepository.save(secureToken);
@@ -75,13 +75,13 @@ public class userImplement implements userService,UserDetailsService{
     }
 
     @Override
-    public boolean verifyUser(String token) throws userAlreadyExistException {
+    public boolean verifyUser(String token) throws UserAlreadyExistException {
         SecureToken secureToken = secureTokenService.findByToken(token);
         if (Objects.isNull(secureToken) || !StringUtils.equals(token, secureToken.getToken()) || secureToken.isExpired()) {
-            throw new userAlreadyExistException();
+            throw new UserAlreadyExistException();
         }
 
-        user user = userRepository.getOne(secureToken.getUser().getId());
+        User user = userRepository.getOne(secureToken.getUser().getId());
         if (Objects.isNull(user)) {
             return false;
         }
@@ -94,7 +94,7 @@ public class userImplement implements userService,UserDetailsService{
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException  {
-        user user=userRepository.findByEmail(username);
+        User user=userRepository.findByEmail(username);
         if(user==null)
              throw new UsernameNotFoundException("user not found");
        return user;

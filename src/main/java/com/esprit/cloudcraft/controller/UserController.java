@@ -1,25 +1,23 @@
 package com.esprit.cloudcraft.controller;
 
-import ch.qos.logback.core.model.Model;
-import com.esprit.cloudcraft.entities.user;
-import com.esprit.cloudcraft.services.userService;
-import com.esprit.cloudcraft.implement.userImplement;
+import com.esprit.cloudcraft.entities.User;
+import com.esprit.cloudcraft.services.UserService;
+import com.esprit.cloudcraft.implement.UserImplement;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("user")
-public class userController {
+public class UserController {
     @Resource
-    private userService userService;
+    private UserService userService;
     @Resource
-    private userImplement userimp;
+    private UserImplement userimp;
 
     @PostMapping("register")
     @ResponseBody
-    public user register(@RequestBody user user )
+    public User register(@RequestBody User user )
     {
    return this.userService.register(user);
 

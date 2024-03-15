@@ -4,7 +4,7 @@ import com.esprit.cloudcraft.entities.SecureToken;
 
 import java.util.List;
 
-public interface secureTokenService {
+public interface SecureTokenService {
     SecureToken createSecureToken();
     void saveSecureToken(SecureToken token);
     SecureToken findByToken(String token);

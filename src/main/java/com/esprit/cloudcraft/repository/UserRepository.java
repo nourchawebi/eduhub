@@ -1,13 +1,12 @@
 package com.esprit.cloudcraft.repository;
 
-import com.esprit.cloudcraft.entities.user;
+import com.esprit.cloudcraft.entities.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 @Repository
-public interface userRepository extends JpaRepository<user,Long> {
-   user findByEmail(String email);
+public interface UserRepository extends JpaRepository<User,Long> {
+   User findByEmail(String email);
 //   user   findByUsername (String username);
 }

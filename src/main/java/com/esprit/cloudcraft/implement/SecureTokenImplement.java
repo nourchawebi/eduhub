@@ -2,7 +2,7 @@ package com.esprit.cloudcraft.implement;
 
 import com.esprit.cloudcraft.entities.SecureToken;
 import com.esprit.cloudcraft.repository.SecureTokenRepository;
-import com.esprit.cloudcraft.services.secureTokenService;
+import com.esprit.cloudcraft.services.SecureTokenService;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 @Service
-public class secureTokenImplement implements secureTokenService {
+public class SecureTokenImplement implements SecureTokenService {
 
     private static final BytesKeyGenerator DEFAULT_TOKEN_GENERATOR = KeyGenerators.secureRandom(15);
     private static final Charset US_ASCII = Charset.forName("US-ASCII");
