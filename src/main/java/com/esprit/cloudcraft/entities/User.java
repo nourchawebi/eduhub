@@ -1,7 +1,11 @@
 package com.esprit.cloudcraft.entities;
 
+import com.esprit.cloudcraft.entities.token.Token;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,18 +18,21 @@ import java.util.Set;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements Serializable , UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id ;
     private String firstName;
     private String lastName;
-    private String userName;
+
     private String email;
     private String password;
     private boolean mfaEnabled; //multifactor authentication
-    private String secret;
-    Date birthDate;
+
+   Date birthDate;
     @Enumerated(EnumType.STRING)
     ClassType classType;
     @Enumerated(EnumType.STRING)
@@ -33,6 +40,8 @@ public class User implements Serializable , UserDetails {
     private boolean enable;
     @OneToMany(mappedBy = "user")
     private Set<SecureToken> tokens;
+   /* @OneToMany(mappedBy = "user")
+    private List<Token> tokensAuth;*/
 
 
 

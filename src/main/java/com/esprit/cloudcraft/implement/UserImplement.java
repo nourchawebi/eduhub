@@ -1,8 +1,11 @@
 package com.esprit.cloudcraft.implement;
 
+import com.esprit.cloudcraft.authentification.JwtService;
+import com.esprit.cloudcraft.dto.AuthenticationResponse;
+import com.esprit.cloudcraft.entities.RoleType;
 import com.esprit.cloudcraft.entities.SecureToken;
 import com.esprit.cloudcraft.entities.User;
-import com.esprit.cloudcraft.exceptions.UserAlreadyExistException;
+
 import com.esprit.cloudcraft.repository.SecureTokenRepository;
 import com.esprit.cloudcraft.repository.UserRepository;
 import com.esprit.cloudcraft.services.EmailService;
@@ -20,9 +23,10 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
-public class UserImplement implements UserService,UserDetailsService{
+public class UserImplement implements UserService{
     @Resource
     private UserRepository userRepository;
     @Resource
@@ -35,22 +39,41 @@ public class UserImplement implements UserService,UserDetailsService{
 
     @Resource
     SecureTokenRepository secureTokenRepository;
+    @Resource
+    private  JwtService jwtService;
+
     @Value("${site.base.url.https}")
     private String baseURL;
     @Override
-    public User register(User user) throws UserAlreadyExistException {
+    public AuthenticationResponse register(User user) throws UsernameNotFoundException {
         if(userRepository.findByEmail(user.getEmail())!= null) {
-            throw new UserAlreadyExistException();
+            new UsernameNotFoundException("user already exists");
+
         }
 
 
              String encryptedPassword = passwordEncoder.encode(user.getPassword());
        user.setPassword(encryptedPassword);
        user.setEnable(false);
+       /* var users = User.builder()
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .role(RoleType.USER)
+                .mfaEnabled(user.isMfaEnabled())
+                .birthDate(user.getBirthDate())
+                .enable(true)
+                .secret("hi")
+                .build();*/
+
         userRepository.save(user);
         sendRegistrationConfirmationEmail(user);
-        return userRepository.save(user);
+
+        var jwtToken=jwtService.generateToken(user);
+        return AuthenticationResponse.builder().token(jwtToken).build();
     }
+
     public void resendToken(User user)  {
 
 
@@ -75,10 +98,10 @@ public class UserImplement implements UserService,UserDetailsService{
     }
 
     @Override
-    public boolean verifyUser(String token) throws UserAlreadyExistException {
+    public boolean verifyUser(String token) {
         SecureToken secureToken = secureTokenService.findByToken(token);
         if (Objects.isNull(secureToken) || !StringUtils.equals(token, secureToken.getToken()) || secureToken.isExpired()) {
-            throw new UserAlreadyExistException();
+
         }
 
         User user = userRepository.getOne(secureToken.getUser().getId());
@@ -92,13 +115,7 @@ public class UserImplement implements UserService,UserDetailsService{
         secureTokenService.removeToken(secureToken);
         return true;
     }
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException  {
-        User user=userRepository.findByEmail(username);
-        if(user==null)
-             throw new UsernameNotFoundException("user not found");
-       return user;
-    }
+
 
 
 }

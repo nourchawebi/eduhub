@@ -1,12 +1,15 @@
 package com.esprit.cloudcraft.services;
 
+import com.esprit.cloudcraft.dto.AuthenticationResponse;
 import com.esprit.cloudcraft.entities.User;
-import com.esprit.cloudcraft.exceptions.UserAlreadyExistException;
+
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserService {
-    User register(User user)throws UserAlreadyExistException;
+   AuthenticationResponse register(User user);
      void sendRegistrationConfirmationEmail(User user);
     boolean verifyUser(String token);
+
 
 
 
