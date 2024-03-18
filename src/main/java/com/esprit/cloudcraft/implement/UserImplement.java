@@ -219,13 +219,19 @@ public class UserImplement implements UserService {
         if (!request.getNewEmail().equals(request.getConfirmationEmail())) {
             throw new IllegalStateException("Emails are not the same");
         }
-        //  user.setEnable(false);
+         // user.setEnable(false);
         var verifuser = user;
         verifuser.setEmail(request.getNewEmail());
-        sendRegistrationConfirmationEmail(verifuser);// bch nb3th  verif token bl email jdid ama mnich bch nsajlou lin yetverifa bch mb3d nrefreshi ltoken
-        userRepository.save(user);
+        SecureToken secureToken = secureTokenService.findByUser(user);
+        if(secureToken==null)
+        {sendVerifNewEmail(verifuser);// bch nb3th  verif token bl email jdid ama mnich bch nsajlou lin yetverifa bch mb3d nrefreshi ltoken
+       // userRepository.save(user);
         newEmail = request.getNewEmail();
-        return request.getNewEmail();
+        return request.getNewEmail();}
+        else{
+            throw new RuntimeException("an email is already sent! u can't send another email now or change ur email again");
+
+        }
     }
 
 

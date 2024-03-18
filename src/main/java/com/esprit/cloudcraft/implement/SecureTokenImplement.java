@@ -1,6 +1,7 @@
 package com.esprit.cloudcraft.implement;
 
 import com.esprit.cloudcraft.entities.SecureToken;
+import com.esprit.cloudcraft.entities.User;
 import com.esprit.cloudcraft.repository.SecureTokenRepository;
 import com.esprit.cloudcraft.services.SecureTokenService;
 import jakarta.annotation.Resource;
@@ -45,6 +46,10 @@ public class SecureTokenImplement implements SecureTokenService {
     @Override
     public SecureToken findByToken(String token) {
         return secureTokenRepository.findByToken(token);
+    }
+    @Override
+    public SecureToken findByUser(User user) {
+        return secureTokenRepository.findByUser(user);
     }
 
     @Override

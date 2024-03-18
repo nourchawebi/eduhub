@@ -41,32 +41,8 @@ public class simpleConnectedUserController {
     ) {
         // Start the email change process
         userService.changeEmail(request, connectedUser);
-        CompletableFuture<Boolean> verificationFuture = CompletableFuture.supplyAsync(() -> {
-            synchronized (this) {
-                try {
-                    // Wait until emailVerified is true or until interrupted
-                    while (!emailVerified) {
-                        this.wait();
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return false;
-                }
-            }
-            return emailVerified;
-        });
+        return ResponseEntity.ok().build();
 
-
-        // Wait for verification to complete
-        boolean verificationResult = verificationFuture.join();
-
-
-        if (verificationResult) {
-
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @Async
