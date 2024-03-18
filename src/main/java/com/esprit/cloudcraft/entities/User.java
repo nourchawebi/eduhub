@@ -30,7 +30,8 @@ public class User implements Serializable , UserDetails {
 
     private String email;
     private String password;
-    private boolean mfaEnabled; //multifactor authentication
+    private boolean mfaEnabled;
+    private boolean notLocker=true;
 
    Date birthDate;
     @Enumerated(EnumType.STRING)
@@ -67,7 +68,7 @@ public class User implements Serializable , UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;//switch it to true or we will not be able to connect our users
+        return notLocker;//switch it to true or we will not be able to connect our users
     }
 
     @Override
