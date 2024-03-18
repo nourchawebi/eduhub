@@ -1,5 +1,8 @@
 package com.esprit.cloudcraft.authentification;
 
+
+import com.esprit.cloudcraft.authentification.JwtService;
+import com.esprit.cloudcraft.repository.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,28 +24,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private  final JwtService jwtService;
 
     private  final UserDetailsService us;
+    private final TokenRepository authTokenRepository;
 
-  @Override
-  protected void doFilterInternal(  @NonNull  HttpServletRequest request, @NonNull  HttpServletResponse response,
-                                    @NonNull   FilterChain filterChain) throws ServletException, IOException {
+    @Override
+    protected void doFilterInternal(  @NonNull  HttpServletRequest request, @NonNull  HttpServletResponse response,
+                                      @NonNull   FilterChain filterChain) throws ServletException, IOException {
 
-      String authHeader = request.getHeader("Authorization");
-      String token = null;
-      String email = null;
-      if (authHeader != null && authHeader.startsWith("Bearer ")){
-          token = authHeader.substring(7);
-          email = jwtService.extractUsernameFromToken(token);
-      }
-      if (email != null & SecurityContextHolder.getContext().getAuthentication() == null) {
-          UserDetails userDetails = us.loadUserByUsername(email);
-          if(jwtService.validateToken(token, userDetails)) {
-              var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-              authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-              SecurityContextHolder.getContext().setAuthentication(authToken);
-          }
-      }
-      filterChain.doFilter(request, response);
-  }
+        String authHeader = request.getHeader("Authorization");
+        String token = null;
+        String email = null;
+        if (authHeader != null && authHeader.startsWith("Bearer ")){
+            token = authHeader.substring(7);
+            email = jwtService.extractUsernameFromToken(token);
+        }
+        if (email != null & SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = us.loadUserByUsername(email);
+            var isValideToken= authTokenRepository.findByToken(token).map(t->!t.isExpired()&& !t.isRevoked()).orElse(false);
+            if(jwtService.validateToken(token, userDetails) && isValideToken) {
+                var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
 }
 
 

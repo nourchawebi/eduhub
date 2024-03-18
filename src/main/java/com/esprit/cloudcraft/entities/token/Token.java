@@ -18,8 +18,8 @@ import java.io.Serializable;
 public class Token implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+    private Long id;
+    @Column(columnDefinition = "longtext")
     private String token;
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;

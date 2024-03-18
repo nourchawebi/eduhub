@@ -61,7 +61,7 @@ public class ApplicationConfig {
         config.setAllowCredentials(true);
 
         // Allowed origins (e.g., http://localhost:4200)
-        config.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
+        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
 
         // Allowed headers
         config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));

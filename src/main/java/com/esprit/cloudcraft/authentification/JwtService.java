@@ -89,6 +89,10 @@ public class JwtService {
         byte[] keyByte = Decoders.BASE64.decode(JWT_SECRET);
         return Keys.hmacShaKeyFor(keyByte);
     }
+    public String generateRefreshToken( User userDetails) {
+        return generateToken( userDetails);
+    }
+
 
 }
 
