@@ -1,5 +1,6 @@
 package com.esprit.cloudcraft.repository;
 
+import com.esprit.cloudcraft.entities.User;
 import com.esprit.cloudcraft.entities.token.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,6 @@ public interface TokenRepository extends JpaRepository<Token,Long> {
     List<Token> findAllValidTokensByUser(Long userId);
 
     Optional<Token> findByToken(String token);
+    Token findTopByUserOrderByCreatedAtDesc(User user);
 }
+

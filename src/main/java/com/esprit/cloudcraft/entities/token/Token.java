@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Data
@@ -27,6 +31,7 @@ public class Token implements Serializable {
 
     private boolean expired;
     private boolean revoked;
+    private Timestamp createdAt ;
 
     @ManyToOne
     @JoinColumn(name ="user_id")

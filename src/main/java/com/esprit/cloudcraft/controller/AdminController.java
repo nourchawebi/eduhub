@@ -25,4 +25,15 @@ public class AdminController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to lock user. User may already be locked or not found.");
         }
-    }}
+    }
+
+    @PatchMapping("/unlock")
+    public ResponseEntity<?> unlockUser(@RequestParam("email") String email) {
+        if (adminService.unlockUser(email)) {
+            return ResponseEntity.status(HttpStatus.OK).body("User unlocked successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to lock user. User may already be locked or not found.");
+        }
+    }
+
+}

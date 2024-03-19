@@ -21,6 +21,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -78,6 +80,7 @@ public class AuthenticationService {
                 .user(user)
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
+                .createdAt(Timestamp.from(Instant.now()))
                 .revoked(false)
                 .expired(false)
                 .build();
