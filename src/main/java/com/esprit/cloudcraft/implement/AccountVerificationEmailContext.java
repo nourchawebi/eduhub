@@ -36,4 +36,9 @@ public class AccountVerificationEmailContext extends AbstractEmailContext {
                 .path("/user/update/email/verify").queryParam("token", token).toUriString();
         put("verificationURL", url);
     }
+    public void buildForgotPasswordUrl(final String baseURL, final String token){
+        final String url= UriComponentsBuilder.fromHttpUrl(baseURL)
+                .path("/login/changePasswordTemplate").queryParam("token", token).toUriString();
+        put("verificationURL", url);
+    }
 }

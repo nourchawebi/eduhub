@@ -4,6 +4,7 @@ import com.esprit.cloudcraft.authentification.JwtService;
 import com.esprit.cloudcraft.dto.AuthenticationResponse;
 import com.esprit.cloudcraft.dto.ChangeEmailRequest;
 import com.esprit.cloudcraft.dto.ChangePasswordRequest;
+import com.esprit.cloudcraft.dto.ForgotPasswordRequest;
 import com.esprit.cloudcraft.entities.SecureToken;
 import com.esprit.cloudcraft.entities.User;
 
@@ -16,7 +17,12 @@ import com.esprit.cloudcraft.services.UserService;
 
 import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
+import jakarta.persistence.Cacheable;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +30,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -44,6 +52,7 @@ public class UserImplement implements UserService {
     SecureTokenRepository secureTokenRepository;
     @Resource
     private JwtService jwtService;
+
 
     @Value("${site.base.url.https}")
     private String baseURL;
@@ -71,49 +80,6 @@ public class UserImplement implements UserService {
 
     }
 
-
-    /* public void resendToken(User user)  {
-
-
-          sendRegistrationConfirmationEmail(user);
-
-      }
-      @Override
-      public void sendRegistrationConfirmationEmail(User user) {
-          SecureToken secureToken= secureTokenService.createSecureToken();
-          secureToken.setUser(user);
-          secureTokenRepository.save(secureToken);
-          AccountVerificationEmailContext emailContext = new AccountVerificationEmailContext();
-          emailContext.init(user);
-          emailContext.setToken(secureToken.getToken());
-          emailContext.buildVerificationUrl(baseURL, secureToken.getToken());
-          try {
-              emailService.sendMail(emailContext);
-          } catch (MessagingException e) {
-              e.printStackTrace();
-          }
-
-      }
-
-      @Override
-      public boolean verifyUser(String token) {
-          SecureToken secureToken = secureTokenService.findByToken(token);
-          if (Objects.isNull(secureToken) || !StringUtils.equals(token, secureToken.getToken()) || secureToken.isExpired()) {
-
-          }
-
-          User user = userRepository.getOne(secureToken.getUser().getId());
-          if (Objects.isNull(user)) {
-              return false;
-          }
-          user.setEnable(true);
-          userRepository.save(user); // let’s same user details
-
-          // we don’t need invalid password now
-          secureTokenService.removeToken(secureToken);
-          return true;
-      }
-  */
     @Override
     public void sendRegistrationConfirmationEmail(User user) {
         SecureToken secureToken= secureTokenService.createSecureToken();
@@ -255,6 +221,57 @@ public class UserImplement implements UserService {
 
         // save the new password
         userRepository.save(user);
+    }
+/* forgot password */
+ public String pwdEmail;
+    @Override
+    public boolean sendForgotPasswordRequest(String email) {
+
+        SecureToken secureToken= secureTokenService.createSecureToken();
+        var userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isPresent()) {
+            pwdEmail=email;
+            User user = userOptional.get();
+            secureToken.setUser(user);
+            secureTokenRepository.save(secureToken);
+            AccountVerificationEmailContext emailContext = new AccountVerificationEmailContext();
+            emailContext.init(user);
+            emailContext.setToken(secureToken.getToken());
+            emailContext.buildForgotPasswordUrl(baseURL, secureToken.getToken());
+            try {
+                emailService.sendMail(emailContext);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }else{return false;
+
+        }
+
+    }
+
+    @Override
+    public boolean setForgotPassword(ForgotPasswordRequest request) {
+
+
+
+        var userOptional = userRepository.findByEmail(pwdEmail);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new IllegalStateException("Password are not the same");
+        }
+
+        // update the password
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        // save the new password
+        userRepository.save(user);
+        return true;
+
+    } return false;
     }
 
 

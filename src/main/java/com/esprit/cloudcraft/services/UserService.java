@@ -3,6 +3,7 @@ package com.esprit.cloudcraft.services;
 import com.esprit.cloudcraft.dto.AuthenticationResponse;
 import com.esprit.cloudcraft.dto.ChangeEmailRequest;
 import com.esprit.cloudcraft.dto.ChangePasswordRequest;
+import com.esprit.cloudcraft.dto.ForgotPasswordRequest;
 import com.esprit.cloudcraft.entities.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -17,6 +18,8 @@ public interface UserService {
     public boolean verifyNewEmail(String token);
     public String changeEmail(ChangeEmailRequest request, Principal connectedUser);
     public void changePassword(ChangePasswordRequest request, Principal connectedUser);
+    public  boolean sendForgotPasswordRequest(String email);
+    public boolean setForgotPassword(ForgotPasswordRequest request);
 
 
 

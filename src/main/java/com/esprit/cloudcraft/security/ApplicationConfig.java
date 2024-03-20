@@ -2,6 +2,8 @@ package com.esprit.cloudcraft.security;
 
 import com.esprit.cloudcraft.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -78,4 +80,5 @@ public class ApplicationConfig {
         // Create and return the CorsFilter
         return new CorsFilter(source);
     }
+
 }

@@ -3,11 +3,13 @@ package com.esprit.cloudcraft.controller;
 
 import com.esprit.cloudcraft.dto.AuthenticationRequest;
 import com.esprit.cloudcraft.dto.AuthenticationResponse;
+import com.esprit.cloudcraft.dto.ForgotPasswordRequest;
 import com.esprit.cloudcraft.entities.User;
 import com.esprit.cloudcraft.services.AuthenticationService;
 import com.esprit.cloudcraft.services.UserService;
 import com.esprit.cloudcraft.implement.UserImplement;
 import jakarta.annotation.Resource;
+import jakarta.persistence.Cacheable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +68,39 @@ public class UserController {
 
         userService.resendToken(email);
         return "emailSent";}
+/* these 3 methodes are for forget password */
+public String sentmail;
+
+   @GetMapping("login/forgotPassword")
+
+    public ResponseEntity<?>sendForgotPassword(@RequestParam("email") String email){
+       if( userService.sendForgotPasswordRequest(email))
+       { sentmail=email;
+           return ResponseEntity.ok("email sent");
+       }
+       else
+           return ResponseEntity.notFound().build();}
+    @GetMapping("login/changePasswordTemplate")
+    public String changepasswordTemplate(@RequestParam(required = false) String token){
+
+        return "changepasswordtemplate";}
+
+    @PatchMapping("login/setnewpassword")
+    public  ResponseEntity<?> setNewPassword( @RequestBody ForgotPasswordRequest request)
+    {
+       if(userService.setForgotPassword( request))
+       {   return ResponseEntity.ok("password changed");}
+       else
+           return ResponseEntity.notFound().build();
+    }
+
+
+
+
+
+
+
+
 
 
 }
