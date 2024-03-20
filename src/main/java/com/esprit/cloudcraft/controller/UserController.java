@@ -4,6 +4,7 @@ package com.esprit.cloudcraft.controller;
 import com.esprit.cloudcraft.dto.AuthenticationRequest;
 import com.esprit.cloudcraft.dto.AuthenticationResponse;
 import com.esprit.cloudcraft.dto.ForgotPasswordRequest;
+import com.esprit.cloudcraft.dto.VerificationRequest;
 import com.esprit.cloudcraft.entities.User;
 import com.esprit.cloudcraft.services.AuthenticationService;
 import com.esprit.cloudcraft.services.UserService;
@@ -31,9 +32,14 @@ public class UserController {
     private final AuthenticationService service;
     @PostMapping("register")
     @ResponseBody
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody User request )
+    public ResponseEntity<?> register(@RequestBody User request )
     {
-        return ResponseEntity.ok(userService.register(request));
+        var response=userService.register(request);
+        if(request.isMfaEnabled())
+        { return ResponseEntity.ok(response);}
+        else  {
+            return ResponseEntity.accepted().build();
+        }
 
 
     }
@@ -92,6 +98,12 @@ public String sentmail;
        {   return ResponseEntity.ok("password changed");}
        else
            return ResponseEntity.notFound().build();
+    }
+    @PostMapping("login/verify")
+    public ResponseEntity<?> verifyCode(
+            @RequestBody VerificationRequest verificationRequest
+    ) {
+        return ResponseEntity.ok(service.verifyCode(verificationRequest));
     }
 
 

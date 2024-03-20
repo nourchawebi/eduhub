@@ -32,7 +32,7 @@ public class User implements Serializable , UserDetails {
     private String password;
     private boolean mfaEnabled;
     private boolean notLocker=true;
-
+    private String secret;
    Date birthDate;
     @Enumerated(EnumType.STRING)
     ClassType classType;

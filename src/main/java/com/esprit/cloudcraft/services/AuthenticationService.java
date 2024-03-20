@@ -3,19 +3,23 @@ package com.esprit.cloudcraft.services;
 import com.esprit.cloudcraft.authentification.JwtService;
 import com.esprit.cloudcraft.dto.AuthenticationRequest;
 import com.esprit.cloudcraft.dto.AuthenticationResponse;
+import com.esprit.cloudcraft.dto.VerificationRequest;
 import com.esprit.cloudcraft.entities.User;
 import com.esprit.cloudcraft.entities.token.Token;
 import com.esprit.cloudcraft.entities.token.TokenType;
 import com.esprit.cloudcraft.repository.SecureTokenRepository;
 import com.esprit.cloudcraft.repository.TokenRepository;
 import com.esprit.cloudcraft.repository.UserRepository;
+import com.esprit.cloudcraft.tfa.TwoFactorAuthenticationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
@@ -38,6 +42,8 @@ public class AuthenticationService {
     private TokenRepository authTokenRepository;
     @Resource
     SecureTokenRepository emailTokenRepository;
+    @Resource
+    private TwoFactorAuthenticationService tfaService;
 
 
     public AuthenticationResponse authenticate(AuthenticationRequest request)  {
@@ -53,13 +59,25 @@ public class AuthenticationService {
 
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
+        if(user.isMfaEnabled())
+        {
+            return AuthenticationResponse.builder()
+                    // .secretImageUri(tfaService.generateQrCodeImageUri(user.getSecret()))
+                    .accessToken("")
+                    .refreshToken("")
+                    .mfaEnabled(true)
+                    .build();
+
+        }
         var jwtToken=jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
+               // .secretImageUri(tfaService.generateQrCodeImageUri(user.getSecret()))
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .mfaEnabled(false)
                 .build();
     }
 
@@ -111,6 +129,24 @@ public class AuthenticationService {
             }
         }
     }
+    /* here we verify the mfa code */
+    public AuthenticationResponse verifyCode(
+            VerificationRequest verificationRequest
+    ) {
+        User user = userRepository
+                .findByEmail(verificationRequest.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("No user found with %S", verificationRequest.getEmail()))
+                );
+        if (tfaService.isOtpNotValid(user.getSecret(), verificationRequest.getCode())) {
 
+            throw new BadCredentialsException("Code is not correct");
+        }
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .mfaEnabled(user.isMfaEnabled())
+                .build();
+    }
 
 }
