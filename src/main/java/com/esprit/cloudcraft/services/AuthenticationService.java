@@ -7,6 +7,8 @@ import com.esprit.cloudcraft.dto.VerificationRequest;
 import com.esprit.cloudcraft.entities.User;
 import com.esprit.cloudcraft.entities.token.Token;
 import com.esprit.cloudcraft.entities.token.TokenType;
+
+import com.esprit.cloudcraft.exceptions.userAlreadyExistException;
 import com.esprit.cloudcraft.repository.SecureTokenRepository;
 import com.esprit.cloudcraft.repository.TokenRepository;
 import com.esprit.cloudcraft.repository.UserRepository;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
@@ -46,19 +49,21 @@ public class AuthenticationService {
     private TwoFactorAuthenticationService tfaService;
 
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request)  {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws userAlreadyExistException {
 
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
-        } catch (AuthenticationException e) {
-            // Handle authentication failure, e.g., incorrect credentials
-            throw new RuntimeException("Authentication failed: " + e.getMessage(), e);
+        } catch (Exception e) {
+            // Handle bad credentials (incorrect email or password)
+
         }
+
 
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
+
         if(user.isMfaEnabled())
         {
             return AuthenticationResponse.builder()

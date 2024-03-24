@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.security.Principal;
 
 public interface UserService {
-   AuthenticationResponse register(User user)throws UsernameNotFoundException;
+   AuthenticationResponse register(User user);
      void sendRegistrationConfirmationEmail(User user);
     boolean verifyUser(String token);
     public void resendToken(String email) throws IllegalArgumentException;
@@ -20,7 +20,8 @@ public interface UserService {
     public void changePassword(ChangePasswordRequest request, Principal connectedUser);
     public  boolean sendForgotPasswordRequest(String email);
     public boolean setForgotPassword(ForgotPasswordRequest request);
-
+    public boolean findByEmail(String email);
+ public User getByEmail(String email);
 
 
 

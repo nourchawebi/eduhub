@@ -37,7 +37,7 @@ public class User implements Serializable , UserDetails {
     @Enumerated(EnumType.STRING)
     ClassType classType;
     @Enumerated(EnumType.STRING)
-    private RoleType role;
+    private RoleType role=RoleType.USER;
     private boolean enable;
     @OneToMany(mappedBy = "user")
     private Set<SecureToken> tokens;

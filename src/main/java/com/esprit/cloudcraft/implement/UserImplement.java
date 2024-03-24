@@ -61,30 +61,27 @@ public class UserImplement implements UserService {
     private String baseURL;
 
     @Override
-    public AuthenticationResponse register(User user) throws UsernameNotFoundException {
-        if (userRepository.findByEmail(user.getEmail()) != null) {
-            new UsernameNotFoundException("user already exists");
+    public AuthenticationResponse register(User user)  {
 
-        }
 
-        String encryptedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encryptedPassword);
-        user.setEnable(false);
-         if(  user.isMfaEnabled())
-         {
-             user.setSecret(tfaService.generateNewSecret());
-         }
-        var savedUser = userRepository.save(user);
 
-        sendRegistrationConfirmationEmail(user);
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        authService.saveUserToken(savedUser, jwtToken);
-        return AuthenticationResponse.builder()
-                .secretImageUri(tfaService.generateQrCodeImageUri(user.getSecret()))
-                .accessToken(jwtToken)
-                .mfaEnabled(user.isMfaEnabled())
-                .refreshToken(refreshToken).build();
+            String encryptedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encryptedPassword);
+            user.setEnable(false);
+            if (user.isMfaEnabled()) {
+                user.setSecret(tfaService.generateNewSecret());
+            }
+            var savedUser = userRepository.save(user);
+
+            sendRegistrationConfirmationEmail(user);
+            var jwtToken = jwtService.generateToken(user);
+            var refreshToken = jwtService.generateRefreshToken(user);
+            authService.saveUserToken(savedUser, jwtToken);
+            return AuthenticationResponse.builder()
+                    .secretImageUri(tfaService.generateQrCodeImageUri(user.getSecret()))
+                    .accessToken(jwtToken)
+                    .mfaEnabled(user.isMfaEnabled())
+                    .refreshToken(refreshToken).build();
 
     }
 
@@ -280,6 +277,20 @@ public class UserImplement implements UserService {
         return true;
 
     } return false;
+    }
+
+    @Override
+    public boolean findByEmail(String email) {
+        if (userRepository.findByEmail(email) != null) {
+            return true;
+        }
+        return false;
+    }
+    @Override
+    public User getByEmail(String email) {
+        var user= userRepository.findByEmail(email)  ;
+
+       return  user.get();
     }
 
 
