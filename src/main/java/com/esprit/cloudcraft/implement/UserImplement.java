@@ -240,10 +240,11 @@ public class UserImplement implements UserService {
             User user = userOptional.get();
             secureToken.setUser(user);
             secureTokenRepository.save(secureToken);
-            AccountVerificationEmailContext emailContext = new AccountVerificationEmailContext();
+           ForgotPasswordEmailContext emailContext = new ForgotPasswordEmailContext();
             emailContext.init(user);
             emailContext.setToken(secureToken.getToken());
-            emailContext.buildForgotPasswordUrl(baseURL, secureToken.getToken());
+            String base="http://localhost:4200";
+            emailContext.buildForgotPasswordUrl(base, secureToken.getToken());
             try {
                 emailService.sendMail(emailContext);
             } catch (MessagingException e) {

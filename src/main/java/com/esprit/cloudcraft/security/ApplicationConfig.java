@@ -69,7 +69,7 @@ public class ApplicationConfig {
         config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
 
         // Allowed methods (e.g., GET, POST, PUT, DELETE, etc.)
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
 
         // Exposed headers (response headers that can be exposed to the client)
         config.setExposedHeaders(Collections.singletonList("Authorization"));

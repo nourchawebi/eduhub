@@ -119,20 +119,21 @@ public String sentmail;
     public ResponseEntity<?>sendForgotPassword(@RequestParam("email") String email){
        if( userService.sendForgotPasswordRequest(email))
        { sentmail=email;
-           return ResponseEntity.ok("email sent");
+
+           return ResponseEntity.accepted().build();
        }
        else
            return ResponseEntity.notFound().build();}
-    @GetMapping("login/changePasswordTemplate")
+   /* @GetMapping("login/changePasswordTemplate")
     public String changepasswordTemplate(@RequestParam(required = false) String token){
 
-        return "changepasswordtemplate";}
+        return "changepasswordtemplate";}*/
 
     @PatchMapping("login/setnewpassword")
     public  ResponseEntity<?> setNewPassword( @RequestBody ForgotPasswordRequest request)
     {
        if(userService.setForgotPassword( request))
-       {   return ResponseEntity.ok("password changed");}
+       {   return ResponseEntity.accepted().build();}
        else
            return ResponseEntity.notFound().build();
     }

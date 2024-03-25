@@ -4,7 +4,7 @@ import com.esprit.cloudcraft.entities.AbstractEmailContext;
 import com.esprit.cloudcraft.entities.User;
 import org.springframework.web.util.UriComponentsBuilder;
 
-public class AccountVerificationEmailContext extends AbstractEmailContext {
+public class ForgotPasswordEmailContext extends AbstractEmailContext {
 
     private String token;
 
@@ -15,7 +15,7 @@ public class AccountVerificationEmailContext extends AbstractEmailContext {
         // like setting up some base URL and context
         User customer = (User) context; // we pass the customer informati
         put("firstName", customer.getFirstName());
-        setTemplateLocation("emailverif");
+        setTemplateLocation("emailForgotPassword");
         setSubject("Complete your registration");
         setFrom("nourelhoudachawebi@gmail.com");
         setTo(customer.getEmail());
@@ -40,7 +40,7 @@ public class AccountVerificationEmailContext extends AbstractEmailContext {
     }
     public void buildForgotPasswordUrl(final String baseURL, final String token){
         final String url= UriComponentsBuilder.fromHttpUrl(baseURL)
-                .path("http://localhost:4200/resetpassword").queryParam("token", token).toUriString();
+                .path("resetpassword").queryParam("token", token).toUriString();
         put("resetPasswordUrl", url);
     }
 }
