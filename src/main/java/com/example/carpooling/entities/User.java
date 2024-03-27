@@ -14,4 +14,6 @@ public class User {
     private List<Participation> participations;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "motorized")
     private List<Journey> journeys;
+    @OneToOne
+    private Location location;
 }
