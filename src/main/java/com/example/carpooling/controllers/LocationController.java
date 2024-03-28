@@ -1,6 +1,5 @@
 package com.example.carpooling.controllers;
 
-import com.example.carpooling.entities.Car;
 import com.example.carpooling.entities.Location;
 import com.example.carpooling.entities.User;
 import com.example.carpooling.services.LocationService;
@@ -13,7 +12,7 @@ public class LocationController {
     @Autowired
     LocationService locationService;
     @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("location")
+    @PostMapping("location/{id}")
     @ResponseBody
     public User addLocation(@PathVariable("id") Integer id, @RequestBody Location location){
         return locationService.addLocation(id,location);
