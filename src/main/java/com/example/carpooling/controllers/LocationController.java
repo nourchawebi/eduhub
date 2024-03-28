@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 public class LocationController {
     @Autowired
@@ -23,6 +25,20 @@ public class LocationController {
     @ResponseBody
     public Location getUserLocation(@PathVariable("id") Integer id){
         return locationService.getUserLocation(id);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("location")
+    @ResponseBody
+    public List<Location> getAllLocations(){
+        return locationService.getUsersLocation();
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @DeleteMapping("location/{id}")
+    @ResponseBody
+    public void deleteLocation(@PathVariable("id") Integer id){
+        locationService.deleteLocation(id);
     }
 
 }
