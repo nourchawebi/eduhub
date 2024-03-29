@@ -10,7 +10,7 @@ import java.util.List;
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "carpooled")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Participation> participations;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "motorized")
     private List<Journey> journeys;

@@ -11,4 +11,5 @@ public interface ParticipationDao extends JpaRepository<Participation,Integer> {
 
     List<Participation> findAllByCarpooled(User carpooled);
     List<Participation> findAllByJourney(Journey journey);
+    Boolean existsParticipationByCarpooledAndJourney(User carpooled,Journey journey);
 }

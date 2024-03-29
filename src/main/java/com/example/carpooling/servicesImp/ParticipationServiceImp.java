@@ -5,10 +5,12 @@ import com.example.carpooling.daos.ParticipationDao;
 import com.example.carpooling.daos.UserDao;
 import com.example.carpooling.entities.Journey;
 import com.example.carpooling.entities.Participation;
+import com.example.carpooling.entities.User;
 import com.example.carpooling.services.ParticipationService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -24,10 +26,19 @@ public class ParticipationServiceImp implements ParticipationService {
     public Participation addParticipation(Integer idCarpooled, Integer idJourney) {
         if(idCarpooled!=null&&idJourney!=null)
             if(userDao.existsById(idCarpooled)&&journeyDao.existsById(idJourney)){
-                Participation participation = new Participation();
-                participation.setCarpooled(userDao.getReferenceById(idCarpooled));
-                participation.setJourney(journeyDao.getReferenceById(idJourney));
-                return participationDao.save(participation);
+                User carpooled = userDao.getReferenceById(idCarpooled);
+                Journey journey = journeyDao.getReferenceById(idJourney);
+                if(!participationDao.existsParticipationByCarpooledAndJourney(carpooled,journey)){
+                    Participation participation = new Participation();
+                    participation.setCarpooled(carpooled);
+                    participation.setJourney(journey);
+                    participationDao.save(participation);
+                    journey.getParticipations().add(participation);
+                    journeyDao.save(journey);
+                    carpooled.getParticipations().add(participation);
+                    userDao.save(carpooled);
+                    return participation;
+                }
             }
         return null;
     }
@@ -45,6 +56,31 @@ public class ParticipationServiceImp implements ParticipationService {
         if (idCarpooled!=null)
             if (userDao.existsById(idCarpooled))
                 return participationDao.findAllByCarpooled(userDao.getReferenceById(idCarpooled));
+        return null;
+    }
+
+    @Override
+    public List<User> getJourneyCarpooled(Integer idJourney) {
+        if(idJourney!=null)
+            if(journeyDao.existsById(idJourney)){
+                Journey journey = journeyDao.getReferenceById(idJourney);
+                List<Participation> participations = journey.getParticipations();
+                List<User> users = userDao.getUserByParticipationsIn(participations);
+                return users;
+            }
+        return null;
+    }
+
+    @Override
+    public List<Journey> getCarpooledJourneys(Integer idCarpooled) {
+        if(idCarpooled!=null)
+            if(userDao.existsById(idCarpooled)){
+                System.out.println(idCarpooled);
+                User user = userDao.getReferenceById(idCarpooled);
+                List<Participation> participations = user.getParticipations();
+                List<Journey> journeys = journeyDao.getJourneysByParticipationsIn(participations);
+                return journeys;
+            }
         return null;
     }
 
