@@ -56,7 +56,7 @@ public class AuthenticationService {
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
         } catch (Exception e) {
-            // Handle bad credentials (incorrect email or password)
+           throw new BadCredentialsException("bad crednetial");
 
         }
 
