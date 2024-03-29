@@ -39,6 +39,10 @@ public class JwtService {
         claims.put("lastName", user.getLastName());
         claims.put("email", user.getEmail());
         claims.put("role", user.getRole());
+        claims.put("birthDate",user.getBirthDate());
+        claims.put(" mfaEnabled",user.isMfaEnabled());
+        claims.put("classeType", user.getClassType());
+
 
 
 

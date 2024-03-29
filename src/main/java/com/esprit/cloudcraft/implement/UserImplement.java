@@ -1,10 +1,7 @@
 package com.esprit.cloudcraft.implement;
 
 import com.esprit.cloudcraft.authentification.JwtService;
-import com.esprit.cloudcraft.dto.AuthenticationResponse;
-import com.esprit.cloudcraft.dto.ChangeEmailRequest;
-import com.esprit.cloudcraft.dto.ChangePasswordRequest;
-import com.esprit.cloudcraft.dto.ForgotPasswordRequest;
+import com.esprit.cloudcraft.dto.*;
 import com.esprit.cloudcraft.entities.SecureToken;
 import com.esprit.cloudcraft.entities.User;
 
@@ -18,12 +15,7 @@ import com.esprit.cloudcraft.services.UserService;
 import com.esprit.cloudcraft.tfa.TwoFactorAuthenticationService;
 import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
-import jakarta.persistence.Cacheable;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,8 +23,6 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -155,16 +145,15 @@ public class UserImplement implements UserService {
     }
     /* tw lmethode mt3 lverif mt3na li bch t3ml el update*/
 
-    public boolean verifyNewEmail(String token) {
+    public AuthenticationResponse verifyNewEmail(String token) {
         SecureToken secureToken = secureTokenService.findByToken(token);
         if (Objects.isNull(secureToken) || !StringUtils.equals(token, secureToken.getToken()) || secureToken.isExpired()) {
-
+           // throw new InvalidTokenException("Invalid or expired token.");
         }
 
-        User user = userRepository.getOne(secureToken.getUser().getId());
-        if (Objects.isNull(user)) {
-            return false;
-        }
+        User user = userRepository.findById(secureToken.getUser().getId())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+
         user.setEnable(true);
         user.setEmail(newEmail);
         userRepository.save(user); // let’s save user details
@@ -175,12 +164,16 @@ public class UserImplement implements UserService {
 
         // we don’t need invalid password now
         secureTokenService.removeToken(secureToken);
-
-
-        return true;
+        return AuthenticationResponse.builder()
+                // .secretImageUri(tfaService.generateQrCodeImageUri(user.getSecret()))
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .mfaEnabled(user.isMfaEnabled())
+                .build();
     }
 
     public String newEmail;
+    /* hdi awl haja bch namlohal i nb3thou request mt3 update request b email */
 
     public String changeEmail(ChangeEmailRequest request, Principal connectedUser) {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
@@ -293,6 +286,33 @@ public class UserImplement implements UserService {
 
        return  user.get();
     }
+
+    /* update personal infos */
+    @Override
+    public AuthenticationResponse changePersonalInfos(ChangePersonalInfosdRequest request, Principal connectedUser)
+    {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setBirthDate(request.getBirthDate());
+        user.setClassType(request.getClassType());
+        userRepository.save(user);
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+        authService.revokeAllUserTokens(user);
+        authService.saveUserToken(user, jwtToken);
+
+
+        return AuthenticationResponse.builder()
+                // .secretImageUri(tfaService.generateQrCodeImageUri(user.getSecret()))
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .mfaEnabled(user.isMfaEnabled())
+                .build();
+
+    }
+
 
 
 }

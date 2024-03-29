@@ -3,6 +3,7 @@ package com.esprit.cloudcraft.controller;
 
 import com.esprit.cloudcraft.dto.ChangeEmailRequest;
 import com.esprit.cloudcraft.dto.ChangePasswordRequest;
+import com.esprit.cloudcraft.dto.ChangePersonalInfosdRequest;
 import com.esprit.cloudcraft.services.UserService;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
@@ -47,19 +48,21 @@ public class simpleConnectedUserController {
 
     @Async
     @GetMapping("update/email/verify")
-    public ResponseEntity<String> verifyCustomer(@RequestParam(required = false) String token) {
+    public  ResponseEntity<?> verifyCustomer(@RequestParam(required = false) String token) {
         emailVerified = true;
-        boolean verificationResult = userService.verifyNewEmail(token);
-        if (verificationResult) {
+
+
             emailVerified = true;
-            synchronized (this) {
-                this.notify(); // Notify waiting thread in changeEmail method
-            }
-            return ResponseEntity.ok("Verification successful.");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Verification failed.");
+        return ResponseEntity.ok(userService.verifyNewEmail(token));
+
         }
-    }
 
-
+/* chnage personal infos request*/
+ @PatchMapping("updatePersonalData")
+    public  ResponseEntity<?> updateUserInfos(
+            @RequestBody ChangePersonalInfosdRequest request
+         , Principal connectedUser)
+ {
+     return ResponseEntity.ok(userService.changePersonalInfos(request,connectedUser));
+ }
 }
