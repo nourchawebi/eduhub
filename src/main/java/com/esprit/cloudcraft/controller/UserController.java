@@ -26,7 +26,7 @@ import java.io.IOException;
 @Controller
 
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:8081", exposedHeaders = "token")
+//@CrossOrigin(origins = "http://localhost:8081", exposedHeaders = "token")
 public class UserController {
     @Resource
     private UserService userService;
@@ -38,8 +38,10 @@ public class UserController {
     @PostMapping("register")
     @ResponseBody
     public ResponseEntity<?> register(@RequestBody User request )
-    {   if (userService.findByEmail(request.getEmail())) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+    {              boolean test=userService.findByEmail(request.getEmail());
+
+        if (userService.findByEmail(request.getEmail())) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(test);
     }
        else{
         var response=userService.register(request);

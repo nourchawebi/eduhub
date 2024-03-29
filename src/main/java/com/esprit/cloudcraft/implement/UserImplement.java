@@ -275,9 +275,9 @@ public class UserImplement implements UserService {
 
     @Override
     public boolean findByEmail(String email) {
-        if (userRepository.findByEmail(email) != null) {
-            return true;
-        }
+        var user= userRepository.findByEmail(email);
+        if(user.isPresent())
+        {return true;}
         return false;
     }
     @Override
