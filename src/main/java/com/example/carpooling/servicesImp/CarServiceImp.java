@@ -19,8 +19,11 @@ public class CarServiceImp implements CarService {
 
     @Override
     public Car addCar(Car car) {
-        car.setMotorized(userDao.getReferenceById(1));
-        return carDao.save(car);
+        car = carDao.save(car);
+        User user = userDao.getReferenceById(1);
+        user.getCars().add(car);
+        userDao.save(user);
+        return car;
     }
 
     @Override
@@ -46,9 +49,8 @@ public class CarServiceImp implements CarService {
 
     @Override
     public List<Car> getCarsByMotorized() {
-        User user = userDao.getReferenceById(1);
-        System.out.println(user);
-        return carDao.getCarsByMotorized(user);
+
+        return userDao.getReferenceById(1).getCars();
     }
 
     @Override

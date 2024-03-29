@@ -15,6 +15,4 @@ public class Car {
     @Temporal(TemporalType.DATE)
     private Date year;
     private Integer capacity;
-
-    @ManyToOne User motorized;
 }

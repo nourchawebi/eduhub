@@ -15,6 +15,7 @@ public class Journey {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer journeyId;
+    private Double price;
     @Enumerated(EnumType.ORDINAL)
     private Day day;
     @JsonFormat(pattern="HH:mm")

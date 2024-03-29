@@ -21,8 +21,8 @@ public class LocationServiceImp implements LocationService {
     public User setLocation(Integer userId, Location location) {
         if(userId!=null)
             if(userDao.existsById(userId))
-                if(userDao.getReferenceById(userId).getLocation()==null)
                     {
+                        locationDao.save(location);
                         User user = userDao.getReferenceById(userId);
                         user.setLocation(location);
                         return userDao.save(user);

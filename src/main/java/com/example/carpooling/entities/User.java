@@ -16,4 +16,6 @@ public class User {
     private List<Journey> journeys;
     @OneToOne
     private Location location;
+    @OneToMany
+    private List<Car> cars;
 }

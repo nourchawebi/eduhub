@@ -12,5 +12,4 @@ public interface CarDao extends JpaRepository<Car,Integer> {
     @Query(value = "select distinct u from User u join Journey j on u.userId = j.motorized.userId")
     List<User> getMotorized();
 
-    List<Car> getCarsByMotorized(User motorized);
 }
