@@ -16,6 +16,6 @@ public class User {
     private List<Journey> journeys;
     @OneToOne
     private Location location;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Car> cars;
 }

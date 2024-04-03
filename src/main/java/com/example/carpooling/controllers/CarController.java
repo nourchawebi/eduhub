@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @Controller
 public class CarController {
     @Autowired
@@ -22,13 +23,14 @@ public class CarController {
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("motorized_cars")
+    @GetMapping("car")
     @ResponseBody
     public List<Car> getMotorizedCars(){
         return carService.getCarsByMotorized();
     }
 
-    @GetMapping("car")
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("car/all")
     @ResponseBody
     public List<Car> getAllCars(){
         return carService.getAllCars();
@@ -47,6 +49,7 @@ public class CarController {
         return carService.modifyCar(id,car);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("car/{id}")
     @ResponseBody
     public void deleteCarById(@PathVariable("id") Integer id){
