@@ -1,6 +1,7 @@
 package com.esprit.cloudcraft.controller.userController;
 
 import com.esprit.cloudcraft.dto.userdto.AuthenticationRequest;
+import com.esprit.cloudcraft.dto.userdto.AuthenticationResponse;
 import com.esprit.cloudcraft.dto.userdto.ForgotPasswordRequest;
 import com.esprit.cloudcraft.dto.userdto.VerificationRequest;
 import com.esprit.cloudcraft.entities.userEntities.ClassType;
@@ -14,11 +15,15 @@ import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.Optional;
 
+import java.util.*;
+@CrossOrigin(origins="*")
 @Controller
 @RequiredArgsConstructor
 
@@ -157,5 +162,15 @@ public String sentmail;
      ) throws IOException {
          service.refreshToken(request,response);
      }*/
+
+    /*********************** oauth2:github *******************/
+
+    @GetMapping("/hello")
+    @ResponseBody
+    public Map<String, Object> getUser(@AuthenticationPrincipal OAuth2User oAuth2User) {
+        return oAuth2User.getAttributes();
+    }
+
+
 
 }

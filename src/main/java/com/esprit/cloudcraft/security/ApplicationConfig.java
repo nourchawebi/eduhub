@@ -60,7 +60,7 @@ public class ApplicationConfig {
         config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
 
         // Allowed headers
-        config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+        config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "responseType", "Authorization"));
 
         // Allowed methods (e.g., GET, POST, PUT, DELETE, etc.)
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));

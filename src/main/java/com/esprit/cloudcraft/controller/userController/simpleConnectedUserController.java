@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
-
+@CrossOrigin(origins="*")
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -29,6 +29,7 @@ public class simpleConnectedUserController {
         return userService.getAllUsers();
     }
     /********************* change the password in the data base ************************/
+
     @PatchMapping("updatePassword")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request, Principal connectedUser)
     {

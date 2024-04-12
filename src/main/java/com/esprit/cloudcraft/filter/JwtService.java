@@ -13,8 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -31,13 +33,17 @@ public class JwtService {
 
     public String generateToken(User user){
         Map<String, Object> claims = new HashMap<>();
+        // Create a date formatter with the desired format
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
 
+        // Format the date
+        String formattedDate = formatter.format(user.getBirthDate());
         claims.put("id", user.getId());
         claims.put("firstName", user.getFirstName());
         claims.put("lastName", user.getLastName());
         claims.put("email", user.getEmail());
         claims.put("role", user.getRole());
-        claims.put("birthDate",user.getBirthDate());
+        claims.put("birthDate",formattedDate);
         claims.put(" mfaEnabled",user.isMfaEnabled());
         claims.put("classeType", user.getClassType());
 

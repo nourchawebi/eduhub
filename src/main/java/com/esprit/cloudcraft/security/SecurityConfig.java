@@ -1,7 +1,9 @@
 package com.esprit.cloudcraft.security;
 
+import jakarta.annotation.Resource;
 import org.springframework.security.authentication.AuthenticationProvider;
 import com.esprit.cloudcraft.filter.JwtAuthenticationFilter;
+
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+
+import static org.springframework.security.config.Customizer.withDefaults;
+
 
 @Configuration
 @EnableWebSecurity
@@ -30,23 +35,33 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/login/**").permitAll()
+
                         .requestMatchers("/user/update/email/verify").permitAll()
                         .requestMatchers("/home").hasAuthority("USER")
                         .requestMatchers("/admin").hasAuthority("ADMIN")
 
                         .anyRequest().authenticated()
                         //will not create or use HTTP sessions to maintain user state
-                ).sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                )
+
+               .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 // Add JWT authentication filter before UsernamePasswordAuthenticationFilter
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) .logout(logout -> logout
+               .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(logout -> logout
                         .logoutUrl("/logout")
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                 )
-        ;
+
+
+
+
+              ;
+
 
         return http.build();
     }
+
 
 }

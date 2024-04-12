@@ -1,5 +1,6 @@
 package com.esprit.cloudcraft.implement.userImplement;
 
+
 import com.esprit.cloudcraft.filter.JwtService;
 import com.esprit.cloudcraft.dto.userdto.AuthenticationRequest;
 import com.esprit.cloudcraft.dto.userdto.AuthenticationResponse;
@@ -21,11 +22,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationImplement  implements AuthenticationService {
@@ -47,7 +51,7 @@ public class AuthenticationImplement  implements AuthenticationService {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         } catch (Exception e)
         {
-            throw new BadCredentialsException("bad crednetial");
+            throw new BadCredentialsException("bad credentials");
         }
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
@@ -119,6 +123,8 @@ public class AuthenticationImplement  implements AuthenticationService {
                 .mfaEnabled(user.isMfaEnabled())
                 .build();
     }
+
+
 
     @Override
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException
