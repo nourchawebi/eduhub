@@ -1,5 +1,6 @@
 package com.example.carpooling.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,8 +15,9 @@ public class Car {
     private Integer carId;
     private String manufacturer;
     private String model;
-    private File image;
+    private String registrationNumber;
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-MM")
     private Date year;
     private Integer capacity;
 }

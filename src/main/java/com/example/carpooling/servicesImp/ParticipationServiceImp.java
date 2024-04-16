@@ -34,6 +34,7 @@ public class ParticipationServiceImp implements ParticipationService {
                     participation.setJourney(journey);
                     participationDao.save(participation);
                     journey.getParticipations().add(participation);
+                    journey.setAvailablePlaces(journey.getAvailablePlaces()-1);
                     journeyDao.save(journey);
                     carpooled.getParticipations().add(participation);
                     userDao.save(carpooled);
@@ -89,5 +90,13 @@ public class ParticipationServiceImp implements ParticipationService {
         if (idParticipation!=null)
             if(participationDao.existsById(idParticipation))
                 participationDao.deleteById(idParticipation);
+    }
+
+    @Override
+    public Boolean checkParticipation(Integer idJourney) {
+        if(idJourney!=null)
+            if(participationDao.existsById(idJourney))
+                return participationDao.existsParticipationByCarpooledAndJourney(userDao.getReferenceById(1),journeyDao.getReferenceById(idJourney));
+        return null;
     }
 }

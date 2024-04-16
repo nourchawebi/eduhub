@@ -17,7 +17,14 @@ public class LocationController {
     @PostMapping("location/{id}")
     @ResponseBody
     public User addLocation(@PathVariable("id") Integer id, @RequestBody Location location){
-        return locationService.setLocation(id,location);
+        return locationService.addLocation(id,location);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PutMapping("location/{id}")
+    @ResponseBody
+    public User updateLocation(@PathVariable("id") Integer id, @RequestBody Location location){
+        return locationService.updateLocation(id,location);
     }
 
     @CrossOrigin(origins = "http://localhost:4200")

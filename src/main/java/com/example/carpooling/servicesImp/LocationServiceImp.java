@@ -18,7 +18,7 @@ public class LocationServiceImp implements LocationService {
     UserDao userDao;
 
     @Override
-    public User setLocation(Integer userId, Location location) {
+    public User addLocation(Integer userId, Location location) {
         if(userId!=null)
             if(userDao.existsById(userId))
                     {
@@ -27,6 +27,20 @@ public class LocationServiceImp implements LocationService {
                         user.setLocation(location);
                         return userDao.save(user);
                     }
+        return null;
+    }
+
+    @Override
+    public User updateLocation(Integer userId, Location location) {
+        if(userId!=null)
+            if(userDao.existsById(userId))
+            {
+                User user = userDao.getReferenceById(userId);
+                location.setLocationId(user.getLocation().getLocationId());
+                locationDao.save(location);
+                user.setLocation(location);
+                return userDao.save(user);
+            }
         return null;
     }
 

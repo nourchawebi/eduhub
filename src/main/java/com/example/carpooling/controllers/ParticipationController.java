@@ -23,11 +23,19 @@ public class ParticipationController {
         return participationService.addParticipation(idCarpooled,idJourney);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+/*    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("participation/journey/{idJourney}")
     @ResponseBody
     public List<Participation> getJourneyParticipations(@PathVariable Integer idJourney){
         return participationService.getJourneyParticipations(idJourney);
+    }*/
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("participation/journey/{idJourney}")
+    @ResponseBody
+    public Boolean checkParticipation(@PathVariable Integer idJourney){
+
+        return participationService.checkParticipation(idJourney);
     }
 
     @CrossOrigin(origins = "http://localhost:4200")

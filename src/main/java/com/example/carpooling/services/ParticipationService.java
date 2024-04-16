@@ -18,4 +18,5 @@ public interface ParticipationService {
 
     void removeParticipation(Integer idParticipation);
 
+    Boolean checkParticipation(Integer idJourney);
 }
