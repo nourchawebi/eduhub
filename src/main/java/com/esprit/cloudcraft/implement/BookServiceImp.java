@@ -1,14 +1,16 @@
 package com.esprit.cloudcraft.implement;
 
+import com.esprit.cloudcraft.dto.BookRequest;
 import com.esprit.cloudcraft.entities.*;
 import com.esprit.cloudcraft.repository.BookDao;
 import com.esprit.cloudcraft.repository.CategoryDao;
-import com.esprit.cloudcraft.services.BookService;
-import com.esprit.cloudcraft.services.UserService;
+import com.esprit.cloudcraft.services.*;
 import jakarta.annotation.Resource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,18 +21,49 @@ public class BookServiceImp implements BookService {
 
     @Resource
     private UserService userService;
+    @Resource
+    private FileStorageService fileStorageService ;
+
+    @Resource
+    private CategoryService categoryService ;
+
+    @Resource BookMapperService bookMapperService;
 
     @Override
-    public Boolean addBook(User user,Book book) {
+    public Boolean addBook (Book newbook , Long iduser, Long idcategory,MultipartFile image) {
         boolean result = Boolean.FALSE;
-        final User requestedUser = userService.findUserById(user.getId());
-        if (user!= null && book!= null){
-            userService.addBookToUser(requestedUser, book);
-            bookDao.save(book);
+        final User requestedUser = userService.findUserById(iduser);
+         Category requesteCategory = categoryService.getCategoryByID(idcategory);
+        Book book =new Book();
+        if (requestedUser!= null && newbook!= null && requesteCategory!=null){
+
+            book.setCategory(requesteCategory);
+            book.setAuthor(newbook.getAuthor());
+            book.setDescription(newbook.getDescription());
+            book.setTitle(newbook.getTitle());
+            book.setPicture(fileStorageService.saveImage(image));
+            book.setAvailability(AvailabilityType.AVAILABILE);
+            book.setPublicationDate(new Date());
+            Book savedbook=bookDao.save(book);
+
+            requesteCategory.getBooks().add(savedbook);
+            categoryService.UpdateCategory(requesteCategory);
+
+            userService.addBookToUser(requestedUser, savedbook);
+
             result = Boolean.TRUE;
         }
 
         return result;
+    }
+
+    @Override
+    public void uploadBookCoverPicture(MultipartFile file, User connectedUser, Long bookId) {
+        Book book = this.getBookByID(bookId);
+        User user =  userService.findUserById(connectedUser.getId());
+        var profilePicture = fileStorageService.saveFile(file, bookId, user.getId());
+        book.setPicture(profilePicture);
+        bookDao.save(book);
     }
 
     @Override
@@ -96,4 +129,8 @@ public class BookServiceImp implements BookService {
         }
         return null;
     }
+
+
+
+
 }

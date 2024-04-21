@@ -40,7 +40,11 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public Category UpdateCategory(Category category) {
-        return categoryDao.saveAndFlush(category);
+        Long nb = category.getIdCategory();
+        Category requestedCategory = this.getCategoryByID(nb);
+        requestedCategory.setName(category.getName());
+        requestedCategory.setDescription((category.getDescription()));
+        return categoryDao.save(requestedCategory);
     }
 
     @Override

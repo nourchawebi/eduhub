@@ -5,3 +5,5 @@ public enum AvailabilityType {
     NOT_AVAILABILE
 
 }
+
+

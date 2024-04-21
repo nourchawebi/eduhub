@@ -1,13 +1,18 @@
 package com.esprit.cloudcraft.controller;
 
+import com.esprit.cloudcraft.dto.BookCategoryDto;
 import com.esprit.cloudcraft.dto.BookDto;
+import com.esprit.cloudcraft.dto.BookRequest;
 import com.esprit.cloudcraft.entities.Book;
 import com.esprit.cloudcraft.entities.Category;
 import com.esprit.cloudcraft.services.BookService;
 import com.esprit.cloudcraft.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -61,14 +66,21 @@ public class BookController {
         }
     }
 
-    @PostMapping("/addBook")
-    @ResponseBody
-    public Boolean addBook(@RequestBody BookDto dto) {
-        if (dto!= null){
-            return bookService.addBook(dto.getUser(), dto.getBook());
-        }
-        return Boolean.FALSE;
+    @PostMapping(value = "/addBook/{idUsuer}/{idCategory}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> addBook(@RequestParam String author,@RequestParam String title,@RequestParam String description,@RequestParam MultipartFile picture , @PathVariable Long idUsuer, @PathVariable Long idCategory) {
+        System.out.println(picture);
 
+        if (idUsuer !=null && idUsuer!=null)
+        {
+            Book newBook=Book.builder()
+                    .title(title)
+                    .description(description)
+                    .author(author)
+                    .build();
+            bookService.addBook(newBook,idUsuer,idCategory,picture);
+
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/updateBook/{id}")

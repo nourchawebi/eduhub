@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Data
+@Builder
 public class Book implements Serializable {
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idBook ;

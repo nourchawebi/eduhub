@@ -3,6 +3,7 @@ package com.esprit.cloudcraft.controller;
 import com.esprit.cloudcraft.entities.Category;
 import com.esprit.cloudcraft.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class CategoryController {
 
     @GetMapping("/getAllCategories")
     @ResponseBody
-    public List<Category> GetAllCategories () {
+    public List<Category> getAllCategories () {
         if (!this.categoryService.getAllCategory().isEmpty()) {
             return this.categoryService.getAllCategory();
         }
@@ -33,15 +34,13 @@ public class CategoryController {
 
     @DeleteMapping("/deleteCategory/{id}")
     @ResponseBody
-    public Object deleteCategory(@PathVariable Long id) {
-        if (categoryService.getCategoryByID(id) != null) {
-            Category category = categoryService.getCategoryByID(id);
+    public ResponseEntity<Object> deleteCategory(@PathVariable Long id) {
+        Category category = categoryService.getCategoryByID(id);
+        if (category != null) {
             categoryService.deleteCategory(category);
-            return "category deleted with success";
-        }
-        else
-        {
-            return null;
+            return ResponseEntity.ok().body("Category deleted with success");
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -51,18 +50,15 @@ public class CategoryController {
         return categoryService.addCategory(category);
     }
 
-    @PutMapping("/updateCategory/{id}")
+    @PutMapping("/updateCategory")
     @ResponseBody
-    public Category updateCategory(@PathVariable Long id, @RequestBody Category categoryupdated) {
-        Category category = categoryService.getCategoryByID(id);
+    public ResponseEntity<Object> updateCategory(@RequestBody Category category) {
+
         if (category != null) {
-            category.setName(categoryupdated.getName());
-            category.setDescription(categoryupdated.getName());
-            return categoryService.UpdateCategory(category);
-        }
-        else
-        {
-            return null ;
+            categoryService.UpdateCategory(category);
+            return ResponseEntity.ok().body("Category updated with success");
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }

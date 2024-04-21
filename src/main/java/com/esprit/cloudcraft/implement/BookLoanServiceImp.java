@@ -25,13 +25,13 @@ public class BookLoanServiceImp implements BookLoanService {
     @Resource
     private UserService userService ;
 
-    @Autowired
+    @Resource
     private BookService bookService ;
 
     @Override
     public Boolean addBookLoan(User user, Book book) {
-        final User requestedUser = userService.findUserById(user.getId());
-        final Book requestedBook = bookService.getBookByID(book.getIdBook());
+         User requestedUser = userService.findUserById(user.getId());
+         Book requestedBook = bookService.getBookByID(book.getIdBook());
         Boolean result = Boolean.FALSE;
 
         if (requestedUser != null && requestedBook != null && requestedBook.getAvailability().equals(AvailabilityType.AVAILABILE)) {
