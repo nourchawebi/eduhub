@@ -78,9 +78,13 @@ public class BookController {
                     .author(author)
                     .build();
             bookService.addBook(newBook,idUsuer,idCategory,picture);
+            return ResponseEntity.ok().build();
 
         }
-        return ResponseEntity.notFound().build();
+        else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     @PutMapping("/updateBook/{id}")

@@ -19,5 +19,5 @@ public interface BookService {
     List<Book> findBookByCategory(Category category);
 
     List<Book> getBooksByUser(User user);
-    public void uploadBookCoverPicture(MultipartFile file, User connectedUser, Long bookId);
+
 }

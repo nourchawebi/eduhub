@@ -27,7 +27,6 @@ public class BookServiceImp implements BookService {
     @Resource
     private CategoryService categoryService ;
 
-    @Resource BookMapperService bookMapperService;
 
     @Override
     public Boolean addBook (Book newbook , Long iduser, Long idcategory,MultipartFile image) {
@@ -57,14 +56,6 @@ public class BookServiceImp implements BookService {
         return result;
     }
 
-    @Override
-    public void uploadBookCoverPicture(MultipartFile file, User connectedUser, Long bookId) {
-        Book book = this.getBookByID(bookId);
-        User user =  userService.findUserById(connectedUser.getId());
-        var profilePicture = fileStorageService.saveFile(file, bookId, user.getId());
-        book.setPicture(profilePicture);
-        bookDao.save(book);
-    }
 
     @Override
     public List<Book> getAllBooks() {
