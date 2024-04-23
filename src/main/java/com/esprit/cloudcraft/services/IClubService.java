@@ -1,10 +1,9 @@
-package com.event.test.InterfaceService;
+package com.esprit.cloudcraft.services;
 
 
-import com.event.test.Entity.Club;
+import com.esprit.cloudcraft.entities.Club;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IClubService {
     public List<Club> getallClubs();

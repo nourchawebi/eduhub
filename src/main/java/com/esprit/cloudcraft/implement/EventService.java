@@ -1,19 +1,16 @@
-package com.event.test.Service;
+package com.esprit.cloudcraft.implement;
 
-import com.event.test.Entity.Event;
-import com.event.test.Entity.User;
-import com.event.test.Enum.Name;
-import com.event.test.InterfaceService.IEventService;
-import com.event.test.Repository.ClubRepository;
-import com.event.test.Repository.EventRepository;
-import com.event.test.Repository.UserRepository;
+import com.esprit.cloudcraft.entities.Event;
+import com.esprit.cloudcraft.entities.User;
+import com.esprit.cloudcraft.Enum.Name;
+import com.esprit.cloudcraft.services.IEventService;
+import com.esprit.cloudcraft.repository.EventRepository;
+import com.esprit.cloudcraft.repository.UserRepository;
 import jakarta.annotation.Resource;
-import jakarta.annotation.Resources;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service

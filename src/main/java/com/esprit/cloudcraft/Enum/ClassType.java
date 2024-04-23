@@ -1,4 +1,4 @@
-package com.event.test.Enum;
+package com.esprit.cloudcraft.Enum;
 
 public enum ClassType {
     FIRSTYEAR,

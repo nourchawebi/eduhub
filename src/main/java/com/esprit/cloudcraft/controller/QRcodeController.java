@@ -1,17 +1,14 @@
-package com.event.test.Controller;
+package com.esprit.cloudcraft.controller;
 
-import com.event.test.Entity.Event;
-import com.event.test.InterfaceService.IEventService;
-import com.event.test.utils.QRCodeGenerator;
+import com.esprit.cloudcraft.services.IEventService;
+import com.esprit.cloudcraft.entities.Event;
+import com.esprit.cloudcraft.utils.QRCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import com.event.test.utils.QRCodeGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,11 +1,11 @@
-package com.event.test.Entity;
+package com.esprit.cloudcraft.entities;
 
-import com.event.test.Enum.Name;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -15,15 +15,26 @@ import java.util.Set;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Setter
-public class Club {
+@Builder
+public class Event  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long idClub;
-    @Enumerated(EnumType.STRING)
-    Name name;
+    long idEvent;
+    String title;
+    LocalDate dateBegin;
+        LocalDate dateEnd;
+    String location;
+    String details ;
     String description;
+    String picture;
+    int capacity;
     @JsonIgnore
     @ToString.Exclude
-    @OneToMany(mappedBy ="club" ,cascade = CascadeType.ALL)
-    Set<Event> event;
+    @ManyToOne
+    Club club;
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToMany(cascade = CascadeType.ALL)
+    Set<User> userSet;
+
 }

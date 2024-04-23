@@ -1,7 +1,7 @@
-package com.event.test.Repository;
+package com.esprit.cloudcraft.repository;
 
-import com.event.test.Entity.Event;
-import com.event.test.Enum.Name;
+import com.esprit.cloudcraft.entities.Event;
+import com.esprit.cloudcraft.Enum.Name;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

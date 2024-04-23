@@ -1,7 +1,7 @@
-package com.event.test.InterfaceService;
+package com.esprit.cloudcraft.services;
 
-import com.event.test.Entity.Event;
-import com.event.test.Enum.Name;
+import com.esprit.cloudcraft.entities.Event;
+import com.esprit.cloudcraft.Enum.Name;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

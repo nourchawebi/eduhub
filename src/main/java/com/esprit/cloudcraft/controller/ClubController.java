@@ -1,11 +1,10 @@
-package com.event.test.Controller;
+package com.esprit.cloudcraft.controller;
 
-import com.event.test.Entity.Club;
-import com.event.test.InterfaceService.IClubService;
+import com.esprit.cloudcraft.entities.Club;
+import com.esprit.cloudcraft.services.IClubService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/club")

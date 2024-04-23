@@ -1,6 +1,6 @@
-package com.event.test.Repository;
+package com.esprit.cloudcraft.repository;
 
-import com.event.test.Entity.User;
+import com.esprit.cloudcraft.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

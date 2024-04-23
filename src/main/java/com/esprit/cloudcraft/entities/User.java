@@ -1,7 +1,7 @@
-package com.event.test.Entity;
+package com.esprit.cloudcraft.entities;
 
-import com.event.test.Enum.ClassType;
-import com.event.test.Enum.RoleType;
+import com.esprit.cloudcraft.Enum.ClassType;
+import com.esprit.cloudcraft.Enum.RoleType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

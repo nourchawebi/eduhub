@@ -1,12 +1,10 @@
-package com.event.test.Controller;
+package com.esprit.cloudcraft.controller;
 
-import com.event.test.Entity.Event;
-import com.event.test.Enum.Name;
-import com.event.test.InterfaceService.IClubService;
-import com.event.test.InterfaceService.IEventService;
-import com.event.test.utils.QRCodeGenerator;
+import com.esprit.cloudcraft.entities.Event;
+import com.esprit.cloudcraft.Enum.Name;
+import com.esprit.cloudcraft.services.IEventService;
+import com.esprit.cloudcraft.utils.QRCodeGenerator;
 import com.google.zxing.WriterException;
-import lombok.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,7 +19,7 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:62699"})
 @RequestMapping("/event")
 public class EventController {
-    private final   IEventService eventService;
+    private final IEventService eventService;
     public EventController(IEventService eventService) {
         this.eventService = eventService;
     }

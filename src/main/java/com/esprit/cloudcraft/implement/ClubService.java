@@ -1,7 +1,7 @@
-package com.event.test.Service;
-import com.event.test.Entity.Club;
-import com.event.test.InterfaceService.IClubService;
-import com.event.test.Repository.ClubRepository;
+package com.esprit.cloudcraft.implement;
+import com.esprit.cloudcraft.entities.Club;
+import com.esprit.cloudcraft.services.IClubService;
+import com.esprit.cloudcraft.repository.ClubRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;

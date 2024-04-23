@@ -1,4 +1,4 @@
-package com.event.test.InterfaceService;
+package com.esprit.cloudcraft.services;
 
 import org.springframework.web.multipart.MultipartFile;
 

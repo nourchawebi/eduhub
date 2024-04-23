@@ -1,7 +1,7 @@
-package com.event.test.utils;
+package com.esprit.cloudcraft.utils;
 
 
-import com.event.test.Entity.Event;
+import com.esprit.cloudcraft.entities.Event;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
