@@ -1,19 +1,16 @@
 package com.esprit.cloudcraft.entities;
 
-import com.esprit.cloudcraft.Enum.ClassType;
-import com.esprit.cloudcraft.Enum.RoleType;
+
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
-@Builder
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements Serializable {
@@ -28,54 +25,24 @@ public class User implements Serializable {
     private boolean mfaEnabled;
     private boolean notLocker=true;
 
-   Date birthDate;
+    @Temporal(TemporalType.DATE)
+    private Date birthDate;
+
     @Enumerated(EnumType.STRING)
     ClassType classType;
     @Enumerated(EnumType.STRING)
     private RoleType role;
     private boolean enable;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Book> books;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<BookLoan> bookLoans;
 
-//    @OneToMany(mappedBy = "user")
-//    private Set<SecureToken> tokens;
-   /* @OneToMany(mappedBy = "user")
+      /* @OneToMany(mappedBy = "user")
+    private Set<SecureToken> tokens;
+    @OneToMany(mappedBy = "user")
     private List<Token> tokensAuth;*/
 
-
-
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return List.of(new SimpleGrantedAuthority(role.name()));
-//    }
-
-//
-//    public String getPassword() {
-//        return password;
-//    }
-//
-//    @Override
-//    public String getUsername() {
-//        return email;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return true;//switch it to true or we will not be able to connect our users
-//    }
-//
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return notLocker;//switch it to true or we will not be able to connect our users
-//    }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;//switch it to true or we will not be able to connect our users
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return enable;//switch it to true or we will not be able to connect our users
-//    }
 }
 
