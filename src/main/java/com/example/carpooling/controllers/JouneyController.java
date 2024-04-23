@@ -26,6 +26,7 @@ public class JouneyController {
         return journeyService.addJourney(journey);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("journey")
     @ResponseBody
     public List<Journey> getAllJourneys(){

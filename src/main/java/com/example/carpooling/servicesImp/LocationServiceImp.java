@@ -8,7 +8,10 @@ import com.example.carpooling.services.LocationService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class LocationServiceImp implements LocationService {
@@ -62,5 +65,15 @@ public class LocationServiceImp implements LocationService {
         if(userDao.existsById(id))
             return userDao.getReferenceById(id).getLocation();
         return null;
+    }
+
+    @Override
+    public Set<String> getLocationNames() {
+        Set<String> names = new HashSet<String>();
+        List<Location> locations = locationDao.findAll();
+        for (Location loc : locations)
+            if(loc.getNameLocation()!=null && !loc.getNameLocation().isEmpty())
+                names.add(loc.getNameLocation());
+        return names;
     }
 }

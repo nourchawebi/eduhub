@@ -4,6 +4,7 @@ import com.example.carpooling.entities.Location;
 import com.example.carpooling.entities.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface LocationService {
     User addLocation(Integer userId, Location location);
@@ -14,5 +15,7 @@ public interface LocationService {
     void deleteLocation(Integer locationId);
 
     Location getUserLocation(Integer id);
+
+    Set<String> getLocationNames();
 
 }

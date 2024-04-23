@@ -20,7 +20,7 @@ public class journeyServiceImp implements JourneyService {
 
     @Override
     public Journey addJourney(Journey journey) {
-        journey.setMotorized(userDao.getReferenceById(1));
+        journey.setMotorized(userDao.getReferenceById(2));
         return journeyDao.save(journey);
     }
 

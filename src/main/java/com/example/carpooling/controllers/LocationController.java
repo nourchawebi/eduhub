@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class LocationController {
@@ -46,6 +47,13 @@ public class LocationController {
     @ResponseBody
     public void deleteLocation(@PathVariable("id") Integer id){
         locationService.deleteLocation(id);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("location/names")
+    @ResponseBody
+    public Set<String> getLocationNames(){
+        return locationService.getLocationNames();
     }
 
 }
