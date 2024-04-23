@@ -1,6 +1,7 @@
 package com.esprit.cloudcraft.entities.userEntities;
 
 import com.esprit.cloudcraft.entities.userEntities.token.Token;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,7 +37,7 @@ public class User implements Serializable , UserDetails {
     private boolean notLocker=true;
 
     private String secret;
-
+    private String picture;
     @Temporal(TemporalType.DATE)
    Date birthDate;
 
@@ -47,6 +48,7 @@ public class User implements Serializable , UserDetails {
     private boolean enable;
     @OneToMany(mappedBy = "user")
     private Set<SecureToken> tokens;
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Token> tokensAuth;
 
