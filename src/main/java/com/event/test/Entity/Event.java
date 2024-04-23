@@ -16,16 +16,18 @@ import java.util.Set;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Setter
+@Builder
 public class Event  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long idEvent;
     String title;
     LocalDate dateBegin;
-    LocalDate dateEnd;
+        LocalDate dateEnd;
     String location;
     String details ;
     String description;
+    String picture;
     int capacity;
     @JsonIgnore
     @ToString.Exclude

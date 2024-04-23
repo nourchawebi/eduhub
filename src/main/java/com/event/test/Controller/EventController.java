@@ -7,14 +7,18 @@ import com.event.test.InterfaceService.IEventService;
 import com.event.test.utils.QRCodeGenerator;
 import com.google.zxing.WriterException;
 import lombok.*;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
+@Controller
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:62699"})
 @RequestMapping("/event")
 public class EventController {
     private final   IEventService eventService;
@@ -26,12 +30,51 @@ public class EventController {
     return eventService.getallEvents();
 };
 
+    //    /////////////////////////////////// CRUD //////////////////////////////////////////
 
-@PostMapping("/create")
+
+
+    @PostMapping(value = "/addEvent", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> addEvent(@RequestParam String title, @RequestParam LocalDate dateBegin, @RequestParam LocalDate dateEnd, @RequestParam String location, @RequestParam String details, @RequestParam String description, @RequestParam MultipartFile picture) {
+//        System.out.println(picture);
+
+        Event newEvent = Event.builder()
+                .title(title)
+                .dateBegin(dateBegin)
+                .dateEnd(dateEnd)
+                .location(location)
+                .details(details)
+                .description(description)
+                .build();
+
+        eventService.addEvent(newEvent, picture);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @PostMapping("/create")
     public ResponseEntity<Event>   createEvent(@RequestBody Event e){
   Event e1 =eventService.createEvent(e);
   return ResponseEntity.ok(e1);
 }
+
+
+
 @PutMapping("/update/{id}")
     public Event updateEvent(@PathVariable long id  , @RequestBody Event e){
     return eventService.updateEvent(id,e);
@@ -40,6 +83,9 @@ public class EventController {
     public void deleteEvent(@PathVariable long id){
      eventService.deleteEvent(id);
 }
+
+    //    /////////////////////////////////// recherche //////////////////////////////////////////
+
 
     @GetMapping("/find")
     public ResponseEntity<Event> findEventByCapacityAndIdEvent(
@@ -82,18 +128,8 @@ public class EventController {
     }
 
 
-    @GetMapping("/getEventQRcode")
-    public List<Event> getAllEventsQR() throws IOException,  WriterException {
-        List<Event> events = eventService.getallEvents();
-        if (!events.isEmpty()) {
-            for (Event event : events){
-                QRCodeGenerator.generateQRCode(event);
-            }
-        }
-        return eventService.getallEvents();
-    }
+// /////////////////////////////// participation et annulation de participation //////////////////////////////////////////
 
-    // ken capacite 5altet max maynajamch iparticipi
     @PostMapping("/{eventId}/participate/{userId}")
     public ResponseEntity<String> participateUserInEvent(@PathVariable Long eventId, @PathVariable Long userId) {
         try {
@@ -104,10 +140,29 @@ public class EventController {
         }
     }
 
+    @PostMapping("/{eventId}/cancelParticipation/{userId}")
+    public ResponseEntity<String> cancelUserParticipation(@PathVariable Long eventId, @PathVariable Long userId) {
+        try {
+            eventService.cancelUserParticipation(eventId, userId);
+            return ResponseEntity.ok("User participation cancelled successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
 
 
 
-
+    ///////////////////////// hedhi ki n'executeha fi oossier yetsabou les QRCODES mtaa events
+    @GetMapping("/getEventQRcode")
+    public List<Event> getAllEventsQR() throws IOException,  WriterException {
+        List<Event> events = eventService.getallEvents();
+        if (!events.isEmpty()) {
+            for (Event event : events){
+                QRCodeGenerator.generateQRCode(event);
+            }
+        }
+        return eventService.getallEvents();
+    }
 
 
 }

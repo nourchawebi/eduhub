@@ -7,7 +7,10 @@ import com.event.test.InterfaceService.IEventService;
 import com.event.test.Repository.ClubRepository;
 import com.event.test.Repository.EventRepository;
 import com.event.test.Repository.UserRepository;
+import jakarta.annotation.Resource;
+import jakarta.annotation.Resources;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +18,8 @@ import java.util.Optional;
 
 @Service
 public class EventService implements IEventService {
+    @Resource
+    private FileStorageService fileStorageService;
     private final EventRepository cc;
 
     private final UserRepository userRepository;
@@ -28,6 +33,40 @@ public class EventService implements IEventService {
         return cc.findAll();
     };
 
+
+
+
+
+
+    @Override
+    public Boolean addEvent(Event newEvent, MultipartFile image) {
+        boolean result = Boolean.FALSE;
+            if (newEvent != null) {
+                Event event = new Event();
+                event.setTitle(newEvent.getTitle());
+                event.setDateBegin(newEvent.getDateBegin());
+                event.setDateEnd(newEvent.getDateEnd());
+                event.setLocation(newEvent.getLocation());
+                event.setDetails(newEvent.getDetails());
+                event.setDescription(newEvent.getDescription());
+                event.setPicture(fileStorageService.saveImage(image));
+                event.setCapacity(newEvent.getCapacity());
+
+                // Assuming you have an EventDao or repository for saving events
+                Event savedEvent = cc.save(event);
+
+                // Adding the saved event to the category's events
+
+                result = Boolean.TRUE;
+            }
+        return result;
+    }
+
+
+
+
+
+    //    /////////////////////////////////// CRUD //////////////////////////////////////////
     public Event createEvent(Event e){
         return cc.save(e);
     };
@@ -50,6 +89,8 @@ public class EventService implements IEventService {
     public void deleteEvent(long id){
          cc.deleteById(id);
     }
+
+    //    /////////////////////////////////// recherche //////////////////////////////////////////
         public Event findEventByCapacityAndIdEventt(long capacity, long idEvent) {
            return cc.findEventByCapacityAndIdEvent(capacity , idEvent);
     }
@@ -69,6 +110,9 @@ public class EventService implements IEventService {
     public Event findbyid(long id) {
         return cc.findById(id).get();
     }
+
+
+// //    /////////////////////////////////// participation et annulation de participation //////////////////////////////////////////
     public Event participateUserInEvent(Long eventId, Long userId) {
         Event event = cc.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
@@ -80,5 +124,19 @@ public class EventService implements IEventService {
         event.getUserSet().add(user);
         return cc.save(event);
     }
+
+
+    public Event cancelUserParticipation(Long eventId, Long userId) {
+        Event event = cc.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!event.getUserSet().contains(user)) {
+            throw new RuntimeException("User is not participating in this event.");
+        }
+
+        event.getUserSet().remove(user);
+        return cc.save(event);
+    }
+
 
 }

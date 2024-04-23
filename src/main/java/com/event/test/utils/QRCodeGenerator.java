@@ -13,18 +13,19 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 public class QRCodeGenerator {
-
-    public static void generateQRCode(Event event) throws WriterException, IOException {
-        String qrCodePath = "C:\\Users\\amena\\Desktop\\PICLOUD\\test\\QRCode\\";
+// hedhi valable l methode eli fi eventcontroler mtaa qrcode
+    public static byte[] generateQRCode(Event event) throws WriterException, IOException {
+        String qrCodePath = "C:\\Users\\amena\\Desktop\\PICLOUD\\test2\\test\\QRCode";
         String qrCodeName = qrCodePath+event.getTitle()+event.getIdEvent()+"-QRCODE.png";
         var qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(
                 "ID: "+event.getIdEvent()+ "\n"+
-                        "Firstname: "+event.getTitle()+ "\n"+
-                        "Lastname: "+event.getLocation()+ "\n"+
-                        "Email: "+event.getCapacity()+ "\n" , BarcodeFormat.QR_CODE, 400, 400);
+                        "TITLE: "+event.getTitle()+ "\n"+
+                        "LOCATION: "+event.getLocation()+ "\n"+
+                        "CAPACITY: "+event.getCapacity()+ "\n" , BarcodeFormat.QR_CODE, 400, 400);
         Path path = FileSystems.getDefault().getPath(qrCodeName);
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
 
+        return new byte[0];
     }
 }
