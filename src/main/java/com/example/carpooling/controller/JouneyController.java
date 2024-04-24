@@ -1,6 +1,5 @@
-package com.example.carpooling.controllers;
+package com.example.carpooling.controller;
 
-import com.example.carpooling.entities.Car;
 import com.example.carpooling.entities.Journey;
 import com.example.carpooling.entities.User;
 import com.example.carpooling.services.JourneyService;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 

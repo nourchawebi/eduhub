@@ -1,8 +1,8 @@
-package com.example.carpooling.servicesImp;
+package com.example.carpooling.Implement;
 
-import com.example.carpooling.daos.JourneyDao;
-import com.example.carpooling.daos.ParticipationDao;
-import com.example.carpooling.daos.UserDao;
+import com.example.carpooling.repository.JourneyDao;
+import com.example.carpooling.repository.ParticipationDao;
+import com.example.carpooling.repository.UserDao;
 import com.example.carpooling.entities.Journey;
 import com.example.carpooling.entities.Participation;
 import com.example.carpooling.entities.User;
@@ -10,7 +10,6 @@ import com.example.carpooling.services.ParticipationService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service

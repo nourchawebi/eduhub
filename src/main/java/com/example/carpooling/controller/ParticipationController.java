@@ -1,6 +1,5 @@
-package com.example.carpooling.controllers;
+package com.example.carpooling.controller;
 
-import com.example.carpooling.entities.Car;
 import com.example.carpooling.entities.Journey;
 import com.example.carpooling.entities.Participation;
 import com.example.carpooling.entities.User;

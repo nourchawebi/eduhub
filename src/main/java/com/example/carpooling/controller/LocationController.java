@@ -1,4 +1,4 @@
-package com.example.carpooling.controllers;
+package com.example.carpooling.controller;
 
 import com.example.carpooling.entities.Location;
 import com.example.carpooling.entities.User;

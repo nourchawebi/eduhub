@@ -1,14 +1,13 @@
-package com.example.carpooling.servicesImp;
+package com.example.carpooling.Implement;
 
-import com.example.carpooling.daos.LocationDao;
-import com.example.carpooling.daos.UserDao;
+import com.example.carpooling.repository.LocationDao;
+import com.example.carpooling.repository.UserDao;
 import com.example.carpooling.entities.Location;
 import com.example.carpooling.entities.User;
 import com.example.carpooling.services.LocationService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package com.example.carpooling.daos;
+package com.example.carpooling.repository;
 
 import com.example.carpooling.entities.Car;
 import com.example.carpooling.entities.User;

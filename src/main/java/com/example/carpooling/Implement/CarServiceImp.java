@@ -1,7 +1,7 @@
-package com.example.carpooling.servicesImp;
+package com.example.carpooling.Implement;
 
-import com.example.carpooling.daos.CarDao;
-import com.example.carpooling.daos.UserDao;
+import com.example.carpooling.repository.CarDao;
+import com.example.carpooling.repository.UserDao;
 import com.example.carpooling.entities.Car;
 import com.example.carpooling.entities.User;
 import com.example.carpooling.services.CarService;
