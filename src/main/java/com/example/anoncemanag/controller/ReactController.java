@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/reacts")
+@CrossOrigin("*")
 public class ReactController {
 
     @Autowired

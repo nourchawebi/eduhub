@@ -12,15 +12,18 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/comments")
+@CrossOrigin("*")
 public class CommentController {
     @Autowired
     IComment commentInterface;
 
-    @PostMapping("/addComment")
-    public Comment addComment (@RequestBody Comment comment){
+    @PostMapping("/addComment/{id}")
+    public Comment addComment (@RequestBody Comment comment,@PathVariable long id) {
 
-        return commentInterface.addComment(comment);
+        return commentInterface.addComment(comment, id);
     }
+
+
     @PutMapping("/updateComment/{id}")
     public Comment updateComment(@PathVariable Long id, @RequestBody Comment comment) {
         return commentInterface.updateComment(id,comment);
@@ -34,10 +37,10 @@ public class CommentController {
     }
 
 
-    @GetMapping("/getAllComments")
-    public List<Comment> getAllComments() {
+    @GetMapping("/getAllComments/{id}")
+    public List<Comment> getAllComments(@PathVariable long id) {
+        return commentInterface.getAllComments(id);
 
-        return commentInterface.getAllComments();
 
     }
     @GetMapping("/getCommentById{id}")

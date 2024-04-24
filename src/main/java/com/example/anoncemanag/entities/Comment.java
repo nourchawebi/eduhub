@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -18,11 +19,14 @@ public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_comment;
-    private long id_user;
     private String comment_description;
-    private Date comment_date;
+    private LocalDate comment_date;
+
+@ManyToOne
+        @JsonIgnore
+Annonce annonce;
+
+    @ManyToOne
     @JsonIgnore
-    @ManyToOne (cascade =CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_annonce")
-    private Annonce annonce;
+    User user;
 }

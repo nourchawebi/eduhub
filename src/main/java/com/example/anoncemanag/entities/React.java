@@ -18,9 +18,6 @@ public class React implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_react;
     private long id_user;
-
-    @JsonIgnore
-    @ManyToOne (cascade =CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_annonce")
-    private Annonce annonce;
+@ManyToOne
+User user;
 }
