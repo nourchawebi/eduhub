@@ -3,6 +3,7 @@ import com.esprit.cloudcraft.services.FileStorageService;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,5 +40,17 @@ public class FileStorageServiceImp implements FileStorageService {
         return image.getOriginalFilename();
     }
 
+    @Override
+    public byte[] getPicture(String pictureUrl) {
+        if (StringUtils.isBlank(pictureUrl)) {
+            return null;
+        }
+        try {
+            Path imagePath = this.imagePath.resolve(pictureUrl);
+            return Files.readAllBytes(imagePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+   }
 
 }

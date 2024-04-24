@@ -1,8 +1,6 @@
 package com.esprit.cloudcraft.controller;
 
-import com.esprit.cloudcraft.dto.BookCategoryDto;
-import com.esprit.cloudcraft.dto.BookDto;
-import com.esprit.cloudcraft.dto.BookRequest;
+import com.esprit.cloudcraft.dto.*;
 import com.esprit.cloudcraft.entities.Book;
 import com.esprit.cloudcraft.entities.Category;
 import com.esprit.cloudcraft.services.BookService;
@@ -16,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/book")
 public class BookController {
     @Autowired
@@ -31,7 +29,6 @@ public class BookController {
     }
 
     @GetMapping("/getAllBooks")
-    @ResponseBody
     public List<Book> GetAllBooks () {
         if (!this.bookService.getAllBooks().isEmpty()) {
             return this.bookService.getAllBooks();
@@ -53,7 +50,6 @@ public class BookController {
     }
 
     @DeleteMapping("/deleteBook/{id}")
-    @ResponseBody
     public Object deleteBook(@PathVariable Long id) {
         if (bookService.getBookByID(id) != null) {
             Book book = bookService.getBookByID(id);
@@ -69,7 +65,6 @@ public class BookController {
     @PostMapping(value = "/addBook/{idUsuer}/{idCategory}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> addBook(@RequestParam String author,@RequestParam String title,@RequestParam String description,@RequestParam MultipartFile picture , @PathVariable Long idUsuer, @PathVariable Long idCategory) {
         System.out.println(picture);
-
         if (idUsuer !=null && idUsuer!=null)
         {
             Book newBook=Book.builder()
@@ -103,4 +98,19 @@ public class BookController {
             return null ;
         }
     }
+    @GetMapping("/findBooksByid/{id}")
+    public ResponseEntity<BookResponse> findById(@PathVariable Long id)
+    {
+        return ResponseEntity.ok(bookService.findById(id));
+    }
+
+    @GetMapping("/findAll")
+    public ResponseEntity<PageResponse<BookResponse>> findAll(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page ,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size
+            )
+    {
+        return ResponseEntity.ok(bookService.findAll(page, size));
+    }
+
 }

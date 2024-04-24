@@ -3,6 +3,7 @@ package com.esprit.cloudcraft.implement;
 import com.esprit.cloudcraft.entities.Book;
 import com.esprit.cloudcraft.entities.BookLoan;
 import com.esprit.cloudcraft.entities.User;
+import com.esprit.cloudcraft.repository.BookDao;
 import com.esprit.cloudcraft.repository.UserDao;
 import com.esprit.cloudcraft.services.UserService;
 import jakarta.annotation.Resource;
@@ -14,6 +15,8 @@ import java.util.Optional;
 public class UserServiceImp implements UserService {
     @Resource
     private UserDao userDao;
+    @Resource
+    BookDao bookDao;
 
     @Override
     public User findUserById(Long id) {
@@ -65,5 +68,7 @@ public class UserServiceImp implements UserService {
             userDao.save(user);
         }
     }
+
+
 }
 

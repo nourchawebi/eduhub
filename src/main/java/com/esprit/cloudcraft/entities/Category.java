@@ -20,7 +20,7 @@ public class Category implements Serializable {
     private long idCategory ;
     private String name ;
     private String description ;
-    @OneToMany(mappedBy = "category",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY)
     private List<Book> books ;
 }
 

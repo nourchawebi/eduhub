@@ -1,12 +1,15 @@
 package com.esprit.cloudcraft.implement;
 
-import com.esprit.cloudcraft.dto.BookRequest;
+import com.esprit.cloudcraft.dto.BookResponse;
+import com.esprit.cloudcraft.dto.PageResponse;
 import com.esprit.cloudcraft.entities.*;
 import com.esprit.cloudcraft.repository.BookDao;
-import com.esprit.cloudcraft.repository.CategoryDao;
 import com.esprit.cloudcraft.services.*;
 import jakarta.annotation.Resource;
-import org.springframework.scheduling.annotation.Scheduled;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +29,8 @@ public class BookServiceImp implements BookService {
 
     @Resource
     private CategoryService categoryService ;
+    @Resource
+    private BookMapperService bookMapperService;
 
 
     @Override
@@ -56,7 +61,6 @@ public class BookServiceImp implements BookService {
         return result;
     }
 
-
     @Override
     public List<Book> getAllBooks() {
         return bookDao.findAll();
@@ -81,17 +85,7 @@ public class BookServiceImp implements BookService {
         return bookDao.saveAndFlush(book);
     }
 
-    @Override
-    public Book UpdateBookAvailabilityToNOT_AVAILABILE(Book book) {
-        book.setAvailability(AvailabilityType.NOT_AVAILABILE);
-        return bookDao.saveAndFlush(book);
-    }
 
-    @Override
-    public Book UpdateBookAvailabilityToAVAILABILE(Book book) {
-        book.setAvailability(AvailabilityType.AVAILABILE);
-        return bookDao.saveAndFlush(book);
-    }
 
     @Override
     public void deleteBook(Book book) {
@@ -121,7 +115,30 @@ public class BookServiceImp implements BookService {
         return null;
     }
 
+    @Override
+    public BookResponse findById(Long idBook) {
+        return bookDao.findById(idBook)
+                .map(bookMapperService::toBookResponse)
+                .orElseThrow(() -> new EntityNotFoundException("No book found with id "+ idBook));
+    }
 
+    @Override
+    public PageResponse<BookResponse> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> books = bookDao.findAll(pageable);
+        List<BookResponse>bookResponses = books.stream()
+                .map(bookMapperService::toBookResponse)
+                .toList();
+        return new PageResponse<>(
+                bookResponses,
+                books.getNumber(),
+                books.getSize(),
+                books.getTotalElements(),
+                books.getTotalPages(),
+                books.isFirst(),
+                books.isLast()
+        );
+    }
 
 
 }

@@ -6,4 +6,5 @@ import java.io.IOException;
 
 public interface FileStorageService {
      String saveImage(MultipartFile image);
+     byte[] getPicture(String pictureUrl);
 }
