@@ -14,7 +14,7 @@ public class BookResponse {
     private String description;
     private String author ;
     private String category ;
-    private byte[] coverPicture ;
+    private String coverPicture ;
     private String availability;
 
 }

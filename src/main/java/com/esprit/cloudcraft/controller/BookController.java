@@ -3,15 +3,22 @@ package com.esprit.cloudcraft.controller;
 import com.esprit.cloudcraft.dto.*;
 import com.esprit.cloudcraft.entities.Book;
 import com.esprit.cloudcraft.entities.Category;
+import com.esprit.cloudcraft.implement.FileStorageServiceImp;
 import com.esprit.cloudcraft.services.BookService;
 import com.esprit.cloudcraft.services.CategoryService;
+import com.esprit.cloudcraft.services.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
 import java.util.List;
 
 @RestController
@@ -21,6 +28,8 @@ public class BookController {
     private BookService bookService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @GetMapping("/getBookById/{id}")
     @ResponseBody
@@ -102,6 +111,40 @@ public class BookController {
     public ResponseEntity<BookResponse> findById(@PathVariable Long id)
     {
         return ResponseEntity.ok(bookService.findById(id));
+    }
+    @GetMapping("/{fileName}")
+    public ResponseEntity<Resource> downloadPdf(@PathVariable String fileName)    {
+        // Construct the file path
+        Path filePath =fileStorageService.getImagePath(fileName);
+        Resource resource = null;
+        try {
+            resource = new UrlResource(filePath.toUri());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Check if the file exists
+        if (!resource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Set content type as application/pdf
+        HttpHeaders headers = new HttpHeaders();
+        String contentType;
+        if (fileName.toLowerCase().endsWith(".pdf")) {
+            contentType = MediaType.APPLICATION_PDF_VALUE;
+        } else if (fileName.toLowerCase().endsWith(".png") || fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg")) {
+            contentType = MediaType.IMAGE_JPEG_VALUE; // You can use IMAGE_PNG_VALUE for PNG files
+        } else {
+            // Default to binary data if the file type is unknown
+            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        }
+        headers.add(HttpHeaders.CONTENT_TYPE, contentType);
+
+        // Return the file as ResponseEntity with appropriate headers
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(resource);
     }
 
     @GetMapping("/findAll")

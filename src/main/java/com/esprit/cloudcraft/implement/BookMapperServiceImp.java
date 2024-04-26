@@ -28,13 +28,14 @@ public class BookMapperServiceImp implements BookMapperService {
 
     @Override
     public BookResponse toBookResponse(Book book) {
+        String imageUrl="http://localhost:8080/book/"+ book.getPicture();
         return BookResponse.builder()
                 .id(book.getIdBook())
                 .title(book.getTitle())
                 .description(book.getDescription())
                 .author(book.getAuthor())
                 .category(book.getCategory().getName())
-                .coverPicture(fileStorageService.getPicture(book.getPicture()))
+                .coverPicture(imageUrl)
                 .availability(book.getAvailability().toString())
                 .build() ;
     }

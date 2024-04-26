@@ -52,5 +52,7 @@ public class FileStorageServiceImp implements FileStorageService {
             throw new RuntimeException(e);
         }
    }
-
+    public Path getImagePath(String fileName){
+        return this.imagePath.resolve(fileName);
+    }
 }

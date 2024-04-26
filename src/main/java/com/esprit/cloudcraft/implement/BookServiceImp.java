@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -129,6 +130,8 @@ public class BookServiceImp implements BookService {
         List<BookResponse>bookResponses = books.stream()
                 .map(bookMapperService::toBookResponse)
                 .toList();
+
+        System.out.println(bookResponses);
         return new PageResponse<>(
                 bookResponses,
                 books.getNumber(),
@@ -139,6 +142,7 @@ public class BookServiceImp implements BookService {
                 books.isLast()
         );
     }
+
 
 
 }
