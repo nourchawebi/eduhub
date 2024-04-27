@@ -8,12 +8,22 @@ import com.esprit.cloudcraft.services.userServices.AdminService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class AdminImplement implements AdminService{
     @Resource
     private UserRepository userRepository;
     @Resource
     private TokenRepository tokenRepository;
+
+
+    /***************** get all users implement ************************/
+    @Override
+    public List<User> getAllUsers() {
+        return  userRepository.findAll();
+    }
     /********************* lock user methode implement **********************/
     @Override
     public boolean lockUser(String email)
@@ -26,6 +36,8 @@ public class AdminImplement implements AdminService{
             if (user.isAccountNonLocked())
             {
                 user.setNotLocker(false);
+                user.setLockedDate(new Date());
+                user.setULockedDate(null);
                 userRepository.save(user);
                 // Get the last token associated with the user
                 Token lastToken = tokenRepository.findTopByUserOrderByCreatedAtDesc(user);
@@ -58,6 +70,7 @@ public class AdminImplement implements AdminService{
             if (!user.isAccountNonLocked())
             {
                 user.setNotLocker(true);
+                user.setULockedDate(new Date());
                 userRepository.save(user);
                 return true;
             } else

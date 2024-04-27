@@ -7,10 +7,7 @@ import com.esprit.cloudcraft.entities.userEntities.SecureToken;
 import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.repository.userDao.SecureTokenRepository;
 import com.esprit.cloudcraft.repository.userDao.UserRepository;
-import com.esprit.cloudcraft.services.userServices.AuthenticationService;
-import com.esprit.cloudcraft.services.userServices.EmailService;
-import com.esprit.cloudcraft.services.userServices.SecureTokenService;
-import com.esprit.cloudcraft.services.userServices.UserService;
+import com.esprit.cloudcraft.services.userServices.*;
 import com.esprit.cloudcraft.tfa.TwoFactorAuthenticationService;
 import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
@@ -20,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 import java.security.Principal;
 import java.util.List;
@@ -45,23 +43,21 @@ public class UserImplement implements UserService {
     private JwtService jwtService;
     @Resource
     private TwoFactorAuthenticationService tfaService;
-
+    @Resource
+    private FileStorageService fileStorageService ;
 
     @Value("${site.base.url.https}")
     private String baseURL;
- /***************** get all users implement ************************/
-    @Override
-    public List<User> getAllUsers() {
-        return  userRepository.findAll();
-    }
+
  /************************ register user implement *****************/
     @Override
-    public AuthenticationResponse register(User user)  {
+    public AuthenticationResponse register(User user, MultipartFile image)  {
 
             String encryptedPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encryptedPassword);
         if (user.getEmail() != null && user.getEmail().contains(".") && user.getEmail().contains("@")) {
             user.setEnable(false);}
+        user.setPicture(fileStorageService.saveImage(image));
             if (user.isMfaEnabled())
             {
                 user.setSecret(tfaService.generateNewSecret());

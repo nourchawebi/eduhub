@@ -4,18 +4,33 @@ import com.esprit.cloudcraft.dto.userdto.ChangeEmailRequest;
 import com.esprit.cloudcraft.dto.userdto.ChangePasswordRequest;
 import com.esprit.cloudcraft.dto.userdto.ChangePersonalInfosdRequest;
 import com.esprit.cloudcraft.entities.userEntities.User;
+import com.esprit.cloudcraft.repository.userDao.UserRepository;
+import com.esprit.cloudcraft.services.userServices.FileStorageService;
 import com.esprit.cloudcraft.services.userServices.UserService;
 import com.google.zxing.NotFoundException;
 import jakarta.annotation.Resource;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
-import java.util.List;
+import java.time.DayOfWeek;
+import java.time.Month;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -26,19 +41,10 @@ public class simpleConnectedUserController {
 
     @Resource
     private UserService userService;
- /************** listing all registerd user ********************/
-    @GetMapping("allusers")
-    @ResponseBody
-     public ResponseEntity<List<User>> getAllUsers()
-    {
-
-        List<User> users = userService.getAllUsers();
-        if (users == null || users.isEmpty()) {
-            return ResponseEntity.notFound().build(); // Handle empty user list
-        }
-        return ResponseEntity.ok(users); // Return OK status with user list
-
-    }
+    @Resource
+    private FileStorageService fileStorageService ;
+    @Resource
+    private UserRepository userRepository;
     /********************* change the password in the data base ************************/
 
     @PatchMapping("updatepassword")
@@ -74,4 +80,34 @@ public class simpleConnectedUserController {
  {
      return ResponseEntity.ok(userService.changePersonalInfos(request,connectedUser));
  }
+/********************** get user logged image ********************/
+    @GetMapping("image")
+    public ResponseEntity<byte[]> getImage( Principal connectedUser) throws IOException {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        Path imagePath= Paths.get("uploads/images",user.getPicture());
+        byte[] imageBytes = Files.readAllBytes(imagePath);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    }
+
+    @PostMapping(value="update-image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<String> updateImage(@RequestParam("image") MultipartFile image, Principal connectedUser)  {
+        if (image.isEmpty()) {
+            return ResponseEntity.badRequest().body("Image file is required");
+        }
+
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        String oldImageName = user.getPicture();
+
+        // Save the new image with a random name
+        String newImageName = fileStorageService.saveImage(image);
+
+        // Update the user's image name in the database
+        user.setPicture(newImageName);
+        userRepository.save(user);
+        // Save the updated user entity
+
+        return ResponseEntity.ok().build();
+    }
+
+
 }

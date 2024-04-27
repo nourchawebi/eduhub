@@ -35,12 +35,21 @@ public class User implements Serializable , UserDetails {
 
     private boolean mfaEnabled;
     private boolean notLocker=true;
+    @Temporal(TemporalType.DATE)
+    @Column( nullable = true)
+    private Date LockedDate;
+    @Temporal(TemporalType.DATE)
+    @Column( nullable = true)
+    private Date uLockedDate;
 
     private String secret;
     private String picture;
     @Temporal(TemporalType.DATE)
    Date birthDate;
+    @Temporal(TemporalType.DATE)
 
+    @Column(name = "created_date"/*, nullable = false, updatable = false*/)
+    private Date createdDate = new Date();
     @Enumerated(EnumType.STRING)
     ClassType classType;
     @Enumerated(EnumType.STRING)
@@ -51,6 +60,7 @@ public class User implements Serializable , UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Token> tokensAuth;
+
 
 
     @Override

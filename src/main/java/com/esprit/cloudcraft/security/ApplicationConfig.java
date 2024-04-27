@@ -49,5 +49,29 @@ public class ApplicationConfig {
         // Return an instance of BCryptPasswordEncoder as the PasswordEncoder
         return new BCryptPasswordEncoder();
     }
+   /* @Bean
+    public CorsFilter corsFilter()
+    {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration config = new CorsConfiguration();
+        // Allow credentials (cookies, authorization headers, etc.)
+        config.setAllowCredentials(true);
+        // Allowed origins (e.g., http://localhost:4200)
+        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+
+        // Allowed headers
+        config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+
+        // Allowed methods (e.g., GET, POST, PUT, DELETE, etc.)
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
+
+        // Exposed headers (response headers that can be exposed to the client)
+        config.setExposedHeaders(Collections.singletonList("Authorization"));
+        // Register the CORS configuration for all paths
+        source.registerCorsConfiguration("/**", config);
+        // Create and return the CorsFilter
+        return new CorsFilter(source);
+    }*/
+
 
 }

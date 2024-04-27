@@ -9,19 +9,30 @@ import com.esprit.cloudcraft.entities.userEntities.RoleType;
 import com.esprit.cloudcraft.entities.userEntities.SecureToken;
 import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.services.userServices.AuthenticationService;
+import com.esprit.cloudcraft.services.userServices.LogoutService;
 import com.esprit.cloudcraft.services.userServices.SecureTokenService;
 import com.esprit.cloudcraft.services.userServices.UserService;
+import io.swagger.v3.oas.annotations.OpenAPI31;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "http://localhost:4200")
 @Controller
 @RequiredArgsConstructor
 
@@ -33,6 +44,17 @@ public class UserController {
     private final AuthenticationService service;
     @Resource
     private SecureTokenService secureTokenService;
+    @Resource
+    private LogoutService logoutService;
+
+    @Resource
+    private LogoutHandler logoutHandler;
+    @PostMapping("/logouts")
+    @ResponseBody
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        logoutService.logout(request, response, null); // Pass null for authentication as it's not used in logout
+
+    }
     /******************* get all roleType ******************/
     @GetMapping("getroles")
     @ResponseBody
@@ -48,10 +70,37 @@ public class UserController {
         return ClassType.getAllClassTypes();
     }
     /******************* register a user ******************/
-    @PostMapping("register")
-    @ResponseBody
-    public ResponseEntity<?> register(@RequestBody User request)
+
+    @PostMapping(value = "register", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+
+    public ResponseEntity<?> register(@RequestParam String firstName,
+                                      @RequestParam String  lastName,
+                                      @RequestParam String email,
+                                      @RequestParam String  password,
+                                      @RequestParam String mfaEnabled,
+
+                                      @RequestParam   String birthDate,
+                                      @RequestParam String classType,
+                                      @RequestParam MultipartFile picture )
     {
+        User request=new User();
+        request.setLastName(lastName);
+        request.setFirstName(firstName);
+        request.setEmail(email);
+        request.setPassword(password);
+        boolean isMfaEnabled = Boolean.parseBoolean(mfaEnabled);
+        request.setMfaEnabled(isMfaEnabled);
+
+        Date parsedBirthDate = null;
+        try {
+            parsedBirthDate = new SimpleDateFormat("yyyy-MM-dd").parse(birthDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        request.setBirthDate(parsedBirthDate);
+        ClassType c = ClassType.valueOf(classType);
+        request.setClassType(c);
+
         boolean test=userService.findByEmail(request.getEmail());
         if (userService.findByEmail(request.getEmail()))
         {
@@ -59,7 +108,7 @@ public class UserController {
         }
        else
        {
-        var response=userService.register(request);
+        var response=userService.register(request,picture);
         if(request.isMfaEnabled())
         { return ResponseEntity.ok(response);}
         else

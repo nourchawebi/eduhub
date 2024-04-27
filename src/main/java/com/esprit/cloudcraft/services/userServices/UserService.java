@@ -2,13 +2,14 @@ package com.esprit.cloudcraft.services.userServices;
 
 import com.esprit.cloudcraft.dto.userdto.*;
 import com.esprit.cloudcraft.entities.userEntities.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
 
 public interface UserService {
-   public List<User> getAllUsers();
-   public AuthenticationResponse register(User user);
+
+   public AuthenticationResponse register(User user,MultipartFile image);
    public void sendRegistrationConfirmationEmail(User user);
     public boolean verifyUser(String token);
     public void resendToken(String email) throws IllegalArgumentException;

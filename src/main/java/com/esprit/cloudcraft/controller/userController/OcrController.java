@@ -54,7 +54,8 @@ public class OcrController {
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(test);
         }
-        var response=userService.register(request);
+        MultipartFile image ;
+      //  var response=userService.register(request,image);
         return ResponseEntity.accepted().build();
     }
 

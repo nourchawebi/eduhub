@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Key;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,7 +32,7 @@ public class JwtService {
 
     @Value("${spring.jwt.jwtExpirationInMs}")
     private int JWT_EXPIRATION_TIME_IN_MILLISECONDS;
-
+    Path imagePath= Paths.get("uploads/images/");
     public String generateToken(User user){
         Map<String, Object> claims = new HashMap<>();
         // Create a date formatter with the desired format
@@ -46,6 +48,8 @@ public class JwtService {
         claims.put("birthDate",formattedDate);
         claims.put(" mfaEnabled",user.isMfaEnabled());
         claims.put("classeType", user.getClassType());
+
+
 
 
 

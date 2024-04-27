@@ -35,7 +35,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/register/**").permitAll()
+                 .requestMatchers(auth_whitelist).permitAll()
+                        .requestMatchers("/register/**").permitAll(
+                                ).requestMatchers("/nour/**").permitAll()
                         .requestMatchers("/login/**").permitAll()
                                 .requestMatchers("/getenabled").permitAll()
                                 .requestMatchers("/getclasstypes").permitAll()
@@ -51,11 +53,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 // Add JWT authentication filter before UsernamePasswordAuthenticationFilter
                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .addLogoutHandler(logoutHandler)
-                        .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-                )
+
 
 
 
@@ -65,6 +63,12 @@ public class SecurityConfig {
 
         return http.build();
     }
-
+private static final String [] auth_whitelist={
+            "/api/v1/auth/**",
+        "/v3/api-docs/**",
+        "/v3/api-docs.yaml",
+        "/swagger-ui/**",
+        "/swagger-ui-html"
+};
 
 }
