@@ -1,7 +1,7 @@
 package com.esprit.cloudcraft.repository;
 
 
-import com.esprit.cloudcraft.module.Rating;
+import com.esprit.cloudcraft.entities.Rating;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

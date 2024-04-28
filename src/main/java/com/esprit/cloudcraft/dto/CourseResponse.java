@@ -3,7 +3,7 @@ package com.esprit.cloudcraft.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import com.esprit.cloudcraft.module.CourseCategory;
+import com.esprit.cloudcraft.entities.CourseCategory;
 
 @Data
 @Builder

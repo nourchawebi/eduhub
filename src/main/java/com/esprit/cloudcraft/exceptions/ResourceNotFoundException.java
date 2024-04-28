@@ -1,4 +1,4 @@
-package com.esprit.cloudcraft.exception;
+package com.esprit.cloudcraft.exceptions;
 
 import lombok.Data;
 

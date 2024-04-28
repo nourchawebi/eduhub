@@ -1,7 +1,7 @@
 package com.esprit.cloudcraft.serviceInt;
 
 import com.esprit.cloudcraft.dto.RatingPayload;
-import com.esprit.cloudcraft.module.Summary;
+import com.esprit.cloudcraft.entities.Summary;
 import com.esprit.cloudcraft.dto.SummaryRequest;
 
 import java.util.List;

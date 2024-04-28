@@ -1,7 +1,7 @@
 package com.esprit.cloudcraft.repository;
 
 
-import com.esprit.cloudcraft.module.Summary;
+import com.esprit.cloudcraft.entities.Summary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

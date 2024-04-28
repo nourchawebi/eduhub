@@ -1,4 +1,4 @@
-package com.esprit.cloudcraft.module;
+package com.esprit.cloudcraft.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -15,28 +15,30 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Rating implements Serializable {
+public class Summary implements Serializable {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ratingId;
+    private Long summaryId;
 
     private String title;
-    @Column( length = 100000 )
-    private String content;
 
-    private Integer value;
 
-    @Temporal(TemporalType.DATE)
-    private Date createdAt ;
 
-    @Temporal(TemporalType.DATE)
-    private Date modifiedAt ;
+
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private List<FileEntity> files;
+
+
+    @OneToMany
+    private List<Rating> ratings;
 
 
     @ManyToOne
     private User owner;
-
+    @Column( length = 100000 )
+    private String description;
 
 
 }

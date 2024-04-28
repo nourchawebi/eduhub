@@ -1,11 +1,11 @@
-package com.esprit.cloudcraft.service;
+package com.esprit.cloudcraft.services;
 
 import com.esprit.cloudcraft.dto.PayloadSerialization;
 import com.esprit.cloudcraft.serviceInt.RatingServiceInt;
 import jakarta.annotation.Resource;
 import com.esprit.cloudcraft.dto.RatingPayload;
-import com.esprit.cloudcraft.exception.ResourceNotFoundException;
-import com.esprit.cloudcraft.module.Rating;
+import com.esprit.cloudcraft.exceptions.ResourceNotFoundException;
+import com.esprit.cloudcraft.entities.Rating;
 import com.esprit.cloudcraft.repository.RatingRepo;
 import com.esprit.cloudcraft.utils.UtilFunctions;
 import org.springframework.stereotype.Service;

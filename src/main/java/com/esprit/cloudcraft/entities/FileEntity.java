@@ -1,4 +1,4 @@
-package com.esprit.cloudcraft.module;
+package com.esprit.cloudcraft.entities;
 
 
 import com.esprit.cloudcraft.upload.FileType;

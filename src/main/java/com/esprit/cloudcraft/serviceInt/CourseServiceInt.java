@@ -4,10 +4,10 @@ import com.esprit.cloudcraft.dto.ChapterRequest;
 import com.esprit.cloudcraft.dto.CourseRequest;
 import com.esprit.cloudcraft.dto.RatingPayload;
 import com.esprit.cloudcraft.dto.SummaryRequest;
-import com.esprit.cloudcraft.module.Chapter;
-import com.esprit.cloudcraft.module.Course;
-import com.esprit.cloudcraft.module.Rating;
-import com.esprit.cloudcraft.module.Summary;
+import com.esprit.cloudcraft.entities.Chapter;
+import com.esprit.cloudcraft.entities.Course;
+import com.esprit.cloudcraft.entities.Rating;
+import com.esprit.cloudcraft.entities.Summary;
 
 import java.util.List;
 

@@ -3,7 +3,7 @@ package com.esprit.cloudcraft.controller;
 
 
 import com.esprit.cloudcraft.dto.*;
-import com.esprit.cloudcraft.module.Chapter;
+import com.esprit.cloudcraft.entities.Chapter;
 import com.esprit.cloudcraft.serviceInt.ChapterServiceInt;
 import com.esprit.cloudcraft.serviceInt.CourseServiceInt;
 import com.esprit.cloudcraft.serviceInt.RatingServiceInt;
@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

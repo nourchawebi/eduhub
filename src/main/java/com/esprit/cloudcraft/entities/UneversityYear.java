@@ -1,7 +1,4 @@
-package com.esprit.cloudcraft.module;
-
-import jakarta.persistence.Entity;
-import lombok.Data;
+package com.esprit.cloudcraft.entities;
 
 import java.io.Serializable;
 

@@ -1,7 +1,7 @@
 package com.esprit.cloudcraft.serviceInt;
 
 import com.esprit.cloudcraft.dto.ContentRequest;
-import com.esprit.cloudcraft.module.Content;
+import com.esprit.cloudcraft.entities.Content;
 
 public interface ContentServiceInt {
     public Content findContentById(Long contentId);

@@ -1,7 +1,7 @@
 package com.esprit.cloudcraft.serviceInt;
 
 import com.esprit.cloudcraft.dto.RatingPayload;
-import com.esprit.cloudcraft.module.Rating;
+import com.esprit.cloudcraft.entities.Rating;
 
 public interface RatingServiceInt {
 

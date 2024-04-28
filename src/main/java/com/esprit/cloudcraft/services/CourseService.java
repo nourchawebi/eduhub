@@ -1,9 +1,9 @@
-package com.esprit.cloudcraft.service;
+package com.esprit.cloudcraft.services;
 
 import com.esprit.cloudcraft.dto.*;
-import com.esprit.cloudcraft.exception.DuplicateValueException;
-import com.esprit.cloudcraft.exception.ResourceNotFoundException;
-import com.esprit.cloudcraft.module.*;
+import com.esprit.cloudcraft.exceptions.DuplicateValueException;
+import com.esprit.cloudcraft.exceptions.ResourceNotFoundException;
+import com.esprit.cloudcraft.entities.*;
 import com.esprit.cloudcraft.repository.CourseRepo;
 import com.esprit.cloudcraft.serviceInt.CourseServiceInt;
 import jakarta.annotation.Resource;

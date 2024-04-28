@@ -1,8 +1,8 @@
 package com.esprit.cloudcraft.dto;
 
 
-import com.esprit.cloudcraft.module.CourseCategory;
-import com.esprit.cloudcraft.module.UneversityYear;
+import com.esprit.cloudcraft.entities.CourseCategory;
+import com.esprit.cloudcraft.entities.UneversityYear;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

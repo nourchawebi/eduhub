@@ -2,7 +2,7 @@ package com.esprit.cloudcraft.controller;
 
 
 import com.esprit.cloudcraft.dto.*;
-import com.esprit.cloudcraft.module.Course;
+import com.esprit.cloudcraft.entities.Course;
 import com.esprit.cloudcraft.serviceInt.CourseServiceInt;
 import com.esprit.cloudcraft.serviceInt.SummaryServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;

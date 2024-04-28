@@ -3,7 +3,7 @@ package com.esprit.cloudcraft.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import com.esprit.cloudcraft.module.ContentCategory;
+import com.esprit.cloudcraft.entities.ContentCategory;
 
 import java.util.List;
 

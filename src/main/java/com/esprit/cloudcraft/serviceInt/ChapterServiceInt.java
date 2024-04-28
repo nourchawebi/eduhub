@@ -3,9 +3,9 @@ package com.esprit.cloudcraft.serviceInt;
 import com.esprit.cloudcraft.dto.ChapterRequest;
 import com.esprit.cloudcraft.dto.ContentRequest;
 import com.esprit.cloudcraft.dto.RatingPayload;
-import com.esprit.cloudcraft.module.Chapter;
-import com.esprit.cloudcraft.module.Content;
-import com.esprit.cloudcraft.module.Rating;
+import com.esprit.cloudcraft.entities.Chapter;
+import com.esprit.cloudcraft.entities.Content;
+import com.esprit.cloudcraft.entities.Rating;
 
 import java.util.List;
 

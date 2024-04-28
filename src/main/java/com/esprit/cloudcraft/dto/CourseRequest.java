@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.esprit.cloudcraft.module.CourseCategory;
-import com.esprit.cloudcraft.module.UneversityYear;
+import com.esprit.cloudcraft.entities.CourseCategory;
+import com.esprit.cloudcraft.entities.UneversityYear;
 import org.springframework.web.multipart.MultipartFile;
 
 

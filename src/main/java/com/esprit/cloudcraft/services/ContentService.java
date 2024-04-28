@@ -1,13 +1,13 @@
-package com.esprit.cloudcraft.service;
+package com.esprit.cloudcraft.services;
 
 
 import com.esprit.cloudcraft.serviceInt.ContentServiceInt;
 import com.esprit.cloudcraft.upload.FileUploadService;
 import jakarta.annotation.Resource;
 import com.esprit.cloudcraft.dto.ContentRequest;
-import com.esprit.cloudcraft.exception.ResourceNotFoundException;
-import com.esprit.cloudcraft.module.Content;
-import com.esprit.cloudcraft.module.FileEntity;
+import com.esprit.cloudcraft.exceptions.ResourceNotFoundException;
+import com.esprit.cloudcraft.entities.Content;
+import com.esprit.cloudcraft.entities.FileEntity;
 import com.esprit.cloudcraft.repository.ContentRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

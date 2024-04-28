@@ -1,7 +1,7 @@
 package com.esprit.cloudcraft.dto;
 
 
-import com.esprit.cloudcraft.module.Rating;
+import com.esprit.cloudcraft.entities.Rating;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

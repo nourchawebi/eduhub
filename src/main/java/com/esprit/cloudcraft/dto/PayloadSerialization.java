@@ -1,6 +1,6 @@
 package com.esprit.cloudcraft.dto;
 
-import com.esprit.cloudcraft.module.*;
+import com.esprit.cloudcraft.entities.*;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,10 @@
-package com.esprit.cloudcraft.service;
+package com.esprit.cloudcraft.services;
 
 import com.esprit.cloudcraft.dto.PayloadSerialization;
 import com.esprit.cloudcraft.dto.RatingPayload;
-import com.esprit.cloudcraft.exception.DuplicateValueException;
-import com.esprit.cloudcraft.exception.ResourceNotFoundException;
-import com.esprit.cloudcraft.module.*;
+import com.esprit.cloudcraft.exceptions.DuplicateValueException;
+import com.esprit.cloudcraft.exceptions.ResourceNotFoundException;
+import com.esprit.cloudcraft.entities.*;
 import com.esprit.cloudcraft.repository.SummaryRepo;
 import com.esprit.cloudcraft.serviceInt.ChapterServiceInt;
 import com.esprit.cloudcraft.dto.SummaryRequest;

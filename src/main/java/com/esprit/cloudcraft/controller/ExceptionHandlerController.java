@@ -1,8 +1,8 @@
 package com.esprit.cloudcraft.controller;
 
 
-import com.esprit.cloudcraft.exception.DuplicateValueException;
-import com.esprit.cloudcraft.exception.ResourceNotFoundException;
+import com.esprit.cloudcraft.exceptions.DuplicateValueException;
+import com.esprit.cloudcraft.exceptions.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import com.esprit.cloudcraft.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.esprit.cloudcraft.service;
+package com.esprit.cloudcraft.services;
 
 import com.esprit.cloudcraft.repository.FileEntityRepo;
 import com.esprit.cloudcraft.serviceInt.FileEntityServiceInt;
@@ -6,7 +6,7 @@ import com.esprit.cloudcraft.upload.FileObject;
 import com.esprit.cloudcraft.upload.FileType;
 import com.esprit.cloudcraft.upload.FileUploadService;
 import jakarta.annotation.Resource;
-import com.esprit.cloudcraft.module.FileEntity;
+import com.esprit.cloudcraft.entities.FileEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
