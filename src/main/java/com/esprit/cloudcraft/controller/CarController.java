@@ -3,10 +3,8 @@ package com.esprit.cloudcraft.controller;
 import com.esprit.cloudcraft.entities.Car;
 import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.serviceInt.CarService;
-import com.esprit.cloudcraft.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
