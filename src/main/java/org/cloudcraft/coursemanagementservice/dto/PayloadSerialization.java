@@ -212,6 +212,7 @@ return SummaryResponse
                 .id(chapter.getChapterId())
                 .content(prepareContentResponseList(chapter.getChapterContent()))
                 .summaries(prepareSummaryResponseList(chapter.getSummaries()))
+                .ratings(prepareRatingResponselist(chapter.getRatings()))
                 .title(chapter.getTitle())
                 .description(chapter.getDescription())
                 .build();

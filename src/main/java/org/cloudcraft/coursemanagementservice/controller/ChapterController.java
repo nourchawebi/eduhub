@@ -1,14 +1,12 @@
-package org.cloudcraft.coursemanagementservice.controller;
+package org.example.coursemanagementservice.controller;
 
 
-import org.cloudcraft.coursemanagementservice.dto.*;
-import org.cloudcraft.coursemanagementservice.module.Chapter;
-import org.cloudcraft.coursemanagementservice.module.Rating;
-import org.cloudcraft.coursemanagementservice.repository.RatingRepo;
-import org.cloudcraft.coursemanagementservice.serviceInt.ChapterServiceInt;
-import org.cloudcraft.coursemanagementservice.serviceInt.CourseServiceInt;
-import org.cloudcraft.coursemanagementservice.serviceInt.RatingServiceInt;
-import org.cloudcraft.coursemanagementservice.serviceInt.SummaryServiceInt;
+import org.example.coursemanagementservice.dto.*;
+import org.example.coursemanagementservice.module.Chapter;
+import org.example.coursemanagementservice.serviceInt.ChapterServiceInt;
+import org.example.coursemanagementservice.serviceInt.CourseServiceInt;
+import org.example.coursemanagementservice.serviceInt.RatingServiceInt;
+import org.example.coursemanagementservice.serviceInt.SummaryServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
+@RequestMapping("chapters")
 public class ChapterController {
     @Autowired
     private ChapterServiceInt chapterServiceInt;
@@ -77,7 +76,7 @@ public class ChapterController {
     }
 
     @PostMapping(value = "chapters/{chapterId}/contents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ContentResponse> addContentToChapter(ContentRequest contentRequest,@PathVariable Long chapterId) {
+    public ResponseEntity<ContentResponse> addContentToChapter(ContentRequest contentRequest, @PathVariable Long chapterId) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(PayloadSerialization.prepareContentResponse(chapterServiceInt.addContentToChapter(chapterId,contentRequest)));
     }

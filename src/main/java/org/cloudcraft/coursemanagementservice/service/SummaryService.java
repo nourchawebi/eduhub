@@ -2,6 +2,7 @@ package org.cloudcraft.coursemanagementservice.service;
 
 import jakarta.annotation.Resource;
 import org.cloudcraft.coursemanagementservice.dto.PayloadSerialization;
+import org.cloudcraft.coursemanagementservice.dto.RatingPayload;
 import org.cloudcraft.coursemanagementservice.dto.SummaryRequest;
 import org.cloudcraft.coursemanagementservice.exception.DuplicateValueException;
 import org.cloudcraft.coursemanagementservice.exception.ResourceNotFoundException;
@@ -28,6 +29,8 @@ public class SummaryService implements SummaryServiceInt {
     private FileEntityService fileEntityService;
     @Autowired
     private ChapterServiceInt chapterServiceInt;
+    @Autowired
+    private RatingService ratingService;
 
 
     public Summary getSummaryById(Long summaryId){
@@ -122,6 +125,18 @@ public class SummaryService implements SummaryServiceInt {
     public boolean deletSummaryFromCourse(Long courseId, Long summaryId) {
         return false;
     }
-
+    public boolean addRatingToSummary(Long summaryId, RatingPayload ratingPayload){
+        Summary summary = getSummaryById(summaryId);
+        Rating savedRating = ratingService.addRating(ratingPayload);
+        List<Rating> summaryratings = summary.getRatings();
+        if (summaryratings == null) {
+            summaryratings = new ArrayList<>();
+            summaryratings.add(savedRating);
+        } else {
+            summaryratings.add(savedRating);
+        }
+        summaryRepo.save(summary);
+        return true;
+    }
 
 }

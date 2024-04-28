@@ -2,6 +2,7 @@ package org.cloudcraft.coursemanagementservice.controller;
 
 
 import org.cloudcraft.coursemanagementservice.dto.PayloadSerialization;
+import org.cloudcraft.coursemanagementservice.dto.RatingPayload;
 import org.cloudcraft.coursemanagementservice.dto.SummaryRequest;
 import org.cloudcraft.coursemanagementservice.dto.SummaryResponse;
 import org.cloudcraft.coursemanagementservice.module.Summary;
@@ -28,6 +29,13 @@ public class SummaryController {
     public ResponseEntity<Boolean> deleteSummary(@PathVariable Long summaryId){
         return ResponseEntity.status(HttpStatus.OK).body(summaryServiceInt.deletSummaryById(summaryId));
     }
+
+
+    @PostMapping("{summaryId}/ratings")
+    public ResponseEntity<Boolean> addRatingToSummary(@PathVariable Long summaryId, @RequestBody RatingPayload ratingPayload){
+        return ResponseEntity.status(HttpStatus.OK).body(summaryServiceInt.addRatingToSummary(summaryId,ratingPayload));
+    }
+
 //    @PutMapping("{summaryId}")
 //    public ResponseEntity<Summary> updateSummary(@PathVariable Long summaryId, SummaryRequest summaryRequest){
 //        return ResponseEntity.status(HttpStatus.OK).body(summaryServiceInt.deletSummaryById(summaryId));

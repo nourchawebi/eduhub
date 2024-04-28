@@ -1,5 +1,6 @@
 package org.cloudcraft.coursemanagementservice.serviceInt;
 
+import org.cloudcraft.coursemanagementservice.dto.RatingPayload;
 import org.cloudcraft.coursemanagementservice.dto.SummaryRequest;
 import org.cloudcraft.coursemanagementservice.module.Summary;
 
@@ -16,6 +17,7 @@ public interface SummaryServiceInt {
     public boolean deletSummaryFromChapter(Long summaryId,Long chapterId);
 
     public boolean deletSummaryFromCourse(Long courseId,Long summaryId);
+    public boolean addRatingToSummary(Long summaryId, RatingPayload ratingPayload);
 
 
 }
