@@ -57,7 +57,10 @@ public class UserImplement implements UserService {
             user.setPassword(encryptedPassword);
         if (user.getEmail() != null && user.getEmail().contains(".") && user.getEmail().contains("@")) {
             user.setEnable(false);}
-        user.setPicture(fileStorageService.saveImage(image));
+        if (image != null) {
+            user.setPicture(fileStorageService.saveImage(image));
+        }
+
             if (user.isMfaEnabled())
             {
                 user.setSecret(tfaService.generateNewSecret());

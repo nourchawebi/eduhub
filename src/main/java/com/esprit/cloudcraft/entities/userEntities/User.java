@@ -27,7 +27,6 @@ public class User implements Serializable , UserDetails {
     private String firstName;
 
     private String lastName;
- //private String priv ="normal";
 
     private String email;
 
@@ -43,6 +42,7 @@ public class User implements Serializable , UserDetails {
     private Date uLockedDate;
 
     private String secret;
+    @Column(nullable = true)
     private String picture;
     @Temporal(TemporalType.DATE)
    Date birthDate;
