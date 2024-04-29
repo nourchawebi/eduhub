@@ -7,8 +7,11 @@ import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.repository.userDao.UserRepository;
 import com.esprit.cloudcraft.services.userServices.FileStorageService;
 import com.esprit.cloudcraft.services.userServices.UserService;
+import com.google.zxing.NotFoundException;
 import jakarta.annotation.Resource;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -18,10 +21,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.time.DayOfWeek;
+import java.time.Month;
+import java.util.*;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -46,7 +55,7 @@ public class simpleConnectedUserController {
     }
     private boolean emailVerified = false;
 /*****************  sending a verification email the new email set by the user*********************/
-/****************** the verification mail contains the api wish will update and set the new email in the database *************/
+    /****************** the verification mail contains the api wish will update and set the new email in the database *************/
     @PatchMapping("updateEmail")
     public ResponseEntity<?> changeEmail(@RequestBody ChangeEmailRequest request, Principal connectedUser)
     {
@@ -54,7 +63,7 @@ public class simpleConnectedUserController {
         return ResponseEntity.ok().build();
 
     }
-/******************************* the api set in the email sent : to update the new email for the user *************/
+    /******************************* the api set in the email sent : to update the new email for the user *************/
     @Async
     @GetMapping("update/email/verify")
     @ResponseBody
@@ -65,13 +74,13 @@ public class simpleConnectedUserController {
 
     }
 
-/******************** change user personal infos(password and email not included ******************************/
- @PatchMapping("updatePersonalData")
+    /******************** change user personal infos(password and email not included ******************************/
+    @PatchMapping("updatePersonalData")
     public  ResponseEntity<?> updateUserInfos(@RequestBody ChangePersonalInfosdRequest request, Principal connectedUser)
- {
-     return ResponseEntity.ok(userService.changePersonalInfos(request,connectedUser));
- }
-/********************** get user logged image ********************/
+    {
+        return ResponseEntity.ok(userService.changePersonalInfos(request,connectedUser));
+    }
+    /********************** get user logged image ********************/
     @GetMapping("image")
     public ResponseEntity<byte[]> getImage( Principal connectedUser) throws IOException {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();

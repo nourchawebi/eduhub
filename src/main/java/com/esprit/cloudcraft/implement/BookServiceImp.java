@@ -32,7 +32,7 @@ public class BookServiceImp implements BookService {
     @Override
     public Boolean addBook (Book newbook , Long iduser, Long idcategory,MultipartFile image) {
         boolean result = Boolean.FALSE;
-        final User requestedUser = userService.findUserById(iduser);
+      /*  final User requestedUser = userService.findUserById(iduser);
          Category requesteCategory = categoryService.getCategoryByID(idcategory);
         Book book =new Book();
         if (requestedUser!= null && newbook!= null && requesteCategory!=null){
@@ -53,7 +53,7 @@ public class BookServiceImp implements BookService {
 
             result = Boolean.TRUE;
         }
-
+*/
         return result;
     }
 
@@ -114,11 +114,11 @@ public class BookServiceImp implements BookService {
 
     @Override
     public List<Book> getBooksByUser(User user) {
-        final User requestedUser = userService.findUserById(user.getId());
+       /* final User requestedUser = userService.findUserById(user.getId());
         if (requestedUser!= null)
         {
             return requestedUser.getBooks();
-        }
+        }*/
         return null;
     }
 

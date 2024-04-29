@@ -20,7 +20,7 @@ import java.util.Map;
 public class AdminController {
     @Resource
     private AdminService adminService;
-@Resource
+    @Resource
     private  UserRepository userRepository;
     /************** listing all registerd user ********************/
     @GetMapping("allusers")
@@ -47,7 +47,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to lock user. User may already be locked or not found.");
         }
     }
-/******************* unlock user api ***********************/
+    /******************* unlock user api ***********************/
     @PatchMapping("/unlock")
     public ResponseEntity<?> unlockUser(@RequestParam("email") String email)
     {

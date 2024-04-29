@@ -1,5 +1,6 @@
 package com.esprit.cloudcraft.controller.userController;
 
+import com.esprit.cloudcraft.dto.userdto.registerRequest;
 import com.esprit.cloudcraft.entities.userEntities.ClassType;
 import com.esprit.cloudcraft.entities.userEntities.RoleType;
 import com.esprit.cloudcraft.entities.userEntities.User;
@@ -14,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 
 @RestController
@@ -53,8 +58,10 @@ public class OcrController {
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(test);
         }
-        MultipartFile image ;
-      //  var response=userService.register(request,image);
+
+
+        MultipartFile image= null;
+        var response=userService.register(request,image);
         return ResponseEntity.accepted().build();
     }
 

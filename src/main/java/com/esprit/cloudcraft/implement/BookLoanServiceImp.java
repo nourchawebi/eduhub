@@ -31,9 +31,10 @@ public class BookLoanServiceImp implements BookLoanService {
 
     @Override
     public Boolean addBookLoan(User user, Book book) {
-         User requestedUser = userService.findUserById(user.getId());
-         Book requestedBook = bookService.getBookByID(book.getIdBook());
         Boolean result = Boolean.FALSE;
+        /* User requestedUser = userService.findUserById(user.getId());
+         Book requestedBook = bookService.getBookByID(book.getIdBook());
+
 
         if (requestedUser != null && requestedBook != null && requestedBook.getAvailability().equals(AvailabilityType.AVAILABILE)) {
             BookLoan bookLoan = new BookLoan();
@@ -54,7 +55,7 @@ public class BookLoanServiceImp implements BookLoanService {
 
             result = Boolean.TRUE;
         }
-
+*/
         return result;
     }
 
@@ -90,11 +91,11 @@ public class BookLoanServiceImp implements BookLoanService {
 
     @Override
     public List<BookLoan> getBookLoansByUser(User user) {
-        final User requestedUser = userService.findUserById(user.getId());
+   /*     final User requestedUser = userService.findUserById(user.getId());
         if (requestedUser!= null)
         {
             //return requestedUser.getBookLoans();
-        }
+        }*/
         return null;
     }
 }

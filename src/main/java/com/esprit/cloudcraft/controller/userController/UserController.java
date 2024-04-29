@@ -1,6 +1,7 @@
 package com.esprit.cloudcraft.controller.userController;
 
 import com.esprit.cloudcraft.dto.userdto.AuthenticationRequest;
+import com.esprit.cloudcraft.dto.userdto.AuthenticationResponse;
 import com.esprit.cloudcraft.dto.userdto.ForgotPasswordRequest;
 import com.esprit.cloudcraft.dto.userdto.VerificationRequest;
 import com.esprit.cloudcraft.entities.userEntities.ClassType;
@@ -11,13 +12,18 @@ import com.esprit.cloudcraft.services.userServices.AuthenticationService;
 import com.esprit.cloudcraft.services.userServices.LogoutService;
 import com.esprit.cloudcraft.services.userServices.SecureTokenService;
 import com.esprit.cloudcraft.services.userServices.UserService;
+
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 @CrossOrigin(origins = "http://localhost:4200")
 @Controller
 @RequiredArgsConstructor
@@ -100,22 +104,22 @@ public class UserController {
         boolean test=userService.findByEmail(request.getEmail());
         if (userService.findByEmail(request.getEmail()))
         {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(test);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(test);
         }
-       else
-       {
-        var response=userService.register(request,picture);
-        if(request.isMfaEnabled())
-        { return ResponseEntity.ok(response);}
         else
         {
-            return ResponseEntity.accepted().build();
+            var response=userService.register(request,picture);
+            if(request.isMfaEnabled())
+            { return ResponseEntity.ok(response);}
+            else
+            {
+                return ResponseEntity.accepted().build();
+            }
         }
-       }
     }
 
 /**** request email to enable the new acount created ****/
-/******** this api is sent in the mail sent and not used in the front end *******/
+    /******** this api is sent in the mail sent and not used in the front end *******/
     @GetMapping("register/verify")
     public String verifyCustomer(@RequestParam(required = false) String token)
     {
@@ -125,35 +129,35 @@ public class UserController {
 
 
 
- /************************ login api ***********************/
+    /************************ login api ***********************/
     @PostMapping("/login")
     public ResponseEntity<?> authenticate (@RequestBody AuthenticationRequest request)
     {
-          if (!userService.findByEmail(request.getEmail()))
-          {
+        if (!userService.findByEmail(request.getEmail()))
+        {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-          }
+        }
         else
         {
             User user =userService.getByEmail(request.getEmail());
-           if(! user.isEnabled())
-           {
-               Optional<SecureToken> fintoken= secureTokenService.findByUser(user);
-               if (fintoken.isEmpty())
-               {
-                   return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User disabled and token expired");
-               }
-               else
-               {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User disabled");
-               }
-           }
-           else
-               return ResponseEntity.ok(service.authenticate(request));
+            if(! user.isEnabled())
+            {
+                Optional<SecureToken> fintoken= secureTokenService.findByUser(user);
+                if (fintoken.isEmpty())
+                {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User disabled and token expired");
+                }
+                else
+                {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User disabled");
+                }
+            }
+            else
+                return ResponseEntity.ok(service.authenticate(request));
         }
     }
 
- /********************* resent activation email if the token is expired and user still disabled using the email set in the login page *****************/
+    /********************* resent activation email if the token is expired and user still disabled using the email set in the login page *****************/
     @GetMapping("register/resendToken")
 
     public ResponseEntity<?>resendtokenToActiveAcount(@RequestParam("email") String email)
@@ -164,30 +168,30 @@ public class UserController {
     }
 /********* these 2 methodes are for forget password ***************/
 
-/**** the email used to set the new password for the required user******/
+    /**** the email used to set the new password for the required user******/
 
-public String sentmail;
-/**************** methode1:send email request for the forgot password ****************************/
-   @GetMapping("login/forgotPassword")
+    public String sentmail;
+    /**************** methode1:send email request for the forgot password ****************************/
+    @GetMapping("login/forgotPassword")
 
     public ResponseEntity<?>sendForgotPassword(@RequestParam("email") String email)
-   {
-       if( userService.sendForgotPasswordRequest(email))
-       { sentmail=email;
+    {
+        if( userService.sendForgotPasswordRequest(email))
+        { sentmail=email;
 
-           return ResponseEntity.accepted().build();
-       }
-       else
-           return ResponseEntity.notFound().build();
-   }
-   /************************ methode2:set the new password tapped by the user **************/
+            return ResponseEntity.accepted().build();
+        }
+        else
+            return ResponseEntity.notFound().build();
+    }
+    /************************ methode2:set the new password tapped by the user **************/
     @PatchMapping("login/setnewpassword")
     public  ResponseEntity<?> setNewPassword( @RequestBody ForgotPasswordRequest request)
     {
-       if(userService.setForgotPassword( request))
-       {   return ResponseEntity.accepted().build();}
-       else
-           return ResponseEntity.notFound().build();
+        if(userService.setForgotPassword( request))
+        {   return ResponseEntity.accepted().build();}
+        else
+            return ResponseEntity.notFound().build();
     }
     /***************** verify the code tapped by the user in the double authentication while login *************/
     /*********** the code is linked with the qr code scanned while registring *********************/

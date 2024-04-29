@@ -52,6 +52,7 @@ public class User implements Serializable , UserDetails {
     private Date uLockedDate;
 
     private String secret;
+    @Column(nullable = true)
     private String picture;
     @Temporal(TemporalType.DATE)
    Date birthDate;

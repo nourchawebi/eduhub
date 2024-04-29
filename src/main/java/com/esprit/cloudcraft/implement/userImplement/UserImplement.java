@@ -1,9 +1,5 @@
 package com.esprit.cloudcraft.implement.userImplement;
 
-import com.esprit.cloudcraft.entities.Book;
-import com.esprit.cloudcraft.entities.BookLoan;
-import com.esprit.cloudcraft.entities.Chapter;
-import com.esprit.cloudcraft.entities.Rating;
 import com.esprit.cloudcraft.entities.userEntities.ClassType;
 import com.esprit.cloudcraft.filter.JwtService;
 import com.esprit.cloudcraft.dto.userdto.*;
@@ -26,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 import java.security.Principal;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -55,29 +50,6 @@ public class UserImplement implements UserService {
     @Value("${site.base.url.https}")
     private String baseURL;
 
-
-public User getConnectedUser(){
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    Object principal = authentication.getPrincipal();
-    User connectedUser=null;
-    if(principal instanceof UserDetails){
-        UserDetails userDetails = (UserDetails) principal;
-        connectedUser=this.getByEmail(userDetails.getUsername());
-    }
-    System.out.println("HELLO");
-    System.out.println(principal);
-    return connectedUser;
-
-}
-
-
-
-
-    @Override
-    public List<User> getAllUsers() {
-        return null;
-    }
-
     /************************ register user implement *****************/
     @Override
     public AuthenticationResponse register(User user, MultipartFile image)  {
@@ -86,7 +58,10 @@ public User getConnectedUser(){
         user.setPassword(encryptedPassword);
         if (user.getEmail() != null && user.getEmail().contains(".") && user.getEmail().contains("@")) {
             user.setEnable(false);}
-        user.setPicture(fileStorageService.saveImage(image));
+        if (image != null) {
+            user.setPicture(fileStorageService.saveImage(image));
+        }
+
         if (user.isMfaEnabled())
         {
             user.setSecret(tfaService.generateNewSecret());
@@ -349,21 +324,6 @@ public User getConnectedUser(){
         return  user.get();
     }
 
-    @Override
-    public User findUserById(Long id) {
-        return null;
-    }
-
-    @Override
-    public void addBookLoanToUser(User user, BookLoan bookLoan) {
-
-    }
-
-    @Override
-    public void addBookToUser(User user, Book book) {
-
-    }
-
     /******************* update user personal infos methode implement **********************/
     @Override
     public  AuthenticationResponse changePersonalInfos(ChangePersonalInfosdRequest request, Principal connectedUser)
@@ -384,6 +344,20 @@ public User getConnectedUser(){
 
                 .refreshToken(refreshToken).build();
 
+
+    }
+    @Override
+    public User getConnectedUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        User connectedUser=null;
+        if(principal instanceof UserDetails){
+            UserDetails userDetails = (UserDetails) principal;
+            connectedUser=this.getByEmail(userDetails.getUsername());
+        }
+        System.out.println("HELLO");
+        System.out.println(principal);
+        return connectedUser;
 
     }
 
