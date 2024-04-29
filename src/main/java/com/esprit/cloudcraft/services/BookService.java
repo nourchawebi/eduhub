@@ -15,10 +15,11 @@ public interface BookService {
     Book getBookByID(Long id);
     Book UpdateBook (Book book);
     void deleteBook (Book book);
-    List<Book> findBookByCategory(Category category);
-    List<Book> getBooksByUser(User user);
 
     BookResponse findById (Long idBook );
 
-    PageResponse<BookResponse> findAll(int page, int size);
+    PageResponse<BookResponse> findAll(int page, int size, Long idUser);
+
+    PageResponse<BookResponse> findBookByUser(int page, int size,User user);
+
 }

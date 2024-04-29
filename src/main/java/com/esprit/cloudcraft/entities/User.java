@@ -1,5 +1,6 @@
 package com.esprit.cloudcraft.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,13 +31,10 @@ public class User implements Serializable {
     private RoleType role;
     private boolean enable;
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Book> books;
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<BookLoan> bookLoans;
-
-      /* @OneToMany(mappedBy = "user")
-    private Set<SecureToken> tokens;
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokensAuth;*/
 
 }

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 import static java.io.File.separator;
 import static java.lang.System.currentTimeMillis;
@@ -22,7 +23,6 @@ import static java.lang.System.currentTimeMillis;
 @Slf4j
 @RequiredArgsConstructor
 public class FileStorageServiceImp implements FileStorageService {
-    @Value("${application.file.uploads.photos-output-path}")
     private String fileUploadPath;
     Path imagePath=Paths.get("uploads/images");
 
@@ -30,14 +30,16 @@ public class FileStorageServiceImp implements FileStorageService {
     @Override
     public String saveImage(MultipartFile image)  {
         try {
-            Files.copy(
-            image.getInputStream(),
-                    imagePath.resolve(image.getOriginalFilename())
-                    );
+            String randomFileName = UUID.randomUUID().toString();
+            String originalFileName = image.getOriginalFilename();
+            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            String savedFileName = randomFileName + fileExtension;
+            Files.copy(image.getInputStream(), imagePath.resolve(savedFileName));
+
+            return savedFileName;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return image.getOriginalFilename();
     }
 
     @Override

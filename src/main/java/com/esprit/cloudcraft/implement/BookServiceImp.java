@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -31,17 +30,16 @@ public class BookServiceImp implements BookService {
     @Resource
     private CategoryService categoryService ;
     @Resource
-    private BookMapperService bookMapperService;
+    private MapperService bookMapperService;
 
 
     @Override
     public Boolean addBook (Book newbook , Long iduser, Long idcategory,MultipartFile image) {
         boolean result = Boolean.FALSE;
-        final User requestedUser = userService.findUserById(iduser);
-         Category requesteCategory = categoryService.getCategoryByID(idcategory);
+        User requestedUser = userService.findUserById(iduser);
+        Category requesteCategory = categoryService.getCategoryByID(idcategory);
         Book book =new Book();
         if (requestedUser!= null && newbook!= null && requesteCategory!=null){
-
             book.setCategory(requesteCategory);
             book.setAuthor(newbook.getAuthor());
             book.setDescription(newbook.getDescription());
@@ -49,12 +47,10 @@ public class BookServiceImp implements BookService {
             book.setPicture(fileStorageService.saveImage(image));
             book.setAvailability(AvailabilityType.AVAILABILE);
             book.setPublicationDate(new Date());
+            book.setUser(requestedUser);
             Book savedbook=bookDao.save(book);
-
             requesteCategory.getBooks().add(savedbook);
             categoryService.UpdateCategory(requesteCategory);
-
-            userService.addBookToUser(requestedUser, savedbook);
 
             result = Boolean.TRUE;
         }
@@ -94,27 +90,6 @@ public class BookServiceImp implements BookService {
 
     }
 
-    @Override
-    public List<Book> findBookByCategory(Category category) {
-        if (!bookDao.findBookByCategory(category).isEmpty())
-        {
-            return bookDao.findBookByCategory(category);
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    @Override
-    public List<Book> getBooksByUser(User user) {
-        final User requestedUser = userService.findUserById(user.getId());
-        if (requestedUser!= null)
-        {
-            return requestedUser.getBooks();
-        }
-        return null;
-    }
 
     @Override
     public BookResponse findById(Long idBook) {
@@ -124,9 +99,10 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
-    public PageResponse<BookResponse> findAll(int page, int size) {
+    public PageResponse<BookResponse> findAll(int page, int size, Long idUser) {
+        User user= userService.findUserById(idUser);
         Pageable pageable = PageRequest.of(page, size);
-        Page<Book> books = bookDao.findAll(pageable);
+        Page<Book> books = bookDao.findAllAvailableBooksExceptUser(pageable,user);
         List<BookResponse>bookResponses = books.stream()
                 .map(bookMapperService::toBookResponse)
                 .toList();
@@ -142,6 +118,27 @@ public class BookServiceImp implements BookService {
                 books.isLast()
         );
     }
+
+
+
+    @Override
+    public PageResponse<BookResponse> findBookByUser(int page, int size,User user) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> books = bookDao.findBookByUser(pageable,user);
+        List<BookResponse> booksResponse = books.stream()
+                .map(bookMapperService::toBookResponse)
+                .toList();
+        return new PageResponse<>(
+                booksResponse,
+                books.getNumber(),
+                books.getSize(),
+                books.getTotalElements(),
+                books.getTotalPages(),
+                books.isFirst(),
+                books.isLast()
+        );
+    }
+
 
 
 

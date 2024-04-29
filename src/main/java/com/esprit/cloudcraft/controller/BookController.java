@@ -3,10 +3,12 @@ package com.esprit.cloudcraft.controller;
 import com.esprit.cloudcraft.dto.*;
 import com.esprit.cloudcraft.entities.Book;
 import com.esprit.cloudcraft.entities.Category;
+import com.esprit.cloudcraft.entities.User;
 import com.esprit.cloudcraft.implement.FileStorageServiceImp;
 import com.esprit.cloudcraft.services.BookService;
 import com.esprit.cloudcraft.services.CategoryService;
 import com.esprit.cloudcraft.services.FileStorageService;
+import com.esprit.cloudcraft.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -23,40 +25,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/book")
+@CrossOrigin("*")
 public class BookController {
     @Autowired
     private BookService bookService;
     @Autowired
     private CategoryService categoryService;
     @Autowired
+    private UserService userService;
+    @Autowired
     private FileStorageService fileStorageService;
 
-    @GetMapping("/getBookById/{id}")
-    @ResponseBody
-    public Book findBookById (@PathVariable Long id) {
-        return this.bookService.getBookByID(id);
-    }
-
-    @GetMapping("/getAllBooks")
-    public List<Book> GetAllBooks () {
-        if (!this.bookService.getAllBooks().isEmpty()) {
-            return this.bookService.getAllBooks();
-        }
-        else
-            return null;
-    }
-
-    @GetMapping("/getBooksByCategory/{id}")
-    @ResponseBody
-    public List<Book> getAllBooksByCategory (@PathVariable Long id)
-    {
-        Category category = categoryService.getCategoryByID(id);
-        if (!this.bookService.findBookByCategory(category).isEmpty()) {
-            return this.bookService.findBookByCategory(category);
-        }
-        else
-            return null;
-    }
 
     @DeleteMapping("/deleteBook/{id}")
     public Object deleteBook(@PathVariable Long id) {
@@ -71,17 +50,18 @@ public class BookController {
         }
     }
 
-    @PostMapping(value = "/addBook/{idUsuer}/{idCategory}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> addBook(@RequestParam String author,@RequestParam String title,@RequestParam String description,@RequestParam MultipartFile picture , @PathVariable Long idUsuer, @PathVariable Long idCategory) {
+    @PostMapping(value = "/addBook/{idCategory}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> addBook(@RequestParam String author,@RequestParam String title,@RequestParam String description,@RequestParam MultipartFile picture , @PathVariable Long idCategory) {
         System.out.println(picture);
-        if (idUsuer !=null && idUsuer!=null)
+        Long idUser = 1L;
+        if (idUser !=null && idCategory!=null)
         {
             Book newBook=Book.builder()
                     .title(title)
                     .description(description)
                     .author(author)
                     .build();
-            bookService.addBook(newBook,idUsuer,idCategory,picture);
+            bookService.addBook(newBook,idUser,idCategory,picture);
             return ResponseEntity.ok().build();
 
         }
@@ -92,7 +72,6 @@ public class BookController {
     }
 
     @PutMapping("/updateBook/{id}")
-    @ResponseBody
     public Book updateBook(@PathVariable Long id, @RequestBody Book bookupdated) {
         Book book = bookService.getBookByID(id);
         if (book != null) {
@@ -112,8 +91,36 @@ public class BookController {
     {
         return ResponseEntity.ok(bookService.findById(id));
     }
+
+    @GetMapping("/findAll")
+    public ResponseEntity<PageResponse<BookResponse>> findAll(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page ,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size
+            )
+    {
+        Long idUser = 1L;
+        return ResponseEntity.ok(bookService.findAll(page, size, idUser));
+    }
+
+    @GetMapping("/findBooksByUser")
+    public ResponseEntity<PageResponse<BookResponse>>findUserBooks(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page ,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size)
+
+    {
+        User user = userService.findUserById(1L);
+        if (user!=null)
+        {
+            return ResponseEntity.ok(bookService.findBookByUser(page, size,user));
+        }
+        else
+        {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/{fileName}")
-    public ResponseEntity<Resource> downloadPdf(@PathVariable String fileName)    {
+    public ResponseEntity<Resource> getImage(@PathVariable String fileName)    {
         // Construct the file path
         Path filePath =fileStorageService.getImagePath(fileName);
         Resource resource = null;
@@ -122,7 +129,6 @@ public class BookController {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-
         // Check if the file exists
         if (!resource.exists()) {
             return ResponseEntity.notFound().build();
@@ -141,19 +147,10 @@ public class BookController {
         }
         headers.add(HttpHeaders.CONTENT_TYPE, contentType);
 
-        // Return the file as ResponseEntity with appropriate headers
+        // Return the file/image as ResponseEntity with appropriate headers
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(resource);
-    }
-
-    @GetMapping("/findAll")
-    public ResponseEntity<PageResponse<BookResponse>> findAll(
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page ,
-            @RequestParam(name = "size", defaultValue = "10", required = false) int size
-            )
-    {
-        return ResponseEntity.ok(bookService.findAll(page, size));
     }
 
 }

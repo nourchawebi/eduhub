@@ -16,7 +16,6 @@ public class CloudcraftApplication {
     public static void main(String[] args) {
         SpringApplication.run(CloudcraftApplication.class, args);
     }
-
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();

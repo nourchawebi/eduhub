@@ -22,7 +22,10 @@ public class BookLoan implements Serializable {
     private Date loanDate ;
     @Temporal(TemporalType.DATE)
     private Date dueDate ;
+    private boolean returned;
     @ManyToOne
     private Book book;
+    @ManyToOne
+    private User user;
 }
 

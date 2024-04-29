@@ -1,10 +1,9 @@
 package com.esprit.cloudcraft.implement;
 
-import com.esprit.cloudcraft.dto.BookRequest;
 import com.esprit.cloudcraft.dto.BookResponse;
 import com.esprit.cloudcraft.entities.AvailabilityType;
 import com.esprit.cloudcraft.entities.Book;
-import com.esprit.cloudcraft.services.BookMapperService;
+import com.esprit.cloudcraft.services.MapperService;
 import com.esprit.cloudcraft.services.FileStorageService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class BookMapperServiceImp implements BookMapperService {
+public class MapperServiceImp implements MapperService {
     @Resource
     private FileStorageService fileStorageService;
     @Override
@@ -34,9 +33,14 @@ public class BookMapperServiceImp implements BookMapperService {
                 .title(book.getTitle())
                 .description(book.getDescription())
                 .author(book.getAuthor())
+                .owner(book.getUser().getFirstName()+" "+book.getUser().getLastName())
                 .category(book.getCategory().getName())
                 .coverPicture(imageUrl)
                 .availability(book.getAvailability().toString())
                 .build() ;
     }
+
+
+
+
 }
