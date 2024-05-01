@@ -90,6 +90,19 @@ public class BookServiceImp implements BookService {
 
     }
 
+    @Override
+    public Book saveBook(Long idBook, String title, String author, String description) {
+        Book requestedBook = this.getBookByID(idBook);
+        if (requestedBook!=null)
+        {
+            requestedBook.setTitle(title);
+            requestedBook.setAuthor(author);
+            requestedBook.setDescription(description);
+            bookDao.save(requestedBook);
+        }
+        return null;
+    }
+
 
     @Override
     public BookResponse findById(Long idBook) {

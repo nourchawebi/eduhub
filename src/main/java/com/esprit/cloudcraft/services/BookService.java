@@ -1,9 +1,7 @@
 package com.esprit.cloudcraft.services;
-
 import com.esprit.cloudcraft.dto.BookResponse;
 import com.esprit.cloudcraft.dto.PageResponse;
 import com.esprit.cloudcraft.entities.Book;
-import com.esprit.cloudcraft.entities.Category;
 import com.esprit.cloudcraft.entities.User;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +13,7 @@ public interface BookService {
     Book getBookByID(Long id);
     Book UpdateBook (Book book);
     void deleteBook (Book book);
+    Book saveBook (Long idBook, String title, String author, String description);
 
     BookResponse findById (Long idBook );
 

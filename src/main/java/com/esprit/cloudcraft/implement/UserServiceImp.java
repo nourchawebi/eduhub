@@ -38,36 +38,16 @@ public class UserServiceImp implements UserService {
 
 
 ///Partie Gestion bibliothèque
-    @Override
-    public List<Book> getBooksByUser(User user) {
-        User requestedUser = this.findUserById(user.getId());
-        if (user != null) {
-            return requestedUser.getBooks();
-        }
-        return null;
-    }
 
-    @Override
-    public List<BookLoan> getBookLoansByUser(User user) {
-        User requestedUser = this.findUserById(user.getId());
-        if (user != null) {
-            return requestedUser.getBookLoans();
-        }
-        return null;
-    }
+
+
     @Override
     public void addBookLoanToUser(User user, BookLoan bookLoan) {
         user.getBookLoans().add(bookLoan);
         userDao.save(user);
     }
 
-    @Override
-    public void addBookToUser(User user, Book book) {
-        if (user != null && book != null) {
-            user.getBooks().add(book);
-            userDao.save(user);
-        }
-    }
+
 
 
 }

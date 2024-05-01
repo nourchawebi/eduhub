@@ -5,10 +5,7 @@ import com.esprit.cloudcraft.entities.Book;
 import com.esprit.cloudcraft.entities.Category;
 import com.esprit.cloudcraft.entities.User;
 import com.esprit.cloudcraft.implement.FileStorageServiceImp;
-import com.esprit.cloudcraft.services.BookService;
-import com.esprit.cloudcraft.services.CategoryService;
-import com.esprit.cloudcraft.services.FileStorageService;
-import com.esprit.cloudcraft.services.UserService;
+import com.esprit.cloudcraft.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Console;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.List;
@@ -30,30 +28,17 @@ public class BookController {
     @Autowired
     private BookService bookService;
     @Autowired
-    private CategoryService categoryService;
-    @Autowired
     private UserService userService;
     @Autowired
     private FileStorageService fileStorageService;
+    @Autowired
+    private BookLoanService bookLoanService ;
 
-
-    @DeleteMapping("/deleteBook/{id}")
-    public Object deleteBook(@PathVariable Long id) {
-        if (bookService.getBookByID(id) != null) {
-            Book book = bookService.getBookByID(id);
-            bookService.deleteBook(book);
-            return "book deleted with success";
-        }
-        else
-        {
-            return null;
-        }
-    }
 
     @PostMapping(value = "/addBook/{idCategory}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> addBook(@RequestParam String author,@RequestParam String title,@RequestParam String description,@RequestParam MultipartFile picture , @PathVariable Long idCategory) {
         System.out.println(picture);
-        Long idUser = 1L;
+        Long idUser = 3L;
         if (idUser !=null && idCategory!=null)
         {
             Book newBook=Book.builder()
@@ -70,20 +55,54 @@ public class BookController {
         }
 
     }
+    @PostMapping(value = "/updateBook",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> updateBook(@RequestParam String author,@RequestParam String title,@RequestParam String description,
+                                             @RequestParam Long idBook) {
 
-    @PutMapping("/updateBook/{id}")
-    public Book updateBook(@PathVariable Long id, @RequestBody Book bookupdated) {
-        Book book = bookService.getBookByID(id);
-        if (book != null) {
-            book.setPicture(bookupdated.getPicture());
-            book.setAuthor(bookupdated.getAuthor());
-            book.setTitle(bookupdated.getTitle());
-            book.setDescription(bookupdated.getDescription());
-            return bookService.UpdateBook(book);
+        if (author != null && title != null && description != null ) {
+            return ResponseEntity.ok(bookService.saveBook(idBook,title, author,description));
         }
         else
         {
-            return null ;
+            return ResponseEntity.notFound().build() ;
+        }
+    }
+    @PostMapping("/borrowBook/{idBook}")
+    public ResponseEntity<Object> addBookLoan(@PathVariable Long idBook) {
+        User user = userService.findUserById(1L);
+        Book book = bookService.getBookByID(idBook);
+        if (user!=null && book != null) {
+         return ResponseEntity.ok(bookLoanService.addBookLoan(user, book));
+        }
+        else
+        {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/returnBook/{idBook}")
+    public ResponseEntity<Object> returnBook(@PathVariable Long idBook) {
+        if (idBook!=null) {
+            return ResponseEntity.ok(bookLoanService.returnBookLoan(idBook));
+        }
+        else
+        {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+
+    @DeleteMapping("/deleteBook/{id}")
+    public Object deleteBook(@PathVariable Long id) {
+        if (bookService.getBookByID(id) != null) {
+            Book book = bookService.getBookByID(id);
+            bookService.deleteBook(book);
+            return "book deleted with success";
+        }
+        else
+        {
+            return null;
         }
     }
     @GetMapping("/findBooksByid/{id}")
@@ -112,6 +131,23 @@ public class BookController {
         if (user!=null)
         {
             return ResponseEntity.ok(bookService.findBookByUser(page, size,user));
+        }
+        else
+        {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/findBookLoansByUser")
+    public ResponseEntity<PageResponse<BookBorrowResponse>>findUserBookLoans(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page ,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size)
+
+    {
+        User user = userService.findUserById(1L);
+        if (user!=null)
+        {
+            return ResponseEntity.ok(bookLoanService.findBookLoansByUser(page, size,user));
         }
         else
         {
@@ -152,5 +188,7 @@ public class BookController {
                 .headers(headers)
                 .body(resource);
     }
+
+
 
 }
