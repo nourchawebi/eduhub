@@ -48,11 +48,7 @@ public class EventService implements IEventService {
                 event.setDescription(newEvent.getDescription());
                 event.setPicture(fileStorageService.saveImage(image));
                 event.setCapacity(newEvent.getCapacity());
-
-                // Assuming you have an EventDao or repository for saving events
                 Event savedEvent = cc.save(event);
-
-                // Adding the saved event to the category's events
 
                 result = Boolean.TRUE;
             }
@@ -61,13 +57,12 @@ public class EventService implements IEventService {
 
 
 
-
-
     //    /////////////////////////////////// CRUD //////////////////////////////////////////
     public Event createEvent(Event e){
+
         return cc.save(e);
     };
-    public Event updateEvent(long id, Event updatedEvent){
+    public Event updateEvent(long id, Event updatedEvent,MultipartFile picture){
         Optional<Event> up = cc.findById(id);
         if (up.isPresent()) {
             Event event = up.get();
@@ -77,6 +72,9 @@ public class EventService implements IEventService {
             event.setDateEnd(updatedEvent.getDateEnd());
             event.setDescription(updatedEvent.getDescription());
             event.setTitle(updatedEvent.getTitle());
+            if (picture != null){
+                event.setPicture(fileStorageService.saveImage(picture));
+            }
             return cc.save(event);
         }
         else {
@@ -110,6 +108,28 @@ public class EventService implements IEventService {
 
 
 // //    /////////////////////////////////// participation et annulation de participation //////////////////////////////////////////
+
+    public boolean IsparticipateUserInEvent(Long eventId, Long userId) {
+        Event event = cc.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Check if the user is already participating in the event
+        if (event.getUserSet().contains(user)) {
+            throw new RuntimeException("User is already participating in the event.");
+        }
+
+        if (event.getUserSet().size() >= event.getCapacity()) {
+            throw new RuntimeException("Event capacity has been reached. Cannot participate.");
+        }
+
+        event.getUserSet().add(user);
+        cc.save(event);
+
+        return true; // User participated successfully
+    }
+
+
+
     public Event participateUserInEvent(Long eventId, Long userId) {
         Event event = cc.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
