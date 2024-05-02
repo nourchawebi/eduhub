@@ -1,6 +1,7 @@
 package com.esprit.cloudcraft.entities;
 
 import com.esprit.cloudcraft.entities.userEntities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class Book implements Serializable {
     private String title;
     private String picture;
     private String author ;
+    @Column(length = 10000)
     private String description ;
     @Enumerated(EnumType.STRING)
     private AvailabilityType availability ;
@@ -28,9 +30,6 @@ public class Book implements Serializable {
     private Date publicationDate ;
     @ManyToOne
     private  Category category ;
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
-    private List<BookLoan> bookLoans;
-
     @ManyToOne
     private User user;
 

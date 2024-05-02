@@ -2,16 +2,19 @@ package com.esprit.cloudcraft.controller;
 
 import com.esprit.cloudcraft.entities.Event;
 import com.esprit.cloudcraft.Enum.Name;
+import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.services.IEventService;
 import com.esprit.cloudcraft.utils.QRCodeGenerator;
 import com.google.zxing.WriterException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 @Controller
@@ -128,10 +131,11 @@ public class EventController {
 
 // /////////////////////////////// participation et annulation de participation //////////////////////////////////////////
 
-    @PostMapping("/{eventId}/participate/{userId}")
-    public ResponseEntity<String> participateUserInEvent(@PathVariable Long eventId, @PathVariable Long userId) {
+    @PostMapping("/{eventId}/participate")
+    public ResponseEntity<String> participateUserInEvent(@PathVariable Long eventId, Principal connectedUser) {
         try {
-            eventService.participateUserInEvent(eventId, userId);
+            var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+            eventService.participateUserInEvent(eventId, user.getId());
             return ResponseEntity.ok("User participated in the event successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());

@@ -16,7 +16,7 @@ public interface UserService {
  public void sendVerifNewEmail(User user);
  public AuthenticationResponse verifyNewEmail(String token);
  public  String changeEmail(ChangeEmailRequest request, Principal connectedUser);
-
+ User findUserById(Long id);
  public void changePassword(ChangePasswordRequest request);
  public  boolean sendForgotPasswordRequest(String email);
  public boolean setForgotPassword(ForgotPasswordRequest request);

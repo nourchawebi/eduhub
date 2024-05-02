@@ -1,16 +1,21 @@
 package com.esprit.cloudcraft.implement;
 
-import com.esprit.cloudcraft.dto.BookRequest;
+import com.esprit.cloudcraft.dto.BookResponse;
+import com.esprit.cloudcraft.dto.PageResponse;
 import com.esprit.cloudcraft.entities.*;
+import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.repository.BookDao;
-import com.esprit.cloudcraft.repository.CategoryDao;
 import com.esprit.cloudcraft.services.*;
+import com.esprit.cloudcraft.services.FileStorageService;
 import com.esprit.cloudcraft.services.userServices.UserService;
 import jakarta.annotation.Resource;
-import org.springframework.scheduling.annotation.Scheduled;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import com.esprit.cloudcraft.entities.userEntities.User;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -27,16 +32,17 @@ public class BookServiceImp implements BookService {
 
     @Resource
     private CategoryService categoryService ;
+    @Resource
+    private MapperService bookMapperService;
 
 
     @Override
     public Boolean addBook (Book newbook , Long iduser, Long idcategory,MultipartFile image) {
         boolean result = Boolean.FALSE;
-      /*  final User requestedUser = userService.findUserById(iduser);
-         Category requesteCategory = categoryService.getCategoryByID(idcategory);
+        User requestedUser = userService.findUserById(iduser);
+        Category requesteCategory = categoryService.getCategoryByID(idcategory);
         Book book =new Book();
         if (requestedUser!= null && newbook!= null && requesteCategory!=null){
-
             book.setCategory(requesteCategory);
             book.setAuthor(newbook.getAuthor());
             book.setDescription(newbook.getDescription());
@@ -44,19 +50,16 @@ public class BookServiceImp implements BookService {
             book.setPicture(fileStorageService.saveImage(image));
             book.setAvailability(AvailabilityType.AVAILABILE);
             book.setPublicationDate(new Date());
+            book.setUser(requestedUser);
             Book savedbook=bookDao.save(book);
-
             requesteCategory.getBooks().add(savedbook);
             categoryService.UpdateCategory(requesteCategory);
 
-            userService.addBookToUser(requestedUser, savedbook);
-
             result = Boolean.TRUE;
         }
-*/
+
         return result;
     }
-
 
     @Override
     public List<Book> getAllBooks() {
@@ -82,17 +85,7 @@ public class BookServiceImp implements BookService {
         return bookDao.saveAndFlush(book);
     }
 
-    @Override
-    public Book UpdateBookAvailabilityToNOT_AVAILABILE(Book book) {
-        book.setAvailability(AvailabilityType.NOT_AVAILABILE);
-        return bookDao.saveAndFlush(book);
-    }
 
-    @Override
-    public Book UpdateBookAvailabilityToAVAILABILE(Book book) {
-        book.setAvailability(AvailabilityType.AVAILABILE);
-        return bookDao.saveAndFlush(book);
-    }
 
     @Override
     public void deleteBook(Book book) {
@@ -101,25 +94,65 @@ public class BookServiceImp implements BookService {
     }
 
     @Override
-    public List<Book> findBookByCategory(Category category) {
-        if (!bookDao.findBookByCategory(category).isEmpty())
+    public Book saveBook(Long idBook, String title, String author, String description) {
+        Book requestedBook = this.getBookByID(idBook);
+        if (requestedBook!=null)
         {
-            return bookDao.findBookByCategory(category);
+            requestedBook.setTitle(title);
+            requestedBook.setAuthor(author);
+            requestedBook.setDescription(description);
+            bookDao.save(requestedBook);
         }
-        else
-        {
-            return null;
-        }
+        return null;
+    }
+
+
+    @Override
+    public BookResponse findById(Long idBook) {
+        return bookDao.findById(idBook)
+                .map(bookMapperService::toBookResponse)
+                .orElseThrow(() -> new EntityNotFoundException("No book found with id "+ idBook));
     }
 
     @Override
-    public List<Book> getBooksByUser(User user) {
-       /* final User requestedUser = userService.findUserById(user.getId());
-        if (requestedUser!= null)
-        {
-            return requestedUser.getBooks();
-        }*/
-        return null;
+    public PageResponse<BookResponse> findAll(int page, int size, Long idUser) {
+        User user= userService.findUserById(idUser);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> books = bookDao.findAllAvailableBooksExceptUser(pageable,user);
+        List<BookResponse>bookResponses = books.stream()
+                .map(bookMapperService::toBookResponse)
+                .toList();
+
+        System.out.println(bookResponses);
+        return new PageResponse<>(
+                bookResponses,
+                books.getNumber(),
+                books.getSize(),
+                books.getTotalElements(),
+                books.getTotalPages(),
+                books.isFirst(),
+                books.isLast()
+        );
+    }
+
+
+
+    @Override
+    public PageResponse<BookResponse> findBookByUser(int page, int size, User user) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> books = bookDao.findBookByUser(pageable,user);
+        List<BookResponse> booksResponse = books.stream()
+                .map(bookMapperService::toBookResponse)
+                .toList();
+        return new PageResponse<>(
+                booksResponse,
+                books.getNumber(),
+                books.getSize(),
+                books.getTotalElements(),
+                books.getTotalPages(),
+                books.isFirst(),
+                books.isLast()
+        );
     }
 
 

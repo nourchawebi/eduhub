@@ -5,7 +5,8 @@ import com.esprit.cloudcraft.dto.userdto.ChangePasswordRequest;
 import com.esprit.cloudcraft.dto.userdto.ChangePersonalInfosdRequest;
 import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.repository.userDao.UserRepository;
-import com.esprit.cloudcraft.services.userServices.FileStorageService;
+
+import com.esprit.cloudcraft.services.FileStorageService;
 import com.esprit.cloudcraft.services.userServices.UserService;
 import com.google.zxing.NotFoundException;
 import jakarta.annotation.Resource;

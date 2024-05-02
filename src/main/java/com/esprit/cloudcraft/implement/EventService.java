@@ -4,6 +4,7 @@ import com.esprit.cloudcraft.entities.Event;
 import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.Enum.Name;
 import com.esprit.cloudcraft.repository.userDao.UserRepository;
+import com.esprit.cloudcraft.services.FileStorageService;
 import com.esprit.cloudcraft.services.IEventService;
 import com.esprit.cloudcraft.repository.EventRepository;
 

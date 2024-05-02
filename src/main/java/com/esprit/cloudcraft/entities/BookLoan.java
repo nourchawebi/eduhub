@@ -1,5 +1,6 @@
 package com.esprit.cloudcraft.entities;
 
+import com.esprit.cloudcraft.entities.userEntities.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +23,10 @@ public class BookLoan implements Serializable {
     private Date loanDate ;
     @Temporal(TemporalType.DATE)
     private Date dueDate ;
+    private boolean returned;
     @ManyToOne
     private Book book;
+    @ManyToOne
+    private User user;
 }
 

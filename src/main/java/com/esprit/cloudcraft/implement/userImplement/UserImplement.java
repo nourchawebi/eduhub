@@ -7,6 +7,7 @@ import com.esprit.cloudcraft.entities.userEntities.SecureToken;
 import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.repository.userDao.SecureTokenRepository;
 import com.esprit.cloudcraft.repository.userDao.UserRepository;
+import com.esprit.cloudcraft.services.FileStorageService;
 import com.esprit.cloudcraft.services.userServices.*;
 import com.esprit.cloudcraft.tfa.TwoFactorAuthenticationService;
 import jakarta.annotation.Resource;
@@ -359,6 +360,18 @@ public class UserImplement implements UserService {
         System.out.println(principal);
         return connectedUser;
 
+    }
+    @Override
+    public User findUserById(Long id) {
+        if(id!= null)
+        {
+            final Optional<User> optionalUser= userRepository.findById(id);
+            if (optionalUser.isPresent())
+            {
+                return optionalUser.get();
+            }
+        }
+        return null;
     }
 
 }
