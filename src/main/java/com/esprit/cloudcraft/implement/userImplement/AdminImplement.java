@@ -6,6 +6,7 @@ import com.esprit.cloudcraft.repository.userDao.TokenRepository;
 import com.esprit.cloudcraft.repository.userDao.UserRepository;
 import com.esprit.cloudcraft.services.userServices.AdminService;
 import jakarta.annotation.Resource;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -89,5 +90,17 @@ public class AdminImplement implements AdminService{
     @Override
     public List<User> getAllUsers() {
         return  userRepository.findAll();
+    }
+
+    @Scheduled(fixedRate = 10000) // Schedule every 10 seconds (adjust as needed)
+    public void checkAndUnlockUsers() {
+        List<User> users = userRepository.findAll();
+        Date date= new Date();
+        for (User user : users) {
+            if(user.getULockedDate()==date )
+            {
+                this.unlockUser(user.getEmail());
+            }
+        }
     }
 }
