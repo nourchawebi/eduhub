@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Details of your book loan</title>
+    <style>
+        .user-name {
+            background-color: #00308f; /* Bleu foncé */
+            color: #ffffff; /* Blanc */
+            padding: 5px 10px; /* Ajouter un peu de marge intérieure */
+            display: inline-block; /* Pour que le fond s'étende autour du texte */
+        }
+        .regards {
+            background-color: #00308f; /* Bleu foncé */
+            color: #ffffff; /* Blanc */
+            padding: 5px 10px; /* Ajouter un peu de marge intérieure */
+            display: inline-block; /* Pour que le fond s'étende autour du texte */
+        }
+    </style>
+</head>
+<body>
+<div >
+    <p class="user-name">Hello <span >[[${user.firstName}]]</span>,</p>
+</div>
+<div>
+    <p style="font-weight: bold">The Book Borrow is successfully added</p>
+    <p >Thank you for choosing us</p>
+</div>
+<div>
+    <p>Below in the attachment file you will find the details of your book borrow</p>
+</div>
+<div>
+    <p>Best regards</p>
+</div>
+<div>
+    <p class="regards">With love from the EduHub Team</p>
+</div>
+</body>
+</html>
