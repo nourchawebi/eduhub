@@ -13,9 +13,9 @@ public interface IEventService {
 
     public Boolean addEvent(Event newEvent, MultipartFile image) ;
 
-        public Event createEvent(Event e);
+    public Event createEvent(Event e);
 
-    public Event updateEvent(long id, Event updatedEvent);
+    public Event updateEvent(long id, Event updatedEvent,MultipartFile picture);
 
     public void deleteEvent(long id);
 
@@ -29,7 +29,7 @@ public interface IEventService {
 
     public Event findbyid(long id);
     //  public void participate(long eventId, long userId);
-
+    public boolean IsparticipateUserInEvent(Long eventId, Long userId);
     public Event participateUserInEvent(Long eventId, Long userId);
 
     public Event cancelUserParticipation(Long eventId, Long userId);
