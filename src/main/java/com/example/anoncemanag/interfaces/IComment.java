@@ -3,16 +3,18 @@ package com.example.anoncemanag.interfaces;
 
 import com.example.anoncemanag.entities.Comment;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface IComment {
-    public Comment addComment(Comment comment,long annonceId);
-    Comment getCommentById(long id);
-    Comment updateComment(long id, Comment comment);
+
+    Comment getCommentById(long id_comment);
+    Comment updateComment(long id, String comment);
     void deleteComment(long id);
     public List<Comment> getAllComments(long id);
 
 
+    List<Comment> getCommentByUser(long id_user);
 
-
+    void addComment(long annonceId, String comment, long userId) throws ParseException;
 }

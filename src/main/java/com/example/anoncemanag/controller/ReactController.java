@@ -22,28 +22,54 @@ public class ReactController {
 
         return reactInterface.addReact(react);
     }
+    @PostMapping("/like")
+    public void likePost(@RequestParam("annonce_id") long annonceId,@RequestParam ("user_id")long userId ) {
+        reactInterface.likePost(annonceId,userId);
+    }
+    @PostMapping("/dislike")
 
-    @PutMapping("/updateReact/{id}")
-    public React updateReact(@PathVariable Long id, @RequestBody React react) {
-        return reactInterface.updateReact(id,react);
+    public void dislikePost(@RequestParam("annonce_id") long annonceId,@RequestParam ("user_id")long userId) {
+        reactInterface.dislikePost(annonceId,userId);
+
+    }
+    @GetMapping("/nbrLikesParAnnonce/{annonceId}")
+     public int nbrLikesParAnnonce(@PathVariable long annonceId) {
+
+        return reactInterface.nbrLikesParAnnonce(annonceId);
     }
 
-    @DeleteMapping("/deleteReact/{id}")
+    @GetMapping("/nbrDislikesParAnnonce/{annonceId}")
+    public int nbrDislikesParAnnonce(@PathVariable long annonceId) {
+        return reactInterface.nbrDislikesParAnnonce(annonceId);
+    }
+
+
+   /* @PutMapping("/updateReact/{id}")
+    public React updateReact(@PathVariable Long id, @RequestBody React react) {
+        return reactInterface.updateReact(id,react);
+    }*/
+
+   /* @DeleteMapping("/deleteReact/{id}")
     public Void deleteReact(@PathVariable long id) {
         this.reactInterface.deleteReact(id);
         return null;
-    }
+    }*/
 
-    @GetMapping("/getAllComments")
+   /* @GetMapping("/getAllReacts")
     public List<React> getAllReact() {
 
         return reactInterface.getAllReact();
 
-    }
-    @GetMapping("/getReactById{id}")
+    }*/
+   /* @GetMapping("/getReactById{id}")
     public React getReactById(@PathVariable Long id) {
 
         return reactInterface.getReactById(id);
+    }*/
+
+    @GetMapping("/verifyUserReaction")
+    public boolean verifyUserReactionLike(@RequestParam long userId, @RequestParam Long annonceId) {
+        return reactInterface.verifyUserReactionLike(userId, annonceId);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.anoncemanag.entities;
 
+import com.example.anoncemanag.enums.TypeReact;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +18,18 @@ public class React implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_react;
-    private long id_user;
-@ManyToOne
-User user;
+    @Enumerated(EnumType.STRING)
+    TypeReact typeReact;
+    private int likes;
+    private int dislikes;
+
+
+
+    @ManyToOne
+    @JsonIgnore
+    private Annonce annonce;
+
+    @ManyToOne
+    @JsonIgnore
+    private User user;
 }

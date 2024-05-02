@@ -11,8 +11,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 @AllArgsConstructor
 @Transactional
@@ -23,43 +24,61 @@ public class CommentService implements IComment {
     @Autowired
     AnnonceDao annonceDao;
 
-    @Override
-    public Comment addComment(Comment comment, long annonceId) {
-        Annonce existingAnnonce = annonceDao.findById(annonceId).orElse(null);
-        if (existingAnnonce == null) {
+  /*  @Override
+    public Comment addComment(CommentDto comment, long annonceId) {
+        Comment comment1= new Comment();
+        comment1.setComment_description(comment.getDescriptionComment());
+        // Get the current date and time
+        LocalDateTime currentDateTime = LocalDateTime.now();
 
-            return null;
-        }
-        comment.setComment_date(LocalDate.now());
-        comment.setAnnonce(existingAnnonce);
-        existingAnnonce.getComments().add(comment);
+        Annonce existingAnnonce = annonceDao.findById(annonceId).orElseThrow(() -> new IllegalArgumentException("Annonce not found for id: " + annonceId));
+        int nb=existingAnnonce.getNbr_comment()+1;
+        existingAnnonce.setNbr_comment(nb);
+        Comment comment2 = Comment.builder()
+                .annonce(existingAnnonce)
+                .comment_description(comment1.getComment_description())
+                .comment_date(currentDateTime)
+                .build();
+        existingAnnonce.getComments().add(comment1);
         annonceDao.save(existingAnnonce);
-        return comment ;
-    }
+        return comment2;
+    }*/
 
 
 
 
-    @Override
-    public Comment getCommentById(long id) {
-        return commentRepository.findById(id).orElse(null);
-    }
 
     @Override
+    public Comment getCommentById(long id_comment) {
+        Comment comment = commentRepository.findById(id_comment).get();
+        Comment comment1 = Comment.builder()
+                .comment_description(comment.getComment_description())
+                .comment_date(comment.getComment_date())
 
-    public Comment updateComment(long id, Comment comment){
-        if (commentRepository.existsById((long) Math.toIntExact(id))){
-            comment.setId_comment(id);
-            return commentRepository.save(comment);
+                .build();
+
+        return comment1;
+    }
+
+    @Override
+
+    public Comment updateComment(long id, String comment){
+        Comment comment1=commentRepository.findById(id).get();
+
+            comment1.setComment_description(comment);
+            return commentRepository.save(comment1);
 
         }
-        return null;
-    }
+
+
 
     @Override
-    public void deleteComment(long id) {
-
-        commentRepository.deleteById(id);
+    public void deleteComment(long id_comment) {
+        Comment comment = commentRepository.findById(id_comment).orElse(null);
+        if (comment != null) {
+            comment.setAnnonce(null);
+            commentRepository.delete(comment);
+        }
     }
 
     @Override
@@ -69,6 +88,28 @@ public class CommentService implements IComment {
             List<Comment>comments=annonces.getComments();
             return comments;
         }
+    }
+    @Override
+    public List<Comment> getCommentByUser(long id_user) {
+        List<Comment> comments = commentRepository.findCommentByUserId(id_user);
+        return comments;
+    }
+
+    @Override
+    public void addComment(long annonceId, String comment, long userId) throws ParseException {
+        Annonce annonce=annonceDao.findById(annonceId).get();
+        Date currentDateTime = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        String formattedDate = dateFormat.format(currentDateTime);
+        Date parsedDate = dateFormat.parse(formattedDate);
+        Comment comment2 = Comment.builder()
+                .annonce(annonce)
+                .comment_description(comment)
+                .comment_date(parsedDate)
+                .build();
+
+        commentRepository.save(comment2);
+
     }
 
 

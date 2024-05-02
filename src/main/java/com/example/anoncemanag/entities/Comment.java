@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -20,11 +21,11 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_comment;
     private String comment_description;
-    private LocalDate comment_date;
+    private Date comment_date;
 
-@ManyToOne
-        @JsonIgnore
-Annonce annonce;
+    @ManyToOne
+    @JsonIgnore
+    Annonce annonce;
 
     @ManyToOne
     @JsonIgnore

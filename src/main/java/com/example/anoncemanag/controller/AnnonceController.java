@@ -7,7 +7,6 @@ import com.example.anoncemanag.enums.TypeAnnonce;
 import com.example.anoncemanag.enums.TypeInternship;
 import com.example.anoncemanag.interfaces.IAnnonce;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -15,9 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.ParseException;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -26,28 +25,55 @@ import java.util.Optional;
 public class AnnonceController {
     @Autowired
     private final IAnnonce iAnnonce;
+    @PostMapping("/addPost")
+    public ResponseEntity<Annonce> addPost(@RequestParam("title") String title,
+                                              @RequestParam("annonce_description") String annonceDescription,
+                                              @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce
+                                              ) {
+        Annonce newAnnonce = iAnnonce.addPost(title, annonceDescription,typeAnnonce);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newAnnonce);
+    }
+    @PostMapping("/addIntership")
+    public ResponseEntity<Annonce> addIntership(@RequestParam("title") String title,
+                                           @RequestParam("annonce_description") String annonceDescription,
+                                           @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,
+                                                @RequestParam("governorate") String governorate,
+                                                @RequestParam("date")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
+                                           @RequestParam("typeintership") TypeInternship typeInternship
+    ) {
+        Annonce newAnnonce = iAnnonce.addIntership(title, annonceDescription,typeAnnonce,governorate,date,typeInternship);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newAnnonce);
+    }
+
+    @PostMapping("/addJobOffer")
+    public ResponseEntity<Annonce> addJob(@RequestParam("title") String title,
+                                          @RequestParam("annonce_description") String annonceDescription,
+                                          @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,
+                                          @RequestParam("governorate") String governorate,
+                                          @RequestParam("date")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date
+    ) {
+        Annonce newAnnonce = iAnnonce.addJob(title, annonceDescription,typeAnnonce, governorate, date);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newAnnonce);
+    }
     @PostMapping("/addAnnonce")
     public ResponseEntity<Annonce> addAnnonce(@RequestParam("title") String title,
                                               @RequestParam("annonce_description") String annonceDescription,
-                                              @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                              @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,
-                                              //@RequestParam("location") String location,
-                                             // @RequestParam("typeInternship") TypeInternship typeInternship,
+                                              @RequestParam("date")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,                                              @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,
+                                           //   @RequestParam("location") String governorate,
+                                              @RequestParam("typeAnnonce") TypeAnnonce typeAnn,
                                               @RequestParam("file") MultipartFile imageFile) {
-        Annonce newAnnonce = iAnnonce.addAnnonce(title, annonceDescription, startDate, typeAnnonce, imageFile);
+        Annonce newAnnonce = iAnnonce.addAnnonce(title, annonceDescription, date,typeAnn, imageFile);
         return ResponseEntity.status(HttpStatus.CREATED).body(newAnnonce);
     }
-    @PostMapping("/addAnnonceSimple")
+  /*  @PostMapping("/addAnnonceSimple")
+    public Annonce addAnnonceSimple(@RequestBody Annonce annonce) {
+        return iAnnonce.addAnnonceSimple(annonce);
+    }
+*/
 
-    public ResponseEntity<Annonce> addAnnonceSimple(@RequestParam("title") String title,
-                                              @RequestParam("annonce_description") String annonceDescription,
-                                              @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                              @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,
 
-                                                    @RequestParam("typeInternship") TypeInternship typeInternship){
-        Annonce newAnnonce = iAnnonce.addAnnonceSimple(title, annonceDescription, startDate, typeAnnonce, typeInternship);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newAnnonce);
-}
+
+
 
     @GetMapping("/filtrer")
     public List<Annonce> filterAnnonces(@RequestParam("typeAnnonces") List<TypeAnnonce> typeAnnonces){

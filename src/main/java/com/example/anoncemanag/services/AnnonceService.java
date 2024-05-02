@@ -3,7 +3,6 @@ package com.example.anoncemanag.services;
 
 
 import com.example.anoncemanag.entities.Annonce;
-import com.example.anoncemanag.entities.Comment;
 import com.example.anoncemanag.enums.TypeAnnonce;
 import com.example.anoncemanag.enums.TypeInternship;
 import com.example.anoncemanag.interfaces.IAnnonce;
@@ -11,11 +10,8 @@ import com.example.anoncemanag.repository.AnnonceDao;
 import com.example.anoncemanag.repository.CommentDao;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,8 +19,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -50,7 +44,7 @@ public class AnnonceService implements IAnnonce {
 
 
     @Override
-    public Annonce addAnnonce(String title, String annoncedesc, LocalDate startDate,
+    public Annonce addAnnonce(String title, String annoncedesc, Date startDate,
                               TypeAnnonce typeAnnonce, MultipartFile imageFile) {
         try {
              //Copier l'image vers le répertoire de destination
@@ -59,20 +53,13 @@ public class AnnonceService implements IAnnonce {
             Files.copy(imageFile.getInputStream(), destinationPath);
 
             Annonce annonce1 = new Annonce();
+            annonce1.setNbr_comment(0);
             annonce1.setAnnonce_date(LocalDate.now());
             annonce1.setAnnonce_description(annoncedesc);
             annonce1.setTypeAnnonce(typeAnnonce);
            annonce1.setImage(fileName.toString());
             annonce1.setStartDate(startDate);
             annonce1.setTitle(title);
-
-           // annonce1.setLocation(location);
-           // annonce1.setTypeInternship(typeInternship);
-            //annonce1.setUser(annonce.getUser());
-            /*annonce1.setLocationLx(annonce.getLocationLx());
-            annonce1.setLocationLy(annonce.getLocationLy());
-            annonce1.setCountry(annonce.getCountry());
-            annonce1.setGovernorate(annonce.getGovernorate());*/
             return annonceDao.save(annonce1);
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload image", e);
@@ -89,14 +76,9 @@ public class AnnonceService implements IAnnonce {
         }
     }
 
-    public Annonce addAnnonceSimple(String title, String annoncedesc, LocalDate startDate, TypeAnnonce typeAnnonce,TypeInternship typeInternship){
-        Annonce annonce2 = new Annonce();
-        annonce2.setAnnonce_date(LocalDate.now());
-        annonce2.setAnnonce_description(annoncedesc);
-        annonce2.setTypeAnnonce(typeAnnonce);
-        annonce2.setStartDate(startDate);
-        annonce2.setTitle(title);
-        return annonceDao.save(annonce2);
+    public Annonce addAnnonceSimple(Annonce annonce){
+
+        return annonceDao.save(annonce);
     }
     public List<Annonce> getAnnoncesByUserId(long userId) {
         return annonceDao.findAnnonceByUserId(userId);
@@ -130,6 +112,47 @@ public class AnnonceService implements IAnnonce {
 
         return annonceDao.findByTitle(title);
     }
+
+    @Override
+    public Annonce addPost(String title, String annonceDescription, TypeAnnonce typeInternship) {
+        Annonce post = Annonce.builder()
+
+
+                .title(title)
+                .annonce_description(annonceDescription)
+                .typeAnnonce(typeInternship)
+                .build();
+        post.setNbr_comment(0);
+
+        return annonceDao.save(post);
+    }
+
+    @Override
+    public Annonce addIntership(String title, String annonceDescription, TypeAnnonce typeAnnonce, String governorate, Date date, TypeInternship typeInternship) {
+        Annonce intership = Annonce.builder()
+                .title(title)
+                .annonce_description(annonceDescription)
+                .typeAnnonce(typeAnnonce)
+                .startDate(date)
+                .governorate(governorate)
+                .typeInternship(typeInternship)
+                .build();
+        intership.setNbr_comment(0);
+        return annonceDao.save(intership);
+    }
+
+    @Override
+    public Annonce addJob(String title, String annonceDescription, TypeAnnonce typeAnnonce, String governorate, Date date) {
+        Annonce job = Annonce.builder()
+                .title(title)
+                .annonce_description(annonceDescription)
+                .typeAnnonce(typeAnnonce)
+                .startDate(date)
+                .governorate(governorate)
+                .build();
+        job.setNbr_comment(0);
+
+        return annonceDao.save(job);    }
 
     @Override
    public Annonce updateAnnonce(long id, Annonce updatedAnnonce) {

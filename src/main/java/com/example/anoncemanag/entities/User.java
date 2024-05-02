@@ -39,7 +39,7 @@ import java.util.List;
         @OneToMany(mappedBy = "user")
     List<Comment> comments=new ArrayList<>();
 
-@OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     List <React>reacts=new ArrayList<>();
 
 }

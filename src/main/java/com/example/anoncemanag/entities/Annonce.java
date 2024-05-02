@@ -31,16 +31,17 @@ public class Annonce implements Serializable {
     private String image;
     private LocalDate annonce_date;
     @DateTimeFormat
-    private LocalDate startDate;
+    private Date startDate;
     @Enumerated(EnumType.STRING)
     private TypeAnnonce typeAnnonce;
     @Enumerated(EnumType.STRING)
     private TypeInternship typeInternship;
-    private String location;
-    private String locationLx;
-    private String  locationLy;
+    private int nbr_comment;
+    private int likes;
+    private int dislikes;
+
     private String governorate;
-    private String country;
+
 
     @ManyToOne
     @JsonIgnore
