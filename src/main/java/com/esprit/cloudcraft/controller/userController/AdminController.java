@@ -10,12 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Month;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("admin")
 @CrossOrigin(origins = "http://localhost:4200")
 public class AdminController {
     @Resource
@@ -37,9 +38,9 @@ public class AdminController {
     }
     /******************** lock user api *************/
     @PatchMapping("/lock")
-    public ResponseEntity<?> lockUser(@RequestParam("email") String email)
+    public ResponseEntity<?> lockUser(@RequestParam("email") String email,@RequestParam("unlockdate") String unlockdate)
     {
-        if (adminService.lockUser(email))
+        if (adminService.lockUser(email,unlockdate))
         {
             return ResponseEntity.accepted().build();
         } else

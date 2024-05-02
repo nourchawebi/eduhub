@@ -70,16 +70,19 @@ public class User implements Serializable , UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Token> tokensAuth;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Book> books;
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
     private List<Participation> participations;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "motorized",fetch = FetchType.EAGER)
     private List<Journey> journeys;
+
     @OneToOne
     private Location location;
+    @JsonIgnore
     @OneToMany
     private List<Car> cars;
 
