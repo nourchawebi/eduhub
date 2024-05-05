@@ -1,38 +1,261 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">>
+
 <head>
-    <title>Details of your book loan</title>
-    <style>
-        .user-name {
-            background-color: #00308f; /* Bleu foncé */
-            color: #ffffff; /* Blanc */
-            padding: 5px 10px; /* Ajouter un peu de marge intérieure */
-            display: inline-block; /* Pour que le fond s'étende autour du texte */
-        }
-        .regards {
-            background-color: #00308f; /* Bleu foncé */
-            color: #ffffff; /* Blanc */
-            padding: 5px 10px; /* Ajouter un peu de marge intérieure */
-            display: inline-block; /* Pour que le fond s'étende autour du texte */
-        }
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="telephone=no" name="format-detection">
+    <title></title>
+    <!--[if (mso 16)]>
+    <style type="text/css">
+        a {text-decoration: none;}
     </style>
+    <![endif]-->
+    <!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Oswald:300,700&display=swap" rel="stylesheet">
+    <!--<![endif]-->
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:AllowPNG></o:AllowPNG>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i" rel="stylesheet">
+    <!--<![endif]-->
 </head>
+
 <body>
-<div >
-    <p class="user-name">Hello <span >[[${user.firstName}]]</span>,</p>
-</div>
-<div>
-    <p style="font-weight: bold">The Book Borrow is successfully added</p>
-    <p >Thank you for choosing us</p>
-</div>
-<div>
-    <p>Below in the attachment file you will find the details of your book borrow</p>
-</div>
-<div>
-    <p>Best regards</p>
-</div>
-<div>
-    <p class="regards">With love from the EduHub Team</p>
+<div dir="ltr" class="es-wrapper-color">
+    <!--[if gte mso 9]>
+    <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
+        <v:fill type="tile" color="#f5f5f5"></v:fill>
+    </v:background>
+    <![endif]-->
+    <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+        <tr>
+            <td class="esd-email-paddings" valign="top">
+                <table cellpadding="0" cellspacing="0" class="es-header esd-header-popover" align="center">
+                    <tbody>
+                    <tr>
+                        <td class="esd-stripe" align="center" bgcolor="#111517" style="background-color: #111517;"esd-custom-block-id="89423">
+                            <table class="es-header-body" width="600" cellspacing="0" cellpadding="0" bgcolor="#111517" align="center" style="background-color: #111517;">
+                                <tbody>
+                                <tr>
+                                    <td class="esd-structure es-p25t es-p40b" align="left">
+                                        <table cellspacing="0" cellpadding="0" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td class="es-m-p0r esd-container-frame" width="600" valign="top" align="center">
+                                                    <table width="100%" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text">
+                                                                <p><br></p>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table cellpadding="0" cellspacing="0" class="es-content" align="center">
+                    <tbody>
+                    <tr>
+                        <td class="esd-stripe" align="center" esd-custom-block-id="82644">
+                            <table bgcolor="#ffffff" class="es-content-body" align="center" cellpadding="0" cellspacing="0" width="600">
+                                <tbody>
+                                <tr>
+                                    <td class="esd-structure es-p40t es-p40b es-p15r es-p15l" align="left" esd-custom-block-id="78476">
+                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td width="570" class="esd-container-frame" align="center" valign="top">
+                                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text es-m-txt-l">
+                                                                <h3></h3>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text">
+                                                                <h1>Hello <span >[[${user.firstName}]]</span>,</h1>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text">
+                                                                <h3><span style="color:#ef0d33;"></span></h3>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text es-m-txt-c es-p40t es-p40b">
+                                                                <p style="font-size: 18px; color: #999999;">Below in the attachment file you will find the details of your book borrow</p>
+                                                                <p style="font-size: 18px; color: #999999;">Thank you for choosing us</p>
+                                                                <p style="font-size: 18px; color: #999999;">Best regards.</p>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="esd-structure" align="left" style="background-position: center center;">
+                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td width="600" class="esd-container-frame" align="center" valign="top">
+                                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-spacer es-p5t es-p5b es-p15r es-p15l" style="font-size:0">
+                                                                <table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0">
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td style="border-bottom: 1px solid #666666; background: none; height: 1px; width: 100%; margin: 0px;"></td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table cellpadding="0" cellspacing="0" class="es-content" align="center">
+                    <tbody>
+                    <tr>
+                        <td class="esd-stripe" align="center" bgcolor="#00308F" style="background-color: #00308f;" esd-custom-block-id="78463">
+                            <table bgcolor="transparent" class="es-content-body" align="center" cellpadding="0" cellspacing="0" width="600" style="background-color: transparent;">
+                                <tbody>
+                                <tr>
+                                    <td class="esd-structure es-p40t es-p40b es-p10r es-p10l" align="left">
+                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td width="580" class="esd-container-frame" align="center" valign="top">
+                                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text es-infoblock es-m-txt-c">
+                                                                <h1 style="color: #ffffff;">With love</h1>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text es-infoblock es-m-txt-c es-p20t es-p20b">
+                                                                <p>From the EduHub team</p>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="es-footer esd-footer-popover" cellspacing="0" cellpadding="0" align="center">
+                    <tbody>
+                    <tr>
+                        <td class="esd-stripe" align="center" esd-custom-block-id="78465" bgcolor="#111517" style="background-color: #111517;">
+                            <table class="es-footer-body" width="600" cellspacing="0" cellpadding="0" bgcolor="#111517" align="center" style="background-color: #111517;">
+                                <tbody>
+                                <tr>
+                                    <td class="esd-structure es-p40t es-p40b es-p20r es-p20l" align="left">
+                                        <!--[if mso]><table width="560" cellpadding="0"
+                                                            cellspacing="0"><tr><td width="175" valign="top"><![endif]-->
+                                        <table class="es-left" cellspacing="0" cellpadding="0" align="left">
+                                            <tbody>
+                                            <tr>
+                                                <td class="es-m-p20b esd-container-frame" width="175" align="left">
+                                                    <table width="100%" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-social es-p20t es-m-txt-c" style="font-size:0">
+                                                                <table cellpadding="0" cellspacing="0" class="es-table-not-adapt es-social">
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td align="center" valign="top" esd-tmp-icon-type="facebook" class="es-p10r"><a target="_blank" href><img src="https://mwzufj.stripocdn.email/content/assets/img/social-icons/logo-white/facebook-logo-white.png" alt="Fb" title="Facebook" width="32"></a></td>
+                                                                        <td align="center" valign="top" esd-tmp-icon-type="twitter" class="es-p10r"><a target="_blank" href><img src="https://mwzufj.stripocdn.email/content/assets/img/social-icons/logo-white/twitter-logo-white.png" alt="Tw" title="Twitter" width="32"></a></td>
+                                                                        <td align="center" valign="top" esd-tmp-icon-type="youtube" class="es-p10r"><a target="_blank" href><img src="https://mwzufj.stripocdn.email/content/assets/img/social-icons/logo-white/youtube-logo-white.png" alt="Yt" title="Youtube" width="32"></a></td>
+                                                                        <td align="center" valign="top" esd-tmp-icon-type="instagram"><a target="_blank" href><img src="https://mwzufj.stripocdn.email/content/assets/img/social-icons/logo-white/instagram-logo-white.png" alt="Ig" title="Instagram" width="32"></a></td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--[if mso]></td><td width="20"></td><td width="365" valign="top"><![endif]-->
+                                        <table class="es-right" cellspacing="0" cellpadding="0" align="right">
+                                            <tbody>
+                                            <tr>
+                                                <td class="esd-container-frame" width="365" align="left">
+                                                    <table width="100%" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td align="left" class="esd-block-text es-m-txt-c es-p20t es-p20b">
+                                                                <p>Contact us via ou Social Networks</p>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--[if mso]></td></tr></table><![endif]-->
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
+
 </html>
