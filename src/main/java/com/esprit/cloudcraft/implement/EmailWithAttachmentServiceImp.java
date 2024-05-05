@@ -8,6 +8,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamSource;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -92,6 +93,16 @@ public class EmailWithAttachmentServiceImp implements EmailWithAttachmentService
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void SendEmail(String to, String subject, String body) {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setFrom("asma.choueibi@gmail.com");
+        msg.setTo(to);
+        msg.setText(body);
+        msg.setSubject(subject);
+        javaMailSender.send(msg);
     }
 
 

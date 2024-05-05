@@ -6,4 +6,6 @@ import com.esprit.cloudcraft.entities.User;
 public interface EmailWithAttachmentService {
     void sendEmailWithAttachment(User user, BookLoan bookLoan);
 
+    void SendEmail(String to, String subject, String Body);
+
 }
