@@ -27,6 +27,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -171,15 +172,19 @@ public class ChapterService implements ChapterServiceInt {
         Chapter chapter=getChapterById(chapterId);
         User connectedUser=userService.getConnectedUser();
         List<Rating> chapterRatings=chapter.getRatings();
+        System.out.println("ADING RATING TO CHAPTER");
         if (chapterRatings!=null) {
 
+            System.out.println(connectedUser.getEmail());
+            System.out.println(chapterRatings);
+
             // Access more details from UserDetails object
-            if(chapterRatings.stream().anyMatch(rating -> rating.getOwner().getEmail()==connectedUser.getUsername())){
+            if(chapterRatings.stream().anyMatch(rating -> Objects.equals(rating.getOwner().getEmail(), connectedUser.getUsername()))){
                 throw new UnauthorizedActionException("you can not add more than one rating to the same chapter");
             }
         }
 
-
+        System.out.println("TEST PASSED");
         Rating savedRating=ratingServiceInt.addRating(ratingPayload,connectedUser);
         if(chapterRatings==null) chapterRatings=new ArrayList<>();
         chapterRatings.add(savedRating);
@@ -219,7 +224,11 @@ public class ChapterService implements ChapterServiceInt {
         }
 
         Chapter chapter=getChapterById(chapterid);
-        chapter.setRatings(chapter.getRatings().stream().filter(rating1 -> rating1.getRatingId()!=ratingId).toList());
+        System.out.println("CHAPTER RATINGS ");
+        System.out.println(chapter.getRatings());
+        chapter.setRatings(chapter.getRatings().stream().filter(rating1 -> !Objects.equals(rating1.getRatingId(), ratingId)).collect(Collectors.toList()));
+
+        System.out.println(chapter.getRatings());
         chapterRepo.save(chapter);
         ratingService.deleteRating(ratingId);
         return true;

@@ -74,6 +74,12 @@ public class CourseController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(PayloadSerialization.prepareSummaryResponse(courseServiceInt.addSummaryToCourse(courseId,summaryRequest)));
     }
+    @PostMapping("{courseId}/ratings")
+    public ResponseEntity<RatingPayload> addRatingToCourse(@PathVariable Long courseId,@RequestBody RatingPayload ratingPayload){
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(PayloadSerialization.prepareRatingResponse(courseServiceInt.addRating(courseId,ratingPayload)));
+    }
     @GetMapping(value="{courseId}/summaries")
     public ResponseEntity<List<SummaryResponse>> addSummaryToCourse(@PathVariable Long courseId){
         return ResponseEntity.status(HttpStatus.CREATED).body(PayloadSerialization.prepareSummaryResponseList(summaryServiceInt.getSummariesByCourse(courseId)));
@@ -89,7 +95,8 @@ public class CourseController {
 
     @DeleteMapping(value="{courseId}/ratings/{ratingId}")
     public ResponseEntity<Boolean> deleteRatingFromCourse(@PathVariable Long courseId,@PathVariable Long ratingId){
-        return ResponseEntity.status(HttpStatus.OK).body(courseServiceInt.deletSummaryFromCourse(courseId,ratingId));
+
+        return ResponseEntity.status(HttpStatus.OK).body(courseServiceInt.deleteRatingFromCourse(courseId,ratingId));
     }
 
 

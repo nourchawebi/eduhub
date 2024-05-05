@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class SummaryService implements SummaryServiceInt {
@@ -184,7 +185,7 @@ public class SummaryService implements SummaryServiceInt {
         }
 
         Summary summary=getSummaryById(summaryId);
-        summary.setRatings(summary.getRatings().stream().filter(rating1 -> rating1.getRatingId()!=ratingId).toList());
+        summary.setRatings(summary.getRatings().stream().filter(rating1 -> rating1.getRatingId()!=ratingId).collect(Collectors.toList()));
         summaryRepo.save(summary);
         ratingService.deleteRating(ratingId);
         return true;

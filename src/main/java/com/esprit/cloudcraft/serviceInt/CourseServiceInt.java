@@ -25,7 +25,7 @@ public interface  CourseServiceInt {
     public List<Rating> getAllRatings(Long courseId);
     public Rating addRating(Long courseId, RatingPayload rating );
     public boolean deleteChapterFromCourse(Long courseId,Long chapterId);
-    public boolean deletSummaryFromCourse(Long courseId,Long summaryId);
+    public boolean deleteSummaryFromCourse(Long courseId,Long summaryId);
     public boolean deleteRatingFromCourse(Long courseId,Long ratingId);
     public List<Chapter> getAllChaptersByCourse(Long courseId);
     public Chapter addChapterToCourse(ChapterRequest chapterRequest, Long courseId);

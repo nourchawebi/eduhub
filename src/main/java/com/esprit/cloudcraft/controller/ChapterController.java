@@ -106,7 +106,7 @@ public class ChapterController {
     }
 
 
-    @DeleteMapping(value="{chapterId}/ratings/{ratingId}")
+    @DeleteMapping(value="chapters/{chapterId}/ratings/{ratingId}")
     public ResponseEntity<Boolean> deleteRatingFromSummary(@PathVariable Long chapterId,@PathVariable Long ratingId){
         return ResponseEntity.status(HttpStatus.OK).body(chapterServiceInt.deleteRatingFromChapter(chapterId,ratingId));
     }
