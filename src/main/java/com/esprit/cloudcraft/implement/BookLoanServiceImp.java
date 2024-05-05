@@ -51,7 +51,7 @@ public class BookLoanServiceImp implements BookLoanService {
             Date dueDate = calendar.getTime();
             bookLoan.setDueDate(dueDate);
             bookLoan.setReturned(Boolean.FALSE);
-            requestedBook.setAvailability(AvailabilityType.NOT_AVAILABILE);
+            //requestedBook.setAvailability(AvailabilityType.NOT_AVAILABILE);
             bookLoan.setUser(user);
             bookLoanDao.save(bookLoan);
             bookService.UpdateBook(requestedBook);
