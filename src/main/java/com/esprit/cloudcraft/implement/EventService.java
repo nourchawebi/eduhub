@@ -12,8 +12,9 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.*;
 
 @Service
 public class EventService implements IEventService {
@@ -28,14 +29,8 @@ public class EventService implements IEventService {
         this.cc = cc;
         this.userRepository = userRepository;
     }
-    public List<Event> getallEvents(){
-        return cc.findAll();
-    };
 
-
-
-
-
+    //    /////////////////////////////////// CRUD //////////////////////////////////////////
 
     @Override
     public Boolean addEvent(Event newEvent, MultipartFile image) {
@@ -59,7 +54,6 @@ public class EventService implements IEventService {
 
 
 
-    //    /////////////////////////////////// CRUD //////////////////////////////////////////
     public Event createEvent(Event e){
 
         return cc.save(e);
@@ -88,6 +82,23 @@ public class EventService implements IEventService {
     }
 
     //    /////////////////////////////////// recherche //////////////////////////////////////////
+    public List<Event> getallEvents(){
+        return cc.findAll();
+    };
+
+    public List<Event> findbyid(long id) {
+        Optional<Event> optionalEvent = cc.findById(id);
+        return optionalEvent.map(Collections::singletonList).orElse(Collections.emptyList());
+    }
+
+
+    public Event findeventbyid(long id) {
+
+        return cc.findById(id).get();
+    }
+
+
+
     public Event findEventByCapacityAndIdEventt(long capacity, long idEvent) {
         return cc.findEventByCapacityAndIdEvent(capacity , idEvent);
     }
@@ -103,10 +114,8 @@ public class EventService implements IEventService {
     public List<Event> findAllByCapacity(long c){
         return  cc.findAllByCapacity(c);
     }
-    @Override
-    public Event findbyid(long id) {
-        return cc.findById(id).get();
-    }
+
+
 
 
 // //    /////////////////////////////////// participation et annulation de participation //////////////////////////////////////////
@@ -155,6 +164,43 @@ public class EventService implements IEventService {
 
         event.getUserSet().remove(user);
         return cc.save(event);
+    }
+
+    @Override
+    public Map<String, Long> countEventByMonth() {
+//        List<String> months =[]
+//        Long count;
+//        Map<String, Long> result = new HashMap<>();;
+//        List<Event> events = cc.findAll();
+//        for (Month month: Month.values()){
+//            count=0L;
+//            for(Journey journey: journeys){
+//                if(journey.getDay()==day){
+//                    count++;
+//                }
+//            }
+//            result.put(day.toString(),count);
+//        }
+        return null;
+    }
+
+    public Map<String, Long> countEventsByMonth() {
+        List<Event> allEvents = cc.findAll();
+        Map<String, Long> eventsByMonth = new HashMap<>();
+
+        for (Event event : allEvents) {
+            // Convert java.sql.Date to LocalDate
+            LocalDate localDate = event.getDateBegin().atStartOfDay().toLocalDate();
+
+            // Extract the month from the LocalDate
+            int monthNumber = localDate.getMonthValue();
+            String monthName = Month.of(monthNumber).name();
+
+            // Increment the count for the corresponding month
+            eventsByMonth.put(monthName, eventsByMonth.getOrDefault(monthName, 0L) + 1);
+        }
+
+        return eventsByMonth;
     }
 
 

@@ -5,6 +5,7 @@ import com.esprit.cloudcraft.dto.EventPayLoad;
 import com.esprit.cloudcraft.entities.Event;
 import com.esprit.cloudcraft.Enum.Name;
 import com.esprit.cloudcraft.entities.userEntities.User;
+import com.esprit.cloudcraft.repository.EventRepository;
 import com.esprit.cloudcraft.services.FileStorageService;
 import com.esprit.cloudcraft.services.IEventService;
 import com.esprit.cloudcraft.utils.QRCodeGenerator;
@@ -25,7 +26,11 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.Month;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Controller
 @RestController
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:62699"})
@@ -34,21 +39,18 @@ public class EventController {
     private final IEventService eventService;
     @Autowired
     private FileStorageService fileStorageService;
-
-    public EventController(IEventService eventService) {
+    private final EventRepository eventRepository;
+    public EventController(IEventService eventService, EventRepository eventRepository) {
         this.eventService = eventService;
+        this.eventRepository= eventRepository;
     }
-    @GetMapping("/getAll")
-    public List<EventPayLoad> getAllEvents(){
-        return EventMapper.geteventpayloadList( eventService.getallEvents());
-    };
 
     //    /////////////////////////////////// CRUD //////////////////////////////////////////
 
 
 
     @PostMapping(value = "/addEvent", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> addEvent(@RequestParam String title, @RequestParam LocalDate dateBegin, @RequestParam LocalDate dateEnd, @RequestParam String location, @RequestParam String details, @RequestParam String description, @RequestParam MultipartFile picture) {
+    public ResponseEntity<Object> addEvent(@RequestParam String title, @RequestParam LocalDate dateBegin, @RequestParam LocalDate dateEnd, @RequestParam String location, @RequestParam String details, @RequestParam String description, @RequestParam int capacity ,@RequestParam MultipartFile picture) {
 //        System.out.println(picture);
 
         Event newEvent = Event.builder()
@@ -57,6 +59,7 @@ public class EventController {
                 .dateEnd(dateEnd)
                 .location(location)
                 .details(details)
+                .capacity(capacity)
                 .description(description)
                 .build();
         System.out.println(newEvent);
@@ -67,7 +70,7 @@ public class EventController {
 
 
     @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object>  updateEvent(@PathVariable long id,@RequestParam String title, @RequestParam LocalDate dateBegin, @RequestParam LocalDate dateEnd, @RequestParam String location, @RequestParam String details, @RequestParam String description, @RequestParam MultipartFile picture) {
+    public ResponseEntity<Object>  updateEvent(@PathVariable long id,@RequestParam String title, @RequestParam LocalDate dateBegin, @RequestParam LocalDate dateEnd, @RequestParam String location, @RequestParam int capacity,@RequestParam String details, @RequestParam String description, @RequestParam MultipartFile picture) {
 //        System.out.println(picture);
 
         Event newEvent = Event.builder()
@@ -76,6 +79,7 @@ public class EventController {
                 .dateEnd(dateEnd)
                 .location(location)
                 .details(details)
+                .capacity(capacity)
                 .description(description)
                 .build();
 
@@ -109,6 +113,29 @@ public class EventController {
 
     //    /////////////////////////////////// recherche //////////////////////////////////////////
 
+
+
+
+    @GetMapping("/getAll")
+    public List<EventPayLoad> getAllEvents(){
+        System.out.println(eventService.getallEvents());
+        return EventMapper.geteventpayloadList( eventService.getallEvents());
+    };
+
+    @GetMapping("/findevents/{id}")
+    public Event findById(@PathVariable long id) {
+        return eventService.findeventbyid(id);
+    }
+    @GetMapping("/events/{id}")
+    public List<EventPayLoad> findeventID(@PathVariable long id)
+    {
+        return EventMapper.geteventpayloadList(eventService.findbyid(id));}
+
+//    @GetMapping("/events/{id}")
+//    public Event findById(@PathVariable long id)
+//    {
+//        return eventService.findbyid(id);
+//    }
 
     @GetMapping("/find")
     public ResponseEntity<Event> findEventByCapacityAndIdEvent(
@@ -150,18 +177,14 @@ public class EventController {
         return  eventService.findAllByCapacity(capacity);
     }
 
-    @GetMapping("/events/{id}")
-    public Event findById(@PathVariable long id) {
-        return eventService.findbyid(id);
-    }
+
 // /////////////////////////////// participation et annulation de participation //////////////////////////////////////////
 
     //// tell me if a user is already paticipation wala le
     @PostMapping("/{eventId}/issparticipate/{userId}")
-    public ResponseEntity<String> isparticipateUserInEvent(@PathVariable Long eventId, Principal connectedUser) {
+    public ResponseEntity<String> isparticipateUserInEvent(@PathVariable Long eventId, @PathVariable Long userId) {
         try {
-            User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-            eventService.IsparticipateUserInEvent(eventId, user.getId());
+            eventService.IsparticipateUserInEvent(eventId, userId);
             return ResponseEntity.ok("User participated in the event successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -184,10 +207,9 @@ public class EventController {
 
 
     @PostMapping("/{eventId}/cancelParticipation/{userId}")
-    public ResponseEntity<String> cancelUserParticipation(@PathVariable Long eventId, Principal connectedUser) {
+    public ResponseEntity<String> cancelUserParticipation(@PathVariable Long eventId, @PathVariable Long userId) {
         try {
-            User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-            eventService.cancelUserParticipation(eventId, user.getId());
+            eventService.cancelUserParticipation(eventId, userId);
             return ResponseEntity.ok("User participation cancelled successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -254,6 +276,61 @@ public class EventController {
                 .headers(headers)
                 .body(resource);
     }
+
+
+
+///////////////////////////////// STATS
+
+    @GetMapping("/most-participated-event")
+    @ResponseBody
+    public Map<String, String> findMostParticipatedEvent() {
+        Map<String, String> result = new HashMap<>();
+
+        List<Object[]> eventCounts = eventRepository.findMostParticipatedEvent();
+        if (!eventCounts.isEmpty()) {
+            Object[] mostParticipatedEvent = eventCounts.get(0);
+            String eventTitle = (String) mostParticipatedEvent[0];
+            Long participationCount = (Long) mostParticipatedEvent[1];
+
+            result.put("eventTitle", eventTitle);
+            result.put("participationCount", participationCount.toString());
+        } else {
+            result.put("message", "No events found.");
+        }
+
+        return result;
+    }
+
+
+    @GetMapping("/most-events-month")
+    @ResponseBody
+    public Map<String, String> findMonthWithMostEvents() {
+        Map<String, String> result = new HashMap<>();
+
+        List<Object[]> monthCounts = eventRepository.findMonthWithMostEvents();
+        if (!monthCounts.isEmpty()) {
+            Object[] mostEventsMonth = monthCounts.get(0);
+            int monthNumber = (int) mostEventsMonth[0];
+            Long eventCount = (Long) mostEventsMonth[1];
+
+            String monthName = Month.of(monthNumber).name();
+            result.put("month", monthName);
+            result.put("eventCount", eventCount.toString());
+        } else {
+            result.put("message", "No events found.");
+        }
+
+        return result;
+    }
+
+
+    @GetMapping("/count-by-month")
+    public ResponseEntity<Map<String, Long>> countEventsByMonth() {
+        Map<String, Long> eventsByMonth = eventService.countEventsByMonth();
+        return ResponseEntity.ok(eventsByMonth);
+    }
+
+
 
 
 }
