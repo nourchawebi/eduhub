@@ -21,10 +21,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 public class CloudcraftApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CloudcraftApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CloudcraftApplication.class, args);
+    }
 
 }
-
-

@@ -105,22 +105,22 @@ public class User implements Serializable , UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;//switch it to true or we will not be able to connect our users
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return notLocker;//switch it to true or we will not be able to connect our users
+        return notLocker;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;//switch it to true or we will not be able to connect our users
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return enable;//switch it to true or we will not be able to connect our users
+        return enable;
     }
 }
 

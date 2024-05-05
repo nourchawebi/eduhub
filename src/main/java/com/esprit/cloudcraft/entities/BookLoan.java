@@ -29,4 +29,3 @@ public class BookLoan implements Serializable {
     @ManyToOne
     private User user;
 }
-
