@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -47,7 +48,7 @@ public class CourseService implements CourseServiceInt {
             course.setImage(savedFileEntity);
         }
 
-            User connectedUser=userService.getConnectedUser();
+        User connectedUser=userService.getConnectedUser();
         course.setOwner(connectedUser);
 
         return courseRepo.save(course);
@@ -200,7 +201,8 @@ public class CourseService implements CourseServiceInt {
 
 
     @Transactional
-    public boolean deletSummaryFromCourse(Long courseId,Long summaryId){
+    public boolean deleteSummaryFromCourse(Long courseId,Long summaryId){
+
         Course course =this.getCourseById(courseId);
         int index = 0;
         List<Summary> summaries=course.getSummaries();
@@ -231,10 +233,32 @@ public class CourseService implements CourseServiceInt {
             if(summary.getFiles()==null) summary.setFiles(new ArrayList<>());
             summary.getFiles().add(savedFileEntity);
         }
+        User connectedUser=userService.getConnectedUser();
+        summary.setOwner(connectedUser);
         Summary savedSummary= summaryService.save(summary);
         course.getSummaries().add(savedSummary);
         this.save(course);
         return savedSummary;
+    }
+
+
+    public boolean deleteRatingFromCourse(Long courseId,Long ratingId){
+        System.out.println("REACHING HERE");
+        Rating rating =ratingService.getRatingById(ratingId);
+        System.out.println(rating);
+        User connectedUser=userService.getConnectedUser();
+
+
+        if(!Objects.equals(rating.getOwner().getEmail(), connectedUser.getEmail())){
+            throw new UnauthorizedActionException("you can not delete rating that you dont own");
+        }
+        System.out.println(connectedUser);
+        System.out.println(rating.getOwner());
+        Course course=getCourseById(courseId);
+        course.setRating(course.getRating().stream().filter(rating1 -> !Objects.equals(rating1.getRatingId(), ratingId)).collect(Collectors.toList()));
+        courseRepo.save(course);
+        ratingService.deleteRating(ratingId);
+        return true;
     }
 }
 

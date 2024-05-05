@@ -40,7 +40,7 @@ public class SecurityConfig {
                                 .requestMatchers("/login").permitAll()
                                 .requestMatchers("/getenabled").permitAll()
                                 .requestMatchers("/getclasstypes").permitAll()
-
+                                .requestMatchers("/files/**").permitAll()
                                 .requestMatchers("/user/update/email/verify").permitAll()
 
 

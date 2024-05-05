@@ -4,6 +4,7 @@ package com.esprit.cloudcraft.controller;
 import com.esprit.cloudcraft.dto.*;
 import com.esprit.cloudcraft.entities.Course;
 import com.esprit.cloudcraft.serviceInt.CourseServiceInt;
+import com.esprit.cloudcraft.serviceInt.RatingServiceInt;
 import com.esprit.cloudcraft.serviceInt.SummaryServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,8 @@ public class CourseController {
     private SummaryServiceInt summaryServiceInt;
 
 
+
+
     @PostMapping
     public ResponseEntity<CourseResponse>  createCourse(@RequestParam String name, @RequestParam MultipartFile image, @RequestParam String description){
         CourseRequest courseRequest=CourseRequest.builder()
@@ -35,7 +38,7 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.CREATED).body(PayloadSerialization.prepeareCourseResponse(newCourse));
     }
     @GetMapping
-    public ResponseEntity<List<CourseResponse>> getAllCourses(){
+    public ResponseEntity<List<CourseDetailedResponse>> getAllCourses(){
         return ResponseEntity.status(HttpStatus.OK).body(PayloadSerialization.prepeareListCoursePayload(courseServiceInt.getAllCourses()));
     }
     @GetMapping("{courseId}")
@@ -59,12 +62,7 @@ public class CourseController {
     public ResponseEntity<List<RatingPayload>> getCourseRatings(@PathVariable Long courseId){
         return ResponseEntity.status(HttpStatus.OK).body(PayloadSerialization.prepareRatingResponselist(courseServiceInt.getAllRatings(courseId)));
     }
-    @PostMapping("{courseId}/ratings")
-    public ResponseEntity<RatingPayload> addRatingToCourse(@PathVariable Long courseId,@RequestBody RatingPayload ratingPayload){
 
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(PayloadSerialization.prepareRatingResponse(courseServiceInt.addRating(courseId,ratingPayload)));
-    }
 
     @PostMapping(value="{courseId}/summaries")
     public ResponseEntity<SummaryResponse> addSummaryToCourse(@PathVariable Long courseId,@RequestParam String title, @RequestParam List<MultipartFile> files, @RequestParam String description){
@@ -76,6 +74,12 @@ public class CourseController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(PayloadSerialization.prepareSummaryResponse(courseServiceInt.addSummaryToCourse(courseId,summaryRequest)));
     }
+    @PostMapping("{courseId}/ratings")
+    public ResponseEntity<RatingPayload> addRatingToCourse(@PathVariable Long courseId,@RequestBody RatingPayload ratingPayload){
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(PayloadSerialization.prepareRatingResponse(courseServiceInt.addRating(courseId,ratingPayload)));
+    }
     @GetMapping(value="{courseId}/summaries")
     public ResponseEntity<List<SummaryResponse>> addSummaryToCourse(@PathVariable Long courseId){
         return ResponseEntity.status(HttpStatus.CREATED).body(PayloadSerialization.prepareSummaryResponseList(summaryServiceInt.getSummariesByCourse(courseId)));
@@ -84,6 +88,15 @@ public class CourseController {
     @DeleteMapping(value="{courseId}/summaries/{summaryId}")
     public ResponseEntity<Boolean> deleteSummaryFromCourse(@PathVariable Long courseId,@PathVariable Long summaryId){
         return ResponseEntity.status(HttpStatus.OK).body(summaryServiceInt.deletSummaryFromCourse(courseId,summaryId));
+    }
+
+
+
+
+    @DeleteMapping(value="{courseId}/ratings/{ratingId}")
+    public ResponseEntity<Boolean> deleteRatingFromCourse(@PathVariable Long courseId,@PathVariable Long ratingId){
+
+        return ResponseEntity.status(HttpStatus.OK).body(courseServiceInt.deleteRatingFromCourse(courseId,ratingId));
     }
 
 

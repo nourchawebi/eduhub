@@ -2,13 +2,18 @@ package com.esprit.cloudcraft.dto;
 
 import com.esprit.cloudcraft.entities.*;
 import com.esprit.cloudcraft.entities.userEntities.User;
+import com.esprit.cloudcraft.services.userServices.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class PayloadSerialization {
+
     //Rating
-        //RatingPayload->Rating
+    //RatingPayload->Rating
     public static Rating getRatingFromRatingPayload(RatingPayload ratingPayload){
         return Rating.builder()
                 .ratingId(ratingPayload.getId())
@@ -46,7 +51,7 @@ public class PayloadSerialization {
         return ratingResponseList;
     }
     // Courses
-        //CoursePayload -> Course
+    //CoursePayload -> Course
     public static Course getCourseFromCourseRequest(CourseRequest courseRequest){
         return Course.builder()
                 .name(courseRequest.getName())
@@ -55,7 +60,7 @@ public class PayloadSerialization {
                 .courseCategory(courseRequest.getCourseCategory())
                 .build();
     }
-        //List<CoursePayload> -> List<Course>
+    //List<CoursePayload> -> List<Course>
     public static List<Course> getCourseListFromCourseRequestList(List<CourseRequest> CourseRequestList){
         List<Course> courses=new ArrayList<>();
         for(CourseRequest courseRequest:CourseRequestList){
@@ -73,18 +78,20 @@ public class PayloadSerialization {
                 .build();
     }
     //List<Course> -> List<CoursePayload>
-    public static List<CourseResponse> prepeareListCoursePayload(List<Course> courses){
-        List<CourseResponse> courseResponseList =new ArrayList<>();
+    public static List<CourseDetailedResponse> prepeareListCoursePayload(List<Course> courses){
+        List<CourseDetailedResponse> courseResponseList =new ArrayList<>();
         for(Course course:courses){
             courseResponseList.add (
-                    CourseResponse.builder()
-                    .name(course.getName())
+                    CourseDetailedResponse.builder()
+                            .name(course.getName())
                             .id(course.getCourseId())
                             .image(prepareFileEntityResponse(course.getImage()))
                             .description(course.getDescription())
+                            .ratings(prepareRatingResponselist(course.getRating()))
+                            .chapters(prepareChapterResponseList(course.getChapters()))
                             .courseCategory(course.getCourseCategory())
-                    .id(course.getCourseId())
-                    .build());
+                            .id(course.getCourseId())
+                            .build());
         }
         return   courseResponseList;
     }
@@ -175,20 +182,20 @@ public class PayloadSerialization {
                 .fileName(file.getFileName())
                 .build();
 
-}
+    }
 
 
-public static SummaryResponse prepareSummaryResponse(Summary summary){
+    public static SummaryResponse prepareSummaryResponse(Summary summary){
         System.out.println(summary);
-return SummaryResponse
-        .builder()
-        .id(summary.getSummaryId())
-        .owner(prepareUserResponseFromUser(summary.getOwner()))
-        .files(prepareFileEntityResponseList(summary.getFiles()))
-        .description(summary.getDescription())
-        .title(summary.getTitle())
-        .build();
-}
+        return SummaryResponse
+                .builder()
+                .id(summary.getSummaryId())
+                .owner(prepareUserResponseFromUser(summary.getOwner()))
+                .files(prepareFileEntityResponseList(summary.getFiles()))
+                .description(summary.getDescription())
+                .title(summary.getTitle())
+                .build();
+    }
     public static SummaryResponse prepareSummaryDetailedResponse(Summary summary){
         System.out.println(summary);
         return SummaryResponse

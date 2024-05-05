@@ -43,7 +43,7 @@ public class ContentService implements ContentServiceInt {
         content.setFiles(new ArrayList<>());
         List<MultipartFile> files=contentRequest.getFiles();
         for(MultipartFile file:files){
-           FileEntity savedFileEntity=fileEntityService.saveFileEntity(file);
+            FileEntity savedFileEntity=fileEntityService.saveFileEntity(file);
             content.getFiles().add(savedFileEntity);
         }
         return contentRepo.save(content);

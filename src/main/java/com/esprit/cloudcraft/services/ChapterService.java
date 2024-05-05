@@ -27,6 +27,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -43,6 +44,9 @@ public class ChapterService implements ChapterServiceInt {
     private FileUploadService fileUploadService;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RatingService ratingService;
 
 
 
@@ -111,7 +115,7 @@ public class ChapterService implements ChapterServiceInt {
 
     public Chapter updateChapter(Long chapterID, ChapterRequest chapterRequest){
         Chapter chapter=getChapterById(chapterID);
-                User connectedUser=userService.getConnectedUser();
+        User connectedUser=userService.getConnectedUser();
         if(chapter.getOwner().getEmail()!=connectedUser.getEmail()){
             throw new UnauthorizedActionException("You can not modify chapter that you dont own");
         }
@@ -151,8 +155,8 @@ public class ChapterService implements ChapterServiceInt {
             }
             index++;
         }
-     if(index>contents.size()-1) return false;
-                User connectedUser=userService.getConnectedUser();
+        if(index>contents.size()-1) return false;
+        User connectedUser=userService.getConnectedUser();
         if(chapter.getChapterContent().get(index).getOwner().getEmail()!=connectedUser.getEmail()){
             throw new UnauthorizedActionException("You can not delete chapter content that you dont own");
         }
@@ -168,15 +172,19 @@ public class ChapterService implements ChapterServiceInt {
         Chapter chapter=getChapterById(chapterId);
         User connectedUser=userService.getConnectedUser();
         List<Rating> chapterRatings=chapter.getRatings();
+        System.out.println("ADING RATING TO CHAPTER");
         if (chapterRatings!=null) {
 
+            System.out.println(connectedUser.getEmail());
+            System.out.println(chapterRatings);
+
             // Access more details from UserDetails object
-            if(chapterRatings.stream().anyMatch(rating -> rating.getOwner().getEmail()==connectedUser.getUsername())){
+            if(chapterRatings.stream().anyMatch(rating -> Objects.equals(rating.getOwner().getEmail(), connectedUser.getUsername()))){
                 throw new UnauthorizedActionException("you can not add more than one rating to the same chapter");
             }
         }
 
-
+        System.out.println("TEST PASSED");
         Rating savedRating=ratingServiceInt.addRating(ratingPayload,connectedUser);
         if(chapterRatings==null) chapterRatings=new ArrayList<>();
         chapterRatings.add(savedRating);
@@ -188,7 +196,7 @@ public class ChapterService implements ChapterServiceInt {
         return chapter.getRatings();
     }
 
-//
+    //
 //        chapter.setChapterContent(new ArrayList<>());
 //        try{
 //        Arrays.stream(chapterRequest.getPdfFiles()).forEach(file-> {
@@ -208,7 +216,23 @@ public class ChapterService implements ChapterServiceInt {
         return chapter.getChapterContent();
     }
 
+    public boolean deleteRatingFromChapter(Long chapterid,Long ratingId){
+        Rating rating =ratingService.getRatingById(ratingId);
+        User connectedUser=userService.getConnectedUser();
+        if(rating.getOwner().getEmail()!=connectedUser.getEmail()){
+            throw new UnauthorizedActionException("you can not delete rating that you dont own");
+        }
 
+        Chapter chapter=getChapterById(chapterid);
+        System.out.println("CHAPTER RATINGS ");
+        System.out.println(chapter.getRatings());
+        chapter.setRatings(chapter.getRatings().stream().filter(rating1 -> !Objects.equals(rating1.getRatingId(), ratingId)).collect(Collectors.toList()));
+
+        System.out.println(chapter.getRatings());
+        chapterRepo.save(chapter);
+        ratingService.deleteRating(ratingId);
+        return true;
+    }
 
 
 }

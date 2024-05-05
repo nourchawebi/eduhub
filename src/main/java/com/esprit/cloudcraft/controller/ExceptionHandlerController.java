@@ -50,7 +50,12 @@ public class ExceptionHandlerController {
     @ExceptionHandler(UnauthorizedActionException.class)
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     public ResponseEntity<ErrorResponse> unauthorizedAction(DuplicateValueException ex, WebRequest request) {
-        ErrorResponse errorResponse=ErrorResponse.builder().statusCode(403).message(ex.getMessage()).build();
+
+        String message;
+        if(ex!=null)
+            message = ex.getMessage();
+        else message="Unothorized Action";
+        ErrorResponse errorResponse=ErrorResponse.builder().statusCode(403).message(message).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
     }
 
