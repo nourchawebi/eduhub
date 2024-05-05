@@ -2,6 +2,7 @@ package com.esprit.cloudcraft.entities;
 
 import com.esprit.cloudcraft.Enum.TypeAnnonce;
 import com.esprit.cloudcraft.Enum.TypeInternship;
+import com.esprit.cloudcraft.entities.userEntities.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

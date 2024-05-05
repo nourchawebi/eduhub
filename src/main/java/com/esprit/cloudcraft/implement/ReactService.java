@@ -1,13 +1,13 @@
 package com.esprit.cloudcraft.implement;
 
+import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.repository.AnnonceDao;
 import com.esprit.cloudcraft.repository.ReactDao;
 import com.esprit.cloudcraft.entities.Annonce;
 import com.esprit.cloudcraft.entities.React;
-import com.esprit.cloudcraft.entities.User;
 import com.esprit.cloudcraft.Enum.TypeReact;
+import com.esprit.cloudcraft.repository.userDao.UserRepository;
 import com.esprit.cloudcraft.services.IReact;
-import com.esprit.cloudcraft.repository.UserDao;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class ReactService implements IReact {
     @Autowired
     AnnonceDao annonceDao;
     @Autowired
-    UserDao userDao;
+    UserRepository userRepository;
 
     @Override
     public React addReact(React react) {
@@ -72,7 +72,7 @@ public class ReactService implements IReact {
             annonce.setLikes(annonce.getLikes()+1);
             react.setTypeReact(TypeReact.LIKE);
             react.setLikes(react.getLikes()+1);
-            User user = userDao.findById(userId)
+            User user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("User not found for id: " + userId));
             react.setUser(user);
             reactRepository.save(react);
@@ -94,7 +94,7 @@ public class ReactService implements IReact {
             annonce.setDislikes(annonce.getDislikes() + 1);
             react.setTypeReact(TypeReact.DISLIKE);
             react.setDislikes(react.getDislikes() + 1);
-            User user = userDao.findById(userId)
+            User user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("User not found for id: " + userId));
             react.setUser(user);
             reactRepository.save(react);

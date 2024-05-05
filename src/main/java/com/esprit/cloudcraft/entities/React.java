@@ -1,6 +1,7 @@
 package com.esprit.cloudcraft.entities;
 
 import com.esprit.cloudcraft.Enum.TypeReact;
+import com.esprit.cloudcraft.entities.userEntities.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

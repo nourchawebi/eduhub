@@ -1,5 +1,6 @@
 package com.esprit.cloudcraft.implement;
 
+
 import com.esprit.cloudcraft.services.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,17 +8,37 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import com.esprit.cloudcraft.services.FileStorageService;
+
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.tools.FileObject;
+import java.io.File;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
+
+
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class FileStorageServiceImp implements FileStorageService {
     private String fileUploadPath;
+
     Path imagePath= Paths.get("uploads/images");
+
+
+
 
 
     @Override
@@ -35,6 +56,10 @@ public class FileStorageServiceImp implements FileStorageService {
         }
     }
 
+
+
+
+
     @Override
     public byte[] getPicture(String pictureUrl) {
         if (StringUtils.isBlank(pictureUrl)) {
@@ -50,4 +75,5 @@ public class FileStorageServiceImp implements FileStorageService {
     public Path getImagePath(String fileName){
         return this.imagePath.resolve(fileName);
     }
+
 }
