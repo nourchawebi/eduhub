@@ -8,8 +8,8 @@
 		<version>3.2.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>AnonceManag</artifactId>
+	<groupId>com.esprit</groupId>
+	<artifactId>cloudcraft</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>AnonceManag</name>
 	<description>AnonceManag</description>
