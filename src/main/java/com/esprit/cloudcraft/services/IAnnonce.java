@@ -17,7 +17,7 @@ public interface IAnnonce {
     public Annonce addAnnonce(String title, String annoncedesc, Date startDate,
                               TypeAnnonce typeAnnonce, MultipartFile imageFile);
     //public Annonce addAnnonceSimple(Annonce annonce);
-
+    int getNombreCommentaires(Annonce annonce);
     Optional<Annonce> getTargetAnnonce(long id);
     public List<Annonce> getAnnonceByUser(long id_user);
 

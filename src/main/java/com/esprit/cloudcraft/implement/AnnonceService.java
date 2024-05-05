@@ -2,6 +2,9 @@ package com.esprit.cloudcraft.implement;
 
 
 
+import com.esprit.cloudcraft.entities.Comment;
+import com.esprit.cloudcraft.entities.React;
+import com.esprit.cloudcraft.repository.ReactDao;
 import com.esprit.cloudcraft.services.IAnnonce;
 import com.esprit.cloudcraft.repository.AnnonceDao;
 import com.esprit.cloudcraft.repository.CommentDao;
@@ -27,6 +30,8 @@ public class AnnonceService implements IAnnonce {
     CommentDao commentRepository;
     @Autowired
     private BadwordsService badwordsService;
+    @Autowired
+    private ReactDao reactDao;
 
 
 
@@ -164,20 +169,38 @@ public class AnnonceService implements IAnnonce {
     @Override
     public List<Annonce> getAllAnnonce() {
         List<Annonce> annonces = annonceDao.findAll();
-        System.out.println(annonces);
+        // Pour chaque annonce, mettre à jour le nombre de commentaires
+        for (Annonce annonce : annonces) {
+            annonce.setNbr_comment(getNombreCommentaires(annonce));
+        }
         return annonces;
-
+    }
+    @Override
+    public int getNombreCommentaires(Annonce annonce) {
+        // Récupérer la liste de commentaires associés à cette annonce
+        List<Comment> comments = annonce.getComments();
+        // Retourner le nombre de commentaires dans cette liste
+        return (comments != null) ? comments.size() : 0;
     }
 
     @Override
     public void deleteAnnonce(long id_annonce) {
-        annonceDao.deleteById(id_annonce);
+        Annonce annonceToDelete = annonceDao.findById(id_annonce).orElse(null);
+        if (annonceToDelete != null) {
+            // Supprimer toutes les réactions associées à cette annonce
+            reactDao.deleteAllByAnnonce(annonceToDelete);
 
+            // Supprimer l'annonce elle-même
+            annonceDao.deleteById(id_annonce);
+        } else {
+            // Gérer le cas où l'annonce n'est pas trouvée
+            // Peut-être lever une exception ou gérer d'une autre manière
+        }
     }
 
 
 
-   @Override
+            @Override
 
    public Annonce updateAnnonce(long id_annonce, String title, String annonceDescription){
        Annonce annonce1=annonceDao.findById(id_annonce).get();

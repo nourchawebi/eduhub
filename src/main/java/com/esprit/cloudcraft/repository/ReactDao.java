@@ -2,8 +2,11 @@ package com.esprit.cloudcraft.repository;
 
 
 
+import com.esprit.cloudcraft.entities.Annonce;
 import com.esprit.cloudcraft.entities.React;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -27,4 +30,9 @@ public interface ReactDao extends JpaRepository<React,Long> {
     boolean FindReactDislikeOfUser(@Param("id_user")  long idUser,@Param("id_annonce") Long idAnnonce);
     @Query("SELECT r FROM React r WHERE r.annonce.id_annonce = :annonceId AND r.user.id = :userId AND r.typeReact = 'DISLIKE'")
     React findReactDislike(@Param("annonceId")long annonceId,@Param("userId")  long userId);
+
+
+
+    void deleteAllByAnnonce(Annonce annonceToDelete);
 }
+
