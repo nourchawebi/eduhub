@@ -8,12 +8,13 @@ import java.util.List;
 
 public interface SummaryServiceInt {
     public Summary getSummaryById(Long summaryId);
+    public Summary updateSummary(Long id,SummaryRequest summaryRequest);
 
     public List<Summary> getSummariesByCourse(Long courseId);
     public Summary addSummaryToChapter(Long chapterId, SummaryRequest summaryRequest);
     public List<Summary>  getSummariesByChapter(Long chapterId);
     public boolean deletSummaryById(Long summaryId);
-
+    public boolean deleteRatingFromSummary(Long summaryId,Long ratingId);
     public boolean deletSummaryFromChapter(Long summaryId,Long chapterId);
 
     public boolean deletSummaryFromCourse(Long courseId,Long summaryId);

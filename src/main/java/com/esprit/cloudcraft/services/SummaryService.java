@@ -43,6 +43,13 @@ public class SummaryService implements SummaryServiceInt {
         return summary;
     }
 
+    public Summary updateSummary(Long id,SummaryRequest summaryRequest){
+        Summary summary=getSummaryById(id);
+        summary.setDescription(summaryRequest.getDescription());
+        summary.setTitle(summaryRequest.getTitle());
+        return summaryRepo.save(summary);
+    }
+
 
 
     public Summary save(SummaryRequest summaryRequest){
@@ -51,6 +58,11 @@ public class SummaryService implements SummaryServiceInt {
         return summaryRepo.save(summary);
     }
     public Summary save(Summary summary){
+
+        return summaryRepo.save(summary);
+    }
+
+    public Summary saveWith(Summary summary){
         return summaryRepo.save(summary);
     }
     public boolean deletSummaryById(Long summaryId){
@@ -163,4 +175,22 @@ public class SummaryService implements SummaryServiceInt {
         return true;
     }
 
+
+    public boolean deleteRatingFromSummary(Long summaryId,Long ratingId){
+       Rating rating =ratingService.getRatingById(ratingId);
+        User connectedUser=userService.getConnectedUser();
+        if(rating.getOwner().getEmail()!=connectedUser.getEmail()){
+            throw new UnauthorizedActionException("you can not delete rating that you dont own");
+        }
+
+        Summary summary=getSummaryById(summaryId);
+        summary.setRatings(summary.getRatings().stream().filter(rating1 -> rating1.getRatingId()!=ratingId).toList());
+        summaryRepo.save(summary);
+        ratingService.deleteRating(ratingId);
+        return true;
+    }
+
+
 }
+
+

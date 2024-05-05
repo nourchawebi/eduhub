@@ -8,6 +8,7 @@ import com.esprit.cloudcraft.serviceInt.ChapterServiceInt;
 import com.esprit.cloudcraft.serviceInt.CourseServiceInt;
 import com.esprit.cloudcraft.serviceInt.RatingServiceInt;
 import com.esprit.cloudcraft.serviceInt.SummaryServiceInt;
+import com.esprit.cloudcraft.services.userServices.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,7 +23,7 @@ public class ChapterController {
     @Autowired
     private ChapterServiceInt chapterServiceInt;
     @Autowired
-    private RatingServiceInt ratingServiceInt;
+    private UserService userService;
     @Autowired
     private SummaryServiceInt summaryServiceInt;
     @Autowired
@@ -35,6 +36,7 @@ public class ChapterController {
     @GetMapping("/courses/{courseId}/chapters")
     public ResponseEntity<List<ChapterResponse>> getAllChaptersByCourse(@PathVariable Long courseId){
         List<Chapter> chapters= courseServiceInt.getAllChaptersByCourse(courseId);
+
         return ResponseEntity.status(HttpStatus.FOUND).body(PayloadSerialization.prepareChapterResponseList(chapters));
     }
 
@@ -104,7 +106,10 @@ public class ChapterController {
     }
 
 
-
+    @DeleteMapping(value="{chapterId}/ratings/{ratingId}")
+    public ResponseEntity<Boolean> deleteRatingFromSummary(@PathVariable Long chapterId,@PathVariable Long ratingId){
+        return ResponseEntity.status(HttpStatus.OK).body(chapterServiceInt.deleteRatingFromChapter(chapterId,ratingId));
+    }
 
 
 //    @GetMapping("/getAllTest")

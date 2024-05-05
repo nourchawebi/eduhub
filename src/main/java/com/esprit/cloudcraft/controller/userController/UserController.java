@@ -63,6 +63,17 @@ public class UserController {
         return RoleType.getAllRoleTypes();
     }
     /******************* get all classType ******************/
+
+
+    @GetMapping("/user/me")
+    @ResponseBody
+    public User getConnectedUser()
+    {
+
+        System.out.println( userService.getConnectedUser());
+        return userService.getConnectedUser();
+    }
+
     @GetMapping("getclasstypes")
     @ResponseBody
     public List<ClassType> getAllClassTypes()

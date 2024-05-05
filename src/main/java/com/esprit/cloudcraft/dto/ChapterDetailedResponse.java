@@ -17,4 +17,6 @@ public class ChapterDetailedResponse {
     private List<RatingPayload> ratings;
     private UserResponse owner;
 
+
+
 }

@@ -22,13 +22,17 @@ public class RatingService implements RatingServiceInt {
     private UserService userService;
 
     public Rating addRating(RatingPayload ratingPayload, User owner) {
-                    Rating newRating= PayloadSerialization.getRatingFromRatingPayload(ratingPayload);
-                    newRating.setCreatedAt(UtilFunctions.getCurrentDateSql());
-                    newRating.setOwner(owner);
-                    return ratingRepo.save(newRating);
-                };
+        Rating newRating= PayloadSerialization.getRatingFromRatingPayload(ratingPayload);
+        newRating.setCreatedAt(UtilFunctions.getCurrentDateSql());
+        newRating.setOwner(owner);
+        return ratingRepo.save(newRating);
+    };
 
-
+public Rating getRatingById(Long id){
+    Rating rating=ratingRepo.findById(id).orElse(null);
+    if(rating==null) throw new ResourceNotFoundException("rating",id);
+    return rating;
+}
 
 
     public Rating updateRating(Long ratingId,RatingPayload ratingPayload ){

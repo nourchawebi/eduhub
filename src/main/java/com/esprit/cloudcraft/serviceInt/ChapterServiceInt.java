@@ -13,7 +13,7 @@ public interface ChapterServiceInt {
 
 
     public Chapter save(Chapter chapter);
-
+    public boolean deleteRatingFromChapter(Long chapterid,Long ratingId);
 
     public Chapter updateChapter(Long chapterID, ChapterRequest chapterRequest);
 

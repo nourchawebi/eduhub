@@ -47,7 +47,7 @@ public class CourseService implements CourseServiceInt {
             course.setImage(savedFileEntity);
         }
 
-            User connectedUser=userService.getConnectedUser();
+        User connectedUser=userService.getConnectedUser();
         course.setOwner(connectedUser);
 
         return courseRepo.save(course);
@@ -231,10 +231,27 @@ public class CourseService implements CourseServiceInt {
             if(summary.getFiles()==null) summary.setFiles(new ArrayList<>());
             summary.getFiles().add(savedFileEntity);
         }
+        User connectedUser=userService.getConnectedUser();
+        summary.setOwner(connectedUser);
         Summary savedSummary= summaryService.save(summary);
         course.getSummaries().add(savedSummary);
         this.save(course);
         return savedSummary;
+    }
+
+
+    public boolean deleteRatingFromCourse(Long courseId,Long ratingId){
+        Rating rating =ratingService.getRatingById(ratingId);
+        User connectedUser=userService.getConnectedUser();
+        if(rating.getOwner().getEmail()!=connectedUser.getEmail()){
+            throw new UnauthorizedActionException("you can not delete rating that you dont own");
+        }
+
+        Course course=getCourseById(courseId);
+        course.setRating(course.getRating().stream().filter(rating1 -> rating1.getRatingId()!=ratingId).toList());
+        courseRepo.save(course);
+        ratingService.deleteRating(ratingId);
+        return true;
     }
 }
 
