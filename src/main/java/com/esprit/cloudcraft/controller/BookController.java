@@ -38,7 +38,7 @@ public class BookController {
     @PostMapping(value = "/addBook/{idCategory}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> addBook(@RequestParam String author,@RequestParam String title,@RequestParam String description,@RequestParam MultipartFile picture , @PathVariable Long idCategory) {
         System.out.println(picture);
-        Long idUser = 3L;
+        Long idUser = 1L;
         if (idUser !=null && idCategory!=null)
         {
             Book newBook=Book.builder()
@@ -117,7 +117,7 @@ public class BookController {
             @RequestParam(name = "size", defaultValue = "10", required = false) int size
             )
     {
-        Long idUser = 1L;
+        Long idUser = 2L;
         return ResponseEntity.ok(bookService.findAll(page, size, idUser));
     }
 
@@ -144,7 +144,7 @@ public class BookController {
             @RequestParam(name = "size", defaultValue = "10", required = false) int size)
 
     {
-        User user = userService.findUserById(1L);
+        User user = userService.findUserById(2L);
         if (user!=null)
         {
             return ResponseEntity.ok(bookLoanService.findBookLoansByUser(page, size,user));
