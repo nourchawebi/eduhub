@@ -21,9 +21,9 @@ public class CarServiceImp implements CarService {
     @Override
     public Car addCar(Car car, User user) {
         car = carDao.save(car);
-        //User u = userDao.getReferenceById(user.getId());
-        user.getCars().add(car);
-        userDao.save(user);
+        User u = userDao.getReferenceById(user.getId());
+        u.getCars().add(car);
+        userDao.save(u);
         return car;
     }
 

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Controller
@@ -21,6 +22,7 @@ public class LocationController {
     @ResponseBody
     public User addLocation(@PathVariable("id") Long id, @RequestBody Location location, Principal connectedUser){
         User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        System.out.println("ok "+user.getEmail());
         return locationService.addLocation(user.getId(),location);
 
     }
@@ -61,5 +63,13 @@ public class LocationController {
     public Set<String> getLocationNames(){
         return locationService.getLocationNames();
     }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("location/statistics")
+    @ResponseBody
+    public Map<String, Long> countUsersByLocation(){
+        return locationService.countUsersByLocation();
+    }
+
 
 }

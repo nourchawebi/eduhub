@@ -16,7 +16,7 @@ public interface ParticipationService {
 
     List<Journey> getCarpooledJourneys(Long idCarpooled);
 
-    void removeParticipation(Integer idParticipation);
+    void removeParticipation(Long idCarpooled, Integer idParticipation);
 
     Boolean checkParticipation(Integer idJourney,Long idCarpooler);
 }

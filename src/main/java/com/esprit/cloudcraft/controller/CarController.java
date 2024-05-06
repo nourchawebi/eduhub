@@ -22,6 +22,7 @@ public class CarController {
     @ResponseBody
     public Car addCar(@RequestBody Car car, Principal connectedUser){
         User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        System.out.println("ok " + user.getEmail());
         return carService.addCar(car,user);
     }
 
