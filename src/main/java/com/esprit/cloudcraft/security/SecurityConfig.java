@@ -42,6 +42,9 @@ public class SecurityConfig {
                                 .requestMatchers("/getclasstypes").permitAll()
                                 .requestMatchers("/files/**").permitAll()
                                 .requestMatchers("/user/update/email/verify").permitAll()
+                                .requestMatchers("/book/**").permitAll()
+                                .requestMatchers("/event/**").permitAll()
+                                .requestMatchers("/image/**").permitAll()
 
 
                                 .anyRequest().authenticated()
