@@ -1,111 +1,268 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
 <head>
-    <meta charset="utf-8"> <!-- utf-8 works for most cases -->
-    <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
-    <meta name="x-apple-disable-message-reformatting">  <!-- Disable auto-scale in iOS 10 Mail entirely -->
-    <title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="telephone=no" name="format-detection">
+    <title></title>
+    <!--[if (mso 16)]>
+    <style type="text/css">
+        a {text-decoration: none;}
+    </style>
+    <![endif]-->
+    <!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Oswald:300,700&display=swap" rel="stylesheet">
+    <!--<![endif]-->
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:AllowPNG></o:AllowPNG>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
-
-    <!-- CSS Reset : BEGIN -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i" rel="stylesheet">
+    <!--<![endif]-->
 </head>
 
-<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-<center style="width: 100%; background-color: #f1f1f1;">
-    <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-        &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-    </div>
-    <div style="max-width: 600px; margin: 0 auto;" class="email-container">
-        <!-- BEGIN BODY -->
-        <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-            <tr>
-                <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tr>
-                            <td class="logo" style="text-align: center;">
-                                <h1>Welcome</h1>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr><!-- end tr -->
-            <tr>
-                <td valign="middle" class="hero bg_white" style="padding: 2em 0 4em 0;">
-                    <table>
-                        <tr>
-                            <td>
-                                <div class="text" style="padding: 0 2.5em; text-align: center;">
-                                    <h2>Finish creating your account.</h2>
-                                    <h3>Hi<p th:text="${firstName}"/></h3>
-                                    <h3>We're excited to have you get started. First, you need to confirm your account. Just press the button below.</h3>
-                                    <p><a th:href="${verificationURL}" class="btn btn-primary">Validate Account</a></p>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="text" style="padding: 0 2.5em; text-align: center;">
-                                    <h3>if you experience any issues with the button above, copy and paste the URL below into your web browser.</h3>
-                                    <p th:text="${verificationURL}"></p>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr><!-- end tr -->
-            <!-- 1 Column Text + Button : END -->
-        </table>
-        <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-            <tr>
-                <td valign="middle" class="bg_light footer email-section">
-                    <table>
-                        <tr>
-                            <td valign="top" width="33.333%" style="padding-top: 20px;">
-                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                                    <tr>
-                                        <td style="text-align: left; padding-right: 10px;">
-                                            <h3 class="heading">About</h3>
-                                            <p>Welcome to Java Development Journal Blog. We publish articles on
-                                                Spring, Spring Boot and Spring Security.
-                                            </p>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td valign="top" width="33.333%" style="padding-top: 20px;">
-                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                                    <tr>
-                                        <td style="text-align: left; padding-left: 5px; padding-right: 5px;">
-                                            <h3 class="heading">Contact Info</h3>
-                                            <ul>
-                                                <li><span class="text">Java Development Journal</span></li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td valign="top" width="33.333%" style="padding-top: 20px;">
-                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                                    <tr>
-                                        <td style="text-align: left; padding-left: 10px;">
-                                            <h3 class="heading">Useful Links</h3>
-                                            <ul>
-                                                <li><a href="#">Home</a></li>
-                                                <li><a href="#">About</a></li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr><!-- end: tr -->
-        </table>
+<body>
+<div dir="ltr" class="es-wrapper-color">
+    <!--[if gte mso 9]>
+    <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
+        <v:fill type="tile" color="#f5f5f5"></v:fill>
+    </v:background>
+    <![endif]-->
+    <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+        <tr>
+            <td class="esd-email-paddings" valign="top">
+                <table cellpadding="0" cellspacing="0" class="es-header esd-header-popover" align="center">
+                    <tbody>
+                    <tr>
+                        <td class="esd-stripe" align="center" bgcolor="#111517" style="background-color: #111517;"esd-custom-block-id="89423">
+                            <table class="es-header-body" width="600" cellspacing="0" cellpadding="0" bgcolor="#111517" align="center" style="background-color: #111517;">
+                                <tbody>
+                                <tr>
+                                    <td class="esd-structure es-p25t es-p40b" align="left">
+                                        <table cellspacing="0" cellpadding="0" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td class="es-m-p0r esd-container-frame" width="600" valign="top" align="center">
+                                                    <table width="100%" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text">
+                                                                <p><br></p>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table cellpadding="0" cellspacing="0" class="es-content" align="center">
+                    <tbody>
+                    <tr>
+                        <td class="esd-stripe" align="center" esd-custom-block-id="82644">
+                            <table bgcolor="#ffffff" class="es-content-body" align="center" cellpadding="0" cellspacing="0" width="600">
+                                <tbody>
+                                <tr>
+                                    <td class="esd-structure es-p40t es-p40b es-p15r es-p15l" align="left" esd-custom-block-id="78476">
+                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td width="570" class="esd-container-frame" align="center" valign="top">
+                                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text es-m-txt-l">
+                                                                <h3></h3>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text">
+                                                                <h1>Finish creating your account.</h1>
+                                                                <h3>Hello<p th:text="${firstName}"/></h3>
+                                                                <h3>We're excited to have you get started. First, you need to confirm your account. Just press the button below.</h3>
+                                                                <p><a th:href="${verificationURL}" class="btn btn-primary">Validate Account</a></p>
 
-    </div>
-</center>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text">
+                                                                <h3><span style="color:#ef0d33;"></span></h3>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text es-m-txt-c es-p40t es-p40b">
+                                                                <div class="text" style="padding: 0 2.5em; text-align: center;">
+                                                                    <p style="font-size: 18px; color: #999999;">if you experience any issues with the button above, copy and paste the URL below into your web browser.</p>
+                                                                    <p th:text="${verificationURL}"></p>
+                                                                </div>
+
+                                                                <p style="font-size: 18px; color: #999999;">Thank you for choosing us</p>
+                                                                <p style="font-size: 18px; color: #999999;">Best regards.</p>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="esd-structure" align="left" style="background-position: center center;">
+                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td width="600" class="esd-container-frame" align="center" valign="top">
+                                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-spacer es-p5t es-p5b es-p15r es-p15l" style="font-size:0">
+                                                                <table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0">
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td style="border-bottom: 1px solid #666666; background: none; height: 1px; width: 100%; margin: 0px;"></td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table cellpadding="0" cellspacing="0" class="es-content" align="center">
+                    <tbody>
+                    <tr>
+                        <td class="esd-stripe" align="center" bgcolor="#00308F" style="background-color: #00308f;" esd-custom-block-id="78463">
+                            <table bgcolor="transparent" class="es-content-body" align="center" cellpadding="0" cellspacing="0" width="600" style="background-color: transparent;">
+                                <tbody>
+                                <tr>
+                                    <td class="esd-structure es-p40t es-p40b es-p10r es-p10l" align="left">
+                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td width="580" class="esd-container-frame" align="center" valign="top">
+                                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text es-infoblock es-m-txt-c">
+                                                                <h1 style="color: #ffffff;">With love</h1>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-text es-infoblock es-m-txt-c es-p20t es-p20b">
+                                                                <h3 style="color: #ffffff;">From the EduHub team</h3>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="es-footer esd-footer-popover" cellspacing="0" cellpadding="0" align="center">
+                    <tbody>
+                    <tr>
+                        <td class="esd-stripe" align="center" esd-custom-block-id="78465" bgcolor="#111517" style="background-color: #111517;">
+                            <table class="es-footer-body" width="600" cellspacing="0" cellpadding="0" bgcolor="#111517" align="center" style="background-color: #111517;">
+                                <tbody>
+                                <tr>
+                                    <td class="esd-structure es-p40t es-p40b es-p20r es-p20l" align="left">
+                                        <!--[if mso]><table width="560" cellpadding="0"
+                                                            cellspacing="0"><tr><td width="175" valign="top"><![endif]-->
+                                        <table class="es-left" cellspacing="0" cellpadding="0" align="left">
+                                            <tbody>
+                                            <tr>
+                                                <td class="es-m-p20b esd-container-frame" width="175" align="left">
+                                                    <table width="100%" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td align="center" class="esd-block-social es-p20t es-m-txt-c" style="font-size:0">
+                                                                <table cellpadding="0" cellspacing="0" class="es-table-not-adapt es-social">
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td align="center" valign="top" esd-tmp-icon-type="facebook" class="es-p10r"><a target="_blank" href><img src="https://mwzufj.stripocdn.email/content/assets/img/social-icons/logo-white/facebook-logo-white.png" alt="Fb" title="Facebook" width="32"></a></td>
+                                                                        <td align="center" valign="top" esd-tmp-icon-type="twitter" class="es-p10r"><a target="_blank" href><img src="https://mwzufj.stripocdn.email/content/assets/img/social-icons/logo-white/twitter-logo-white.png" alt="Tw" title="Twitter" width="32"></a></td>
+                                                                        <td align="center" valign="top" esd-tmp-icon-type="youtube" class="es-p10r"><a target="_blank" href><img src="https://mwzufj.stripocdn.email/content/assets/img/social-icons/logo-white/youtube-logo-white.png" alt="Yt" title="Youtube" width="32"></a></td>
+                                                                        <td align="center" valign="top" esd-tmp-icon-type="instagram"><a target="_blank" href><img src="https://mwzufj.stripocdn.email/content/assets/img/social-icons/logo-white/instagram-logo-white.png" alt="Ig" title="Instagram" width="32"></a></td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--[if mso]></td><td width="20"></td><td width="365" valign="top"><![endif]-->
+                                        <table class="es-right" cellspacing="0" cellpadding="0" align="right">
+                                            <tbody>
+                                            <tr>
+                                                <td class="esd-container-frame" width="365" align="left">
+                                                    <table width="100%" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td align="left" class="esd-block-text es-m-txt-c es-p20t es-p20b">
+                                                                <p style="color: white;">Contact us via our Social Networks</p>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--[if mso]></td></tr></table><![endif]-->
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
