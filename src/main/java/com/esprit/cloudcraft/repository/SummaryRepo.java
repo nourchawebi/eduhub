@@ -14,4 +14,7 @@ public interface SummaryRepo extends JpaRepository<Summary,Long> {
 
     @Query("SELECT s FROM Summary s JOIN Course c ON s.summaryId = c.courseId WHERE c.courseId = :id")
     List<Summary> findSummariesByCourseId(Long id);
+
+
+    long countBy();
 }

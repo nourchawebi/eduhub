@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChapterRepo extends JpaRepository<Chapter,Long> {
-
+    long countBy();
 }
