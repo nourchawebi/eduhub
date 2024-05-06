@@ -4,6 +4,7 @@ import com.esprit.cloudcraft.entities.Event;
 import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.Enum.Name;
 import com.esprit.cloudcraft.repository.userDao.UserRepository;
+import com.esprit.cloudcraft.services.EmailWithAttachmentService;
 import com.esprit.cloudcraft.services.FileStorageService;
 import com.esprit.cloudcraft.services.IEventService;
 import com.esprit.cloudcraft.repository.EventRepository;
@@ -18,6 +19,8 @@ import java.util.*;
 
 @Service
 public class EventService implements IEventService {
+    @Resource
+    private EmailWithAttachmentService sendMail;
     @Resource
     private FileStorageService fileStorageService;
     private final EventRepository cc;
@@ -46,7 +49,18 @@ public class EventService implements IEventService {
             event.setPicture(fileStorageService.saveImage(image));
             event.setCapacity(newEvent.getCapacity());
             Event savedEvent = cc.save(event);
+            // Customize the email message
+            String emailSubject = "Event Created!";
+            String emailBody = "Hello,\n\n"
+                    + "We are excited to inform you that the event titled \"" + newEvent.getTitle() + "\" has been successfully created!\n"
+                    + "Event details:\n"
+                    + "- Date: " + newEvent.getDateBegin() + " to " + newEvent.getDateEnd() + "\n"
+                    + "- Location: " + newEvent.getLocation() + "\n"
+                    + "- Description: " + newEvent.getDescription() + "\n"
+                    + "- Capacity: " + newEvent.getCapacity() + "\n\n"
+                    + "Thank you for organizing this event. Let's make it a memorable one! 😊";
 
+            sendMail.SendEmail("nourelhoudachawebi@gmail.com", emailSubject, emailBody);
             result = Boolean.TRUE;
         }
         return result;
@@ -150,6 +164,15 @@ public class EventService implements IEventService {
         }
 
         event.getUserSet().add(user);
+        // Customize the email message
+        String emailSubject = "Participation Confirmation";
+        String emailBody = "Hello,\n\n"
+                + "Thank you for participating in the event titled \"" + event.getTitle() + "\"!\n"
+                + "We look forward to seeing you there.\n\n"
+                + "Best regards,\n"
+                + "Event Organizer";
+
+        sendMail.SendEmail("nourelhoudachawebi@gmail.com", emailSubject, emailBody);
         return cc.save(event);
     }
 
@@ -163,9 +186,17 @@ public class EventService implements IEventService {
         }
 
         event.getUserSet().remove(user);
+        // Customize the email message
+        String emailSubject = "Participation Canceled";
+        String emailBody = "Hello,\n\n"
+                + "We're sorry to see that you've canceled your participation in the event titled \"" + event.getTitle() + "\".\n"
+                + "If you change your mind, feel free to join us again in the future!\n\n"
+                + "Best regards,\n"
+                + "Event Organizer";
+
+        sendMail.SendEmail("nourelhoudachawebi@gmail.com", emailSubject, emailBody);
         return cc.save(event);
     }
-
     @Override
     public Map<String, Long> countEventByMonth() {
 //        List<String> months =[]
