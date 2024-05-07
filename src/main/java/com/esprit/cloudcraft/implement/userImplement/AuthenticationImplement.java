@@ -133,13 +133,17 @@ public class AuthenticationImplement  implements AuthenticationService {
         {
             throw new BadCredentialsException("Code is not correct");
         }
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken=jwtService.generateToken(user);
+
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
+
         return AuthenticationResponse.builder()
+
                 .accessToken(jwtToken)
                 .mfaEnabled(user.isMfaEnabled())
                 .build();
     }
-
 
 
     @Override
