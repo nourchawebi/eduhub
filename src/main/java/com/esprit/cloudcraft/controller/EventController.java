@@ -40,9 +40,11 @@ public class EventController {
     @Autowired
     private FileStorageService fileStorageService;
     private final EventRepository eventRepository;
+
     public EventController(IEventService eventService, EventRepository eventRepository) {
         this.eventService = eventService;
         this.eventRepository= eventRepository;
+
     }
 
     //    /////////////////////////////////// CRUD //////////////////////////////////////////
@@ -182,9 +184,11 @@ public class EventController {
 
     //// tell me if a user is already paticipation wala le
     @PostMapping("/{eventId}/issparticipate/{userId}")
-    public ResponseEntity<String> isparticipateUserInEvent(@PathVariable Long eventId, @PathVariable Long userId) {
+    public ResponseEntity<String> isparticipateUserInEvent(@PathVariable Long eventId, @PathVariable Long userId,Principal connectedUser) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
         try {
-            eventService.IsparticipateUserInEvent(eventId, userId);
+            eventService.IsparticipateUserInEvent(eventId, user.getId());
             return ResponseEntity.ok("User participated in the event successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -207,9 +211,11 @@ public class EventController {
 
 
     @PostMapping("/{eventId}/cancelParticipation/{userId}")
-    public ResponseEntity<String> cancelUserParticipation(@PathVariable Long eventId, @PathVariable Long userId) {
+    public ResponseEntity<String> cancelUserParticipation(@PathVariable Long eventId, @PathVariable Long userId,Principal connectedUser) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
         try {
-            eventService.cancelUserParticipation(eventId, userId);
+            eventService.cancelUserParticipation(eventId, user.getId());
             return ResponseEntity.ok("User participation cancelled successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());

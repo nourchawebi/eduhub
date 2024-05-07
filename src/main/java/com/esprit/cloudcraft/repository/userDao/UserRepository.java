@@ -23,7 +23,7 @@ Optional<User> findByTokens(List<String> tokens);
           "FROM user WHERE YEAR(created_date) = YEAR(CURDATE()) GROUP BY MONTH(created_date) ORDER BY month", nativeQuery = true)
   List<Object[]> countUsersByMonthNativeQuery();
   @Query(value = "SELECT MONTH(Locked_date) AS month, COUNT(*) AS userCount " +
-          "FROM user WHERE YEAR(Locked_date) = YEAR(CURDATE()) AND (not_locker)=0   AND ((u_locked_date) IS NULL OR (u_locked_date) = '') GROUP BY MONTH(Locked_date) ORDER BY month", nativeQuery = true)
+          "FROM user WHERE YEAR(Locked_date) = YEAR(CURDATE()) AND (not_locker)=0  GROUP BY MONTH(Locked_date) ORDER BY month", nativeQuery = true)
   List<Object[]> countUserslockedByMonthNativeQuery();
   @Query(value = "SELECT (class_type) AS class, COUNT(*) AS userCount " +
           "FROM user  GROUP BY (class_type)", nativeQuery = true)
