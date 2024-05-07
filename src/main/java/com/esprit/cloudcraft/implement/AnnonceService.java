@@ -4,6 +4,7 @@ package com.esprit.cloudcraft.implement;
 
 import com.esprit.cloudcraft.entities.Comment;
 import com.esprit.cloudcraft.entities.React;
+import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.repository.ReactDao;
 import com.esprit.cloudcraft.services.IAnnonce;
 import com.esprit.cloudcraft.repository.AnnonceDao;
@@ -11,6 +12,7 @@ import com.esprit.cloudcraft.repository.CommentDao;
 import com.esprit.cloudcraft.entities.Annonce;
 import com.esprit.cloudcraft.Enum.TypeAnnonce;
 import com.esprit.cloudcraft.Enum.TypeInternship;
+import com.esprit.cloudcraft.services.userServices.UserService;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,8 @@ public class AnnonceService implements IAnnonce {
     private BadwordsService badwordsService;
     @Autowired
     private ReactDao reactDao;
+    @Autowired
+    private UserService userService;
 
 
 
@@ -52,8 +56,8 @@ public class AnnonceService implements IAnnonce {
 
     @Override
     public Annonce addAnnonce(String title, String annoncedesc, Date startDate,
-                              TypeAnnonce typeAnnonce, MultipartFile image) {
-
+                              TypeAnnonce typeAnnonce, MultipartFile image,long id_user) {
+        User user = userService.findUserById(id_user);
         //Copier l'image vers le répertoire de destination
         // String fileName = imageService.nameFile(imageFile);
         // Path destinationPath = Paths.get(uploadAnnonceImages, fileName);
@@ -61,6 +65,7 @@ public class AnnonceService implements IAnnonce {
         String sanitizedDesc = badwordsService.sanitizeText(annoncedesc);
 
         Annonce annonce1 = new Annonce();
+        annonce1.setUser(user);
         annonce1.setNbr_comment(0);
         annonce1.setAnnonce_date(LocalDate.now());
         annonce1.setAnnonce_description(sanitizedDesc);
@@ -119,7 +124,8 @@ public class AnnonceService implements IAnnonce {
     }
 
     @Override
-    public Annonce addPost(String title, String annonceDescription, TypeAnnonce typeInternship) {
+    public Annonce addPost(String title, String annonceDescription, TypeAnnonce typeInternship,long id_user) {
+        User user = userService.findUserById(id_user);
         String sanitizedDesc = badwordsService.sanitizeText(annonceDescription);
         Annonce post = Annonce.builder()
 
@@ -129,12 +135,14 @@ public class AnnonceService implements IAnnonce {
                 .typeAnnonce(typeInternship)
                 .build();
         post.setNbr_comment(0);
+        post.setUser(user);
 
         return annonceDao.save(post);
     }
 
     @Override
-    public Annonce addIntership(String title, String annonceDescription, TypeAnnonce typeAnnonce, String governorate, Date date, TypeInternship typeInternship) {
+    public Annonce addIntership(String title, String annonceDescription, TypeAnnonce typeAnnonce, String governorate, Date date, TypeInternship typeInternship,long id_user) {
+        User user = userService.findUserById(id_user);
         String sanitizedDesc = badwordsService.sanitizeText(annonceDescription);
         Annonce intership = Annonce.builder()
                 .title(title)
@@ -145,11 +153,13 @@ public class AnnonceService implements IAnnonce {
                 .typeInternship(typeInternship)
                 .build();
         intership.setNbr_comment(0);
+        intership.setUser(user);
         return annonceDao.save(intership);
     }
 
     @Override
-    public Annonce addJob(String title, String annonceDescription, TypeAnnonce typeAnnonce, String governorate, Date date) {
+    public Annonce addJob(String title, String annonceDescription, TypeAnnonce typeAnnonce, String governorate, Date date,long id_user) {
+        User user = userService.findUserById(id_user);
         String sanitizedDesc = badwordsService.sanitizeText(annonceDescription);
         Annonce job = Annonce.builder()
                 .title(title)
@@ -159,6 +169,7 @@ public class AnnonceService implements IAnnonce {
                 .governorate(governorate)
                 .build();
         job.setNbr_comment(0);
+        job.setUser(user);
 
         return annonceDao.save(job);
     }

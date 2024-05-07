@@ -1,10 +1,14 @@
 package com.esprit.cloudcraft.controller;
 
+import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.services.IReact;
 import com.esprit.cloudcraft.entities.React;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @AllArgsConstructor
@@ -17,16 +21,19 @@ public class ReactController {
 
     @PostMapping("/addReact")
     public React addReact (@RequestBody React react){
+       ;
 
         return reactInterface.addReact(react);
     }
     @PostMapping("/like")
-    public void likePost(@RequestParam("annonce_id") long annonceId,@RequestParam ("user_id")long userId ) {
+    public void likePost(@RequestParam("annonce_id") long annonceId,long userId ,Principal connectedUser) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         reactInterface.likePost(annonceId,userId);
     }
     @PostMapping("/dislike")
 
-    public void dislikePost(@RequestParam("annonce_id") long annonceId,@RequestParam ("user_id")long userId) {
+    public void dislikePost(@RequestParam("annonce_id") long annonceId,long userId,Principal connectedUser) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         reactInterface.dislikePost(annonceId,userId);
 
     }

@@ -1,11 +1,14 @@
 package com.esprit.cloudcraft.controller;
 
+import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.services.IComment;
 import com.esprit.cloudcraft.entities.Comment;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.text.ParseException;
 import java.util.List;
 
@@ -18,8 +21,9 @@ public class CommentController {
     IComment commentInterface;
 
     @PostMapping("/addComment")
-    public void addComment(@RequestParam("annonce_id") long annonceId,@RequestParam("comment_text") String comment,
-                              @RequestParam("id_user") long userId) throws ParseException {
+    public void addComment(@RequestParam("annonce_id") long annonceId, @RequestParam("comment_text") String comment,
+                           long userId, Principal connectedUser) throws ParseException {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
            commentInterface.addComment(annonceId, comment,userId);
 

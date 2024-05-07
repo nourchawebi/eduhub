@@ -2,6 +2,7 @@ package com.esprit.cloudcraft.controller;
 
 
 
+import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.services.IAnnonce;
 import com.esprit.cloudcraft.entities.Annonce;
 import com.esprit.cloudcraft.Enum.TypeAnnonce;
@@ -17,11 +18,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.MalformedURLException;
 import java.nio.file.Path;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -39,9 +42,10 @@ public class AnnonceController {
     @PostMapping("/addPost")
     public ResponseEntity<Annonce> addPost(@RequestParam("title") String title,
                                               @RequestParam("annonce_description") String annonceDescription,
-                                              @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce
+                                              @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,Principal connectedUser
                                               ) {
-        Annonce newAnnonce = iAnnonce.addPost(title, annonceDescription,typeAnnonce);
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        Annonce newAnnonce = iAnnonce.addPost(title, annonceDescription,typeAnnonce, user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(newAnnonce);
     }
     @PostMapping("/addIntership")
@@ -50,9 +54,10 @@ public class AnnonceController {
                                            @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,
                                                 @RequestParam("governorate") String governorate,
                                                 @RequestParam("date")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
-                                           @RequestParam("typeintership") TypeInternship typeInternship
+                                           @RequestParam("typeintership") TypeInternship typeInternship,Principal connectedUser
     ) {
-        Annonce newAnnonce = iAnnonce.addIntership(title, annonceDescription,typeAnnonce,governorate,date,typeInternship);
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        Annonce newAnnonce = iAnnonce.addIntership(title, annonceDescription,typeAnnonce,governorate,date,typeInternship, user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(newAnnonce);
     }
 
@@ -61,19 +66,21 @@ public class AnnonceController {
                                           @RequestParam("annonce_description") String annonceDescription,
                                           @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,
                                           @RequestParam("governorate") String governorate,
-                                          @RequestParam("date")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date
+                                          @RequestParam("date")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,Principal connectedUser
+
     ) {
-        Annonce newAnnonce = iAnnonce.addJob(title, annonceDescription,typeAnnonce, governorate, date);
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        Annonce newAnnonce = iAnnonce.addJob(title, annonceDescription,typeAnnonce, governorate, date, user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(newAnnonce);
     }
     @PostMapping(value ="/addAnnonce",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Annonce> addAnnonce(@RequestParam("title") String title,
                                               @RequestParam("annonce_description") String annonceDescription,
                                               @RequestParam("date")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,                                              @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,
-                                           //   @RequestParam("location") String governorate,
                                               @RequestParam("typeAnnonce") TypeAnnonce typeAnn,
-                                              @RequestParam("file") MultipartFile picture) {
-        Annonce newAnnonce = iAnnonce.addAnnonce(title, annonceDescription, date,typeAnn, picture);
+                                              @RequestParam("file") MultipartFile picture ,Principal connectedUser){
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        Annonce newAnnonce = iAnnonce.addAnnonce(title, annonceDescription, date,typeAnn, picture, user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(newAnnonce);
     }
   /*  @PostMapping("/addAnnonceSimple")
@@ -131,11 +138,15 @@ public class AnnonceController {
 
 
 
-    @GetMapping("/user/{id}")
-    public List<Annonce> getAnnoncesByUser(@PathVariable("id") long id) {
-        return iAnnonce.getAnnonceByUser(id);
+    @GetMapping("/annonceByUser")
+    public List<Annonce> getAnnoncesByUser(Principal connectedUser) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        return iAnnonce.getAnnonceByUser(user.getId());
 
     }
+
+
+
   /*  @PutMapping("/{id_annonce}")
     @ResponseStatus(HttpStatus.OK)
     public Annonce updateAnnonce(long id, Annonce updatedAnnonce) {

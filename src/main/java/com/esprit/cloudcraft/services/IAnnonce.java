@@ -5,6 +5,7 @@ package com.esprit.cloudcraft.services;
 import com.esprit.cloudcraft.entities.Annonce;
 import com.esprit.cloudcraft.Enum.TypeAnnonce;
 import com.esprit.cloudcraft.Enum.TypeInternship;
+import com.esprit.cloudcraft.entities.userEntities.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 public interface IAnnonce {
     public Annonce addAnnonce(String title, String annoncedesc, Date startDate,
-                              TypeAnnonce typeAnnonce, MultipartFile imageFile);
+                              TypeAnnonce typeAnnonce, MultipartFile imageFile,long id_user);
     //public Annonce addAnnonceSimple(Annonce annonce);
     int getNombreCommentaires(Annonce annonce);
     Optional<Annonce> getTargetAnnonce(long id);
@@ -31,11 +32,11 @@ public interface IAnnonce {
 
     public List<Annonce> searchAnnonce(String title);
 
-    Annonce addPost(String title, String annonceDescription, TypeAnnonce typeInternship);
+    Annonce addPost(String title, String annonceDescription, TypeAnnonce typeInternship,long id_user);
 
-    Annonce addIntership(String title, String annonceDescription, TypeAnnonce typeAnnonce, String governorate, Date date, TypeInternship typeInternship);
+    Annonce addIntership(String title, String annonceDescription, TypeAnnonce typeAnnonce, String governorate, Date date, TypeInternship typeInternship,long id_user);
 
-    Annonce addJob(String title, String annonceDescription, TypeAnnonce typeAnnonce, String governorate, Date date);
+    Annonce addJob(String title, String annonceDescription, TypeAnnonce typeAnnonce, String governorate, Date date,long id_user);
 
 
     Annonce updateAnnonce(long id_annonce, String title, String annonceDescription);

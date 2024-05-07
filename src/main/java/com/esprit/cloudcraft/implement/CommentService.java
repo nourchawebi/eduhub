@@ -1,11 +1,13 @@
 package com.esprit.cloudcraft.implement;
 
 
+import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.services.IComment;
 import com.esprit.cloudcraft.repository.AnnonceDao;
 import com.esprit.cloudcraft.repository.CommentDao;
 import com.esprit.cloudcraft.entities.Annonce;
 import com.esprit.cloudcraft.entities.Comment;
+import com.esprit.cloudcraft.services.userServices.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ public class CommentService implements IComment {
 
     @Autowired
     private BadwordsService badwordsService;
+    @Autowired
+    private UserService userService;
 
   /*  @Override
     public Comment addComment(CommentDto comment, long annonceId) {
@@ -100,18 +104,21 @@ public class CommentService implements IComment {
 
     @Override
     public void addComment(long annonceId, String comment, long userId) throws ParseException {
+        User user = userService.findUserById(userId);
         Annonce annonce=annonceDao.findById(annonceId).get();
         Date currentDateTime = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String formattedDate = dateFormat.format(currentDateTime);
         Date parsedDate = dateFormat.parse(formattedDate);
         String sanitizedComment = badwordsService.sanitizeText(comment);
+        System.out.println("firstt");
 
         Comment comment2 = Comment.builder()
                 .annonce(annonce)
                 .comment_description(sanitizedComment) // Use the sanitized comment                .comment_date(parsedDate)
                 .build();
-
+        comment2.setUser(user);
+System.out.println("hahahaha");
         commentRepository.save(comment2);
 
     }
