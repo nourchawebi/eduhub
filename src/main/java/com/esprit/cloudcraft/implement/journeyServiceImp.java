@@ -1,6 +1,7 @@
 package com.esprit.cloudcraft.implement;
 
 import com.esprit.cloudcraft.entities.Day;
+import com.esprit.cloudcraft.entities.Day;
 import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.repository.JourneyDao;
 import com.esprit.cloudcraft.repository.userDao.UserRepository;

@@ -1,5 +1,6 @@
 package com.esprit.cloudcraft.entities;
 
+import com.esprit.cloudcraft.entities.userEntities.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;

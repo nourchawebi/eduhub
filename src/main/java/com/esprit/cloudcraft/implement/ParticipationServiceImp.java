@@ -11,6 +11,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -78,7 +79,10 @@ public class ParticipationServiceImp implements ParticipationService {
                 System.out.println(idCarpooled);
                 User user = userDao.getReferenceById(idCarpooled);
                 List<Participation> participations = user.getParticipations();
-                List<Journey> journeys = journeyDao.getJourneysByParticipationsIn(participations);
+                List<Journey> journeys = new ArrayList<>();
+                for(Participation participation:participations){
+                    journeys.add(journeyDao.getJourneyByParticipationsContains(participation));
+                }
                 return journeys;
             }
         return null;

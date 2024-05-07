@@ -2,6 +2,7 @@ package com.esprit.cloudcraft.implement;
 
 import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.repository.CarDao;
+import com.esprit.cloudcraft.repository.JourneyDao;
 import com.esprit.cloudcraft.repository.userDao.UserRepository;
 import com.esprit.cloudcraft.entities.Car;
 import com.esprit.cloudcraft.entities.userEntities.User;
@@ -17,6 +18,9 @@ public class CarServiceImp implements CarService {
     CarDao carDao;
     @Resource
     UserRepository userDao;
+
+    @Resource
+    JourneyDao journeyDao;
 
     @Override
     public Car addCar(Car car, User user) {
@@ -44,8 +48,21 @@ public class CarServiceImp implements CarService {
 
     @Override
     public void deleteCarById(Integer carId) {
-        if(carDao.existsById(carId))
-            carDao.deleteById(carId);
+        Car car;
+        User user;
+        if(carDao.findById(carId).isPresent())
+            {
+                car = carDao.findById(carId).get();
+                user = userDao.findByCarsContains(car);
+
+                    List<Car> cars = user.getCars();
+                    cars.remove(car);
+                    user.setCars(cars);
+                    userDao.save(user);
+
+
+                carDao.deleteById(carId);
+            }
     }
 
     @Override

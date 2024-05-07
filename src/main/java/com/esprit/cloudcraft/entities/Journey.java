@@ -31,7 +31,7 @@ public class Journey {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "journey")
     private List<Participation> participations;
 
-    @OneToOne
+    @ManyToOne
     private Car car;
 
     @JsonIgnore

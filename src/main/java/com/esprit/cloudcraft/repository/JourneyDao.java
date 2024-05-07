@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface JourneyDao extends JpaRepository<Journey,Integer> {
     List<Journey> getJourneysByMotorized(User user);
-    List<Journey> getJourneysByParticipationsIn(List<Participation> participations);
+    Journey getJourneyByParticipationsContains(Participation participations);
 
     @Query(value = "select j from Journey as j inner join Participation as p on p.journey.journeyId = j.journeyId inner join User as u on p.carpooled.id = u.id where u.id = :id")
     List<Journey> getJourneysParticipated(@Param("id") Long id);

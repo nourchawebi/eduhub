@@ -82,8 +82,6 @@ public class User implements Serializable , UserDetails {
     @OneToMany
     private List<Car> cars;
 
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
