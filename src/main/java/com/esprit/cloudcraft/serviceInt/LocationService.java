@@ -4,6 +4,7 @@ import com.esprit.cloudcraft.entities.Location;
 import com.esprit.cloudcraft.entities.userEntities.User;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface LocationService {
@@ -18,4 +19,5 @@ public interface LocationService {
 
     Set<String> getLocationNames();
 
+    Map<String,Long> countUsersByLocation();
 }

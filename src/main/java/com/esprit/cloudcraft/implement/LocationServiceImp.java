@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 import com.esprit.cloudcraft.entities.userEntities.User;
 
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class LocationServiceImp implements LocationService {
@@ -24,12 +22,12 @@ public class LocationServiceImp implements LocationService {
     public User addLocation(Long userId, Location location) {
         if(userId!=null)
             if(userDao.existsById(userId))
-                    {
-                        locationDao.save(location);
-                        User user = userDao.getReferenceById(userId);
-                        user.setLocation(location);
-                        return userDao.save(user);
-                    }
+            {
+                locationDao.save(location);
+                User user = userDao.getReferenceById(userId);
+                user.setLocation(location);
+                return userDao.save(user);
+            }
         return null;
     }
 
@@ -75,5 +73,22 @@ public class LocationServiceImp implements LocationService {
             if(loc.getNameLocation()!=null && !loc.getNameLocation().isEmpty())
                 names.add(loc.getNameLocation());
         return names;
+    }
+
+    @Override
+    public Map<String, Long> countUsersByLocation() {
+        Long count;
+        Map<String, Long> result = new HashMap<>();;
+        List<User> users = userDao.findAll();
+        for (String s:getLocationNames()){
+            count=0L;
+            for(User u: users){
+                if(u.getLocation().getNameLocation()==s){
+                    count++;
+                }
+            }
+            result.put(s,count);
+        }
+        return result;
     }
 }
