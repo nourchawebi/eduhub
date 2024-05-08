@@ -13,11 +13,11 @@ import java.util.List;
 @Entity
 public class Journey {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer journeyId;
     private Double price;
-    @Enumerated(EnumType.ORDINAL)
-    private Day day;
+    //@Enumerated(EnumType.ORDINAL)
+    private Date day;
     @JsonFormat(pattern="HH:mm")
     private Date leavingTime;
     //@Temporal(TemporalType.TIME)
@@ -25,11 +25,14 @@ public class Journey {
     private Date returnTime;
     private Integer availablePlaces;
 
-    @OneToMany(cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL)
     private List<Location> traject;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "journey")
     private List<Participation> participations;
+
+    @ManyToOne
+    private Car car;
 
     @JsonIgnore
     @ManyToOne

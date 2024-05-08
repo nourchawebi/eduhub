@@ -18,9 +18,9 @@ public class ParticipationController {
     ParticipationService participationService;
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("participation/{idCarpooled}/{idJourney}")
+    @PostMapping("participation/{idJourney}")
     @ResponseBody
-    public Participation addParticipation(@PathVariable Integer idCarpooled, @PathVariable Integer idJourney, Principal connectedUser){
+    public Participation addParticipation(@PathVariable Integer idJourney, Principal connectedUser){
         User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         return participationService.addParticipation(user.getId(),idJourney);
     }
@@ -40,13 +40,13 @@ public class ParticipationController {
         return participationService.checkParticipation(idJourney,user.getId());
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+/*    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("participation/carpooled/{idCarpooled}")
     @ResponseBody
     public List<Participation> getCarpoolerParticipations(@PathVariable Integer idCarpooled,Principal connectedUser){
         User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         return participationService.getCarpoolerParticipations(user.getId());
-    }
+    }*/
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("carpooled/{idCarpooled}/journeys")
@@ -57,18 +57,18 @@ public class ParticipationController {
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("journey/{idJourney}/carpooled")
+    @GetMapping("participation/carpooled/{idJourney}")
     @ResponseBody
     public List<User> getJourneyCarpooled(@PathVariable Integer idJourney){
         return participationService.getJourneyCarpooled(idJourney);
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("participation/participation/{idParticipation}")
+    @DeleteMapping("participation/{idJourney}")
     @ResponseBody
-    public void removeParticipation(@PathVariable Integer idParticipation){
-        participationService.removeParticipation(idParticipation);
+    public void deleteParticipation(@PathVariable Integer idJourney, Principal connectedUser){
+        User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        participationService.removeParticipation(user.getId(),idJourney);
     }
-
 
 }

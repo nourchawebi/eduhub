@@ -1,5 +1,6 @@
 package com.esprit.cloudcraft.repository.userDao;
 
+import com.esprit.cloudcraft.entities.Car;
 import com.esprit.cloudcraft.entities.Participation;
 import com.esprit.cloudcraft.entities.userEntities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -55,5 +56,5 @@ Optional<User> findByTokens(List<String> tokens);
 
   List<User> getUserByParticipationsIn(List<Participation> participations);
 
-
+  User findByCarsContains(Car car);
 }
