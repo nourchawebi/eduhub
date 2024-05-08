@@ -72,10 +72,10 @@ public class CommentService implements IComment {
     public Comment updateComment(long id, String comment){
         Comment comment1=commentRepository.findById(id).get();
 
-            comment1.setComment_description(comment);
-            return commentRepository.save(comment1);
+        comment1.setComment_description(comment);
+        return commentRepository.save(comment1);
 
-        }
+    }
 
 
 
@@ -104,6 +104,8 @@ public class CommentService implements IComment {
 
     @Override
     public void addComment(long annonceId, String comment, long userId) throws ParseException {
+        System.out.println("hahahaha");
+
         User user = userService.findUserById(userId);
         Annonce annonce=annonceDao.findById(annonceId).get();
         Date currentDateTime = new Date();
@@ -118,7 +120,8 @@ public class CommentService implements IComment {
                 .comment_description(sanitizedComment) // Use the sanitized comment                .comment_date(parsedDate)
                 .build();
         comment2.setUser(user);
-System.out.println("hahahaha");
+        comment2.setComment_date(parsedDate);
+        System.out.println("hahahaha");
         commentRepository.save(comment2);
 
     }

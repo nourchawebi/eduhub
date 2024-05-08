@@ -7,11 +7,11 @@ import com.esprit.cloudcraft.entities.React;
 public interface IReact {
     React addReact(React react);
 
-   // React getReactById(long id);
+    // React getReactById(long id);
 
 
 
-   // React updateReact(long id, React react);
+    // React updateReact(long id, React react);
 
 
 

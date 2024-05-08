@@ -197,29 +197,27 @@ public class AnnonceService implements IAnnonce {
     @Override
     public void deleteAnnonce(long id_annonce) {
         Annonce annonceToDelete = annonceDao.findById(id_annonce).orElse(null);
+        System.out.println("deletenow");
         if (annonceToDelete != null) {
-            // Supprimer toutes les réactions associées à cette annonce
             reactDao.deleteAllByAnnonce(annonceToDelete);
 
-            // Supprimer l'annonce elle-même
             annonceDao.deleteById(id_annonce);
         } else {
-            // Gérer le cas où l'annonce n'est pas trouvée
-            // Peut-être lever une exception ou gérer d'une autre manière
+
         }
     }
 
 
 
-            @Override
+    @Override
 
-   public Annonce updateAnnonce(long id_annonce, String title, String annonceDescription){
-       Annonce annonce1=annonceDao.findById(id_annonce).get();
-       annonce1.setTitle(title);
-       annonce1.setAnnonce_description(annonceDescription);
-       return annonceDao.save(annonce1);
+    public Annonce updateAnnonce(long id_annonce, String title, String annonceDescription){
+        Annonce annonce1=annonceDao.findById(id_annonce).get();
+        annonce1.setTitle(title);
+        annonce1.setAnnonce_description(annonceDescription);
+        return annonceDao.save(annonce1);
 
-   }
+    }
 
     @Override
     public Annonce updateAnnnnonce(Annonce annonce) {
@@ -232,39 +230,39 @@ public class AnnonceService implements IAnnonce {
     @Override
     public Map<String, Float> FindAnnonceByType() {
         List<Annonce> annonces = annonceDao.findAll();
-            List<Annonce> internship = new ArrayList<>();
-            List<Annonce> LostAndFound = new ArrayList<>();
-            List<Annonce> JobOffer = new ArrayList<>();
-            List<Annonce> Other = new ArrayList<>();
+        List<Annonce> internship = new ArrayList<>();
+        List<Annonce> LostAndFound = new ArrayList<>();
+        List<Annonce> JobOffer = new ArrayList<>();
+        List<Annonce> Other = new ArrayList<>();
 
-            for (Annonce a : annonces) {
-                if (a.getTypeAnnonce() == TypeAnnonce.INTERNSHIP) {
-                    internship.add(a);
-                }  if (a.getTypeAnnonce() == TypeAnnonce.LOST_AND_FOUND) {
-                    LostAndFound.add(a);
-                }
-             if (a.getTypeAnnonce() == TypeAnnonce.JOB_OFFER) {
-            JobOffer.add(a);
-        }
-                else if (a.getTypeAnnonce() == TypeAnnonce.OTHER) {
-                    Other.add(a);
-                }
+        for (Annonce a : annonces) {
+            if (a.getTypeAnnonce() == TypeAnnonce.INTERNSHIP) {
+                internship.add(a);
+            }  if (a.getTypeAnnonce() == TypeAnnonce.LOST_AND_FOUND) {
+                LostAndFound.add(a);
             }
+            if (a.getTypeAnnonce() == TypeAnnonce.JOB_OFFER) {
+                JobOffer.add(a);
+            }
+            else if (a.getTypeAnnonce() == TypeAnnonce.OTHER) {
+                Other.add(a);
+            }
+        }
 
-            float pourcentINTERNSHIP = (float) internship.size() / annonces.size() * 100;
-            float pourcentLostAndFound = (float) LostAndFound.size() / annonces.size() * 100;
+        float pourcentINTERNSHIP = (float) internship.size() / annonces.size() * 100;
+        float pourcentLostAndFound = (float) LostAndFound.size() / annonces.size() * 100;
 
-            float pourcentJoboffer = (float) JobOffer.size() / annonces.size() * 100;
-            float pourcentOther = (float) Other.size() / annonces.size() * 100;
+        float pourcentJoboffer = (float) JobOffer.size() / annonces.size() * 100;
+        float pourcentOther = (float) Other.size() / annonces.size() * 100;
 
 
         Map<String, Float> percentages = new HashMap<>();
-            percentages.put("Pourcentage INTERNSHIP", pourcentINTERNSHIP);
-            percentages.put("Pourcentage LostAnd Found", pourcentLostAndFound);
-            percentages.put("Pourcentage JobOffer", pourcentJoboffer);
-            percentages.put("Pourcentage Other", pourcentOther);
-            return percentages;
-        }
+        percentages.put("Percentage INTERNSHIP", pourcentINTERNSHIP);
+        percentages.put("Percentage LostAnd Found", pourcentLostAndFound);
+        percentages.put("Percentage JobOffer", pourcentJoboffer);
+        percentages.put("Percentage Other", pourcentOther);
+        return percentages;
+    }
 
 
     @Override

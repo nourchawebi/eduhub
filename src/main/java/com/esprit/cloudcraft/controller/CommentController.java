@@ -21,11 +21,11 @@ public class CommentController {
     IComment commentInterface;
 
     @PostMapping("/addComment")
-    public void addComment(@RequestParam("annonce_id") long annonceId, @RequestParam("comment_text") String comment,
-                           long userId, Principal connectedUser) throws ParseException {
+    public void addComment(@RequestParam("annonce_id") long annonceId, @RequestParam("comment_text") String comment
+            , Principal connectedUser) throws ParseException {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
-           commentInterface.addComment(annonceId, comment,userId);
+        commentInterface.addComment(annonceId, comment,user.getId());
 
 
     }
@@ -61,6 +61,6 @@ public class CommentController {
 
     }
 
-    }
+}
 
 

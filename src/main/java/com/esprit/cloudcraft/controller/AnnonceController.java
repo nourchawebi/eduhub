@@ -41,20 +41,20 @@ public class AnnonceController {
     private  FileStorageService fileStorage;
     @PostMapping("/addPost")
     public ResponseEntity<Annonce> addPost(@RequestParam("title") String title,
-                                              @RequestParam("annonce_description") String annonceDescription,
-                                              @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,Principal connectedUser
-                                              ) {
+                                           @RequestParam("annonce_description") String annonceDescription,
+                                           @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,Principal connectedUser
+    ) {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         Annonce newAnnonce = iAnnonce.addPost(title, annonceDescription,typeAnnonce, user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(newAnnonce);
     }
     @PostMapping("/addIntership")
     public ResponseEntity<Annonce> addIntership(@RequestParam("title") String title,
-                                           @RequestParam("annonce_description") String annonceDescription,
-                                           @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,
+                                                @RequestParam("annonce_description") String annonceDescription,
+                                                @RequestParam("typeAnnonce") TypeAnnonce typeAnnonce,
                                                 @RequestParam("governorate") String governorate,
                                                 @RequestParam("date")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
-                                           @RequestParam("typeintership") TypeInternship typeInternship,Principal connectedUser
+                                                @RequestParam("typeintership") TypeInternship typeInternship,Principal connectedUser
     ) {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         Annonce newAnnonce = iAnnonce.addIntership(title, annonceDescription,typeAnnonce,governorate,date,typeInternship, user.getId());
@@ -104,7 +104,7 @@ public class AnnonceController {
     }
 
 
-   @GetMapping
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Annonce> getAllAnnonce()  {
         return iAnnonce.getAllAnnonce();
@@ -122,14 +122,14 @@ public class AnnonceController {
     }
 
 
-    @DeleteMapping("/{id_annonce}")
-    public ResponseEntity<Void> deleteAnnonce(@PathVariable("id_annonce") long id_annonce) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteAnnonce(@PathVariable("id") long id) {
 
 
-        Optional<Annonce> anononce = iAnnonce.getTargetAnnonce(id_annonce);
+        Optional<Annonce> anononce = iAnnonce.getTargetAnnonce(id);
 
         if (anononce.isPresent()) {
-        iAnnonce.deleteAnnonce(id_annonce);
+            iAnnonce.deleteAnnonce(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

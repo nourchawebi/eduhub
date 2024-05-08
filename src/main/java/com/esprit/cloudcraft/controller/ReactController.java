@@ -21,24 +21,24 @@ public class ReactController {
 
     @PostMapping("/addReact")
     public React addReact (@RequestBody React react){
-       ;
+        ;
 
         return reactInterface.addReact(react);
     }
     @PostMapping("/like")
-    public void likePost(@RequestParam("annonce_id") long annonceId,long userId ,Principal connectedUser) {
+    public void likePost(@RequestParam("annonce_id") long annonceId,Principal connectedUser) {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-        reactInterface.likePost(annonceId,userId);
+        reactInterface.likePost(annonceId,user.getId());
     }
     @PostMapping("/dislike")
 
-    public void dislikePost(@RequestParam("annonce_id") long annonceId,long userId,Principal connectedUser) {
+    public void dislikePost(@RequestParam("annonce_id") long annonceId,Principal connectedUser) {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-        reactInterface.dislikePost(annonceId,userId);
+        reactInterface.dislikePost(annonceId,user.getId());
 
     }
     @GetMapping("/nbrLikesParAnnonce/{annonceId}")
-     public int nbrLikesParAnnonce(@PathVariable long annonceId) {
+    public int nbrLikesParAnnonce(@PathVariable long annonceId) {
 
         return reactInterface.nbrLikesParAnnonce(annonceId);
     }
