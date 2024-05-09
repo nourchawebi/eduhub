@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 public class Journey {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer journeyId;
     private Double price;
     //@Enumerated(EnumType.ORDINAL)

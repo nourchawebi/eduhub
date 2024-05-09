@@ -1,8 +1,10 @@
 package com.esprit.cloudcraft.controller;
 
+import com.esprit.cloudcraft.dto.MailDto;
 import com.esprit.cloudcraft.entities.Journey;
 import com.esprit.cloudcraft.entities.userEntities.User;
 import com.esprit.cloudcraft.serviceInt.JourneyService;
+import com.esprit.cloudcraft.services.EmailWithAttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,8 @@ import java.util.Map;
 public class JouneyController {
     @Autowired
     private JourneyService journeyService;
+    @Autowired
+    private EmailWithAttachmentService emailWithAttachmentService;
 
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("journey")
@@ -69,6 +73,19 @@ public class JouneyController {
     @ResponseBody
     public Map<String, Long> countJourneyByDay(){
         return journeyService.countJourneyByDay();
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("journey/mail")
+    @ResponseBody
+    public void sendMail(@RequestBody MailDto mailDto, Principal connectedUser){
+        User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        String subject = "from "+user.getFirstName()+" "+user.getLastName();
+        System.out.println("to " +mailDto.getTo());
+        System.out.println("body " +mailDto.getBody());
+        System.out.println("sub " +mailDto.getBody());
+
+        emailWithAttachmentService.SendEmail(mailDto.getTo(),subject,mailDto.getBody());
     }
 
 

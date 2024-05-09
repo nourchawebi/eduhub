@@ -83,12 +83,14 @@ public class LocationServiceImp implements LocationService {
         for (String s:getLocationNames()){
             count=0L;
             for(User u: users){
+                if(u.getLocation()!=null)
                 if(u.getLocation().getNameLocation()==s){
                     count++;
                 }
             }
             result.put(s,count);
         }
+        System.out.println(result);
         return result;
     }
 }

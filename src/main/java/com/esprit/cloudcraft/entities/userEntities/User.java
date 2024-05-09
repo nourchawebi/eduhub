@@ -83,6 +83,7 @@ public class User implements Serializable , UserDetails {
 
     @OneToOne
     private Location location;
+
     @JsonIgnore
     @OneToMany
     private List<Car> cars;
