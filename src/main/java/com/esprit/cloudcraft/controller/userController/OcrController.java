@@ -23,7 +23,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin("*")
 public class OcrController {
     @Resource
     private UserService userService;

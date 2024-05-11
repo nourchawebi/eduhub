@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin("*")
 public class simpleConnectedUserController {
 
     @Resource

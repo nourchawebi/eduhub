@@ -32,7 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin("*")
 @Controller
 @RequiredArgsConstructor
 
