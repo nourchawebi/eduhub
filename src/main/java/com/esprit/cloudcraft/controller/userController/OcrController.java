@@ -23,7 +23,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class OcrController {
     @Resource
     private UserService userService;

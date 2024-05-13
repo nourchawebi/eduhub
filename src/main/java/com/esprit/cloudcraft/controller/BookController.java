@@ -23,7 +23,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/book")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class BookController {
     @jakarta.annotation.Resource
     private BookService bookService;

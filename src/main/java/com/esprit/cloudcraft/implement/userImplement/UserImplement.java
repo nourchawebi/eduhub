@@ -58,7 +58,7 @@ public class UserImplement implements UserService {
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
         if (user.getEmail() != null && user.getEmail().contains(".") && user.getEmail().contains("@")) {
-            user.setEnable(false);}
+            user.setEnable(true);}
         if (image != null) {
             user.setPicture(fileStorageService.saveImage(image));
         }
@@ -68,8 +68,8 @@ public class UserImplement implements UserService {
             user.setSecret(tfaService.generateNewSecret());
         }
         var savedUser = userRepository.save(user);
-        if (user.getEmail() != null && user.getEmail().contains(".") && user.getEmail().contains("@")) {
-            sendRegistrationConfirmationEmail(user);}
+//        if (user.getEmail() != null && user.getEmail().contains(".") && user.getEmail().contains("@")) {
+//            sendRegistrationConfirmationEmail(user);}
         // generate  a jwt key to authorize the rest of api
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);

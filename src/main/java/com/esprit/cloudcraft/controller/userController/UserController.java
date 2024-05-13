@@ -32,7 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @Controller
 @RequiredArgsConstructor
 
@@ -89,7 +89,6 @@ public class UserController {
                                       @RequestParam String email,
                                       @RequestParam String  password,
                                       @RequestParam String mfaEnabled,
-
                                       @RequestParam   String birthDate,
                                       @RequestParam String classType,
                                       @RequestParam MultipartFile picture )
@@ -119,7 +118,9 @@ public class UserController {
         }
         else
         {
+            MultipartFile image= null;
             var response=userService.register(request,picture);
+
             if(request.isMfaEnabled())
             { return ResponseEntity.ok(response);}
             else

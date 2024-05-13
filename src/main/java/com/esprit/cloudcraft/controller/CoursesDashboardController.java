@@ -5,6 +5,7 @@ import com.esprit.cloudcraft.entities.UneversityYear;
 import com.esprit.cloudcraft.repository.BookDao;
 import com.esprit.cloudcraft.services.CourseDashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import java.util.TreeMap;
 
 @RestController
 @RequestMapping("course-dashboard")
+@CrossOrigin(origins = "*")
 public class CoursesDashboardController {
     @Autowired
     private BookDao bookDao ;

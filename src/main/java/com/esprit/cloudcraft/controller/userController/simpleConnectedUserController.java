@@ -34,10 +34,11 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Controller
+@CrossOrigin(origins = "*")
 @RequestMapping("/user")
 @RequiredArgsConstructor
 
-@CrossOrigin("*")
+
 public class simpleConnectedUserController {
 
     @Resource

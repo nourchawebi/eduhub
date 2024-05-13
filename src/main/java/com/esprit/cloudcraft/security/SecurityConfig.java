@@ -37,6 +37,9 @@ public class SecurityConfig {
 
                                 .requestMatchers(auth_whitelist).permitAll()
                                 .requestMatchers("/register/**").permitAll()
+                                .requestMatchers("/user/**").permitAll()
+                                .requestMatchers("/**").permitAll()
+                                .requestMatchers("/admin/**").permitAll()
                                 .requestMatchers("/login/**").permitAll()
                                 .requestMatchers("/getenabled").permitAll()
                                 .requestMatchers("/getclasstypes").permitAll()

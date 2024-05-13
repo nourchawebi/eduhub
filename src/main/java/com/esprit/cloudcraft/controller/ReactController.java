@@ -13,7 +13,7 @@ import java.security.Principal;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/reacts")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ReactController {
 
     @Autowired

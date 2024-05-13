@@ -33,7 +33,7 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class AnnonceController {
     @Autowired
     private final IAnnonce iAnnonce;

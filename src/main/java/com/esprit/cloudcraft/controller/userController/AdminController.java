@@ -17,16 +17,28 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("admin")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class AdminController {
     @Resource
     private AdminService adminService;
     @Resource
     private  UserRepository userRepository;
     /************** listing all registerd user ********************/
-    @GetMapping("allusers")
+    @GetMapping("get")
     @ResponseBody
     public ResponseEntity<List<User>> getAllUsers()
+    {
+
+        List<User> users = adminService.getAllUsers();
+        if (users == null || users.isEmpty()) {
+            return ResponseEntity.notFound().build(); // Handle empty user list
+        }
+        return ResponseEntity.ok(users); // Return OK status with user list
+
+    }
+    @GetMapping("allusers")
+    @ResponseBody
+    public ResponseEntity<List<User>> get()
     {
 
         List<User> users = adminService.getAllUsers();

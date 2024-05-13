@@ -15,7 +15,7 @@ import java.util.TreeMap;
 
 @RestController
 @RequestMapping("/bookstats")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class BookDashboardController {
     @Autowired
     private BookDao bookDao ;
